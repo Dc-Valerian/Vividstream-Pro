@@ -99,7 +99,14 @@ const Footer = () => {
           </div>
         </div>
         <div className="pt-8 border-t border-border/50 text-center text-sm text-muted-foreground">
-          <p>© 2025 Vividstream Pro. All rights reserved.</p>
+          <p>
+            ©{" "}
+            {new Date().toLocaleDateString("en-US", {
+              month: "long",
+              year: "numeric",
+            })}{" "}
+            Vividstream Pro. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
