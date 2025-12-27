@@ -2,7 +2,15 @@ import {
   Ticket,
   Plane,
   Hotel,
+  Wallet,
+  Clock,
+  User,
+  Settings,
+  LogOut,
+  ExternalLink,
   Trophy,
+  Menu,
+  ChevronDown,
 } from "lucide-react";
 
 export const worldCupCountries = [
@@ -159,5 +167,91 @@ export const features = [
     icon: Trophy,
     title: "World Cup Betting",
     description: "Predict match outcomes and win Vividstream rewards.",
+  },
+];
+
+export const subNavItems = [
+  { title: "Redeem Ticket", icon: Ticket, href: "/dashboard/redeem" },
+  { title: "Visa Application", icon: Plane, href: "/dashboard/visa" },
+  { title: "Hotels", icon: Hotel, href: "/dashboard/hotels" },
+  { title: "World Cup", icon: Trophy, href: "/dashboard/world-cup" },
+];
+
+export const quickActions = [
+  { title: "Redeem Ticket", icon: Ticket, href: "/dashboard/redeem" },
+  { title: "Apply for Visa", icon: Plane, href: "/dashboard/visa" },
+  { title: "World Cup Bets", icon: Trophy, href: "/dashboard/world-cup" },
+  { title: "Book Hotel", icon: Hotel, href: "/dashboard/hotels" },
+];
+
+export const statusCards = [
+  {
+    title: "Ticket Status",
+    value: "No Ticket",
+    icon: Ticket,
+    status: "neutral",
+    action: null,
+  },
+  {
+    title: "Visa Application",
+    value: "Not Started",
+    icon: Plane,
+    status: "info",
+    action: { label: "Manage Application", href: "/dashboard/visa" },
+  },
+  {
+    title: "Hotel Booking",
+    value: "Locked",
+    icon: Hotel,
+    status: "locked",
+    subtitle: "Requires Visa Approval",
+  },
+  {
+    title: "Vividstream Wallet",
+    value: "2,500",
+    icon: Wallet,
+    status: "success",
+    isHighlight: true,
+  },
+];
+
+export const getStatusColor = (status: string) => {
+  switch (status) {
+    case "success":
+      return "border-primary/50 bg-primary/5";
+    case "info":
+      return "border-info/50 bg-info/5";
+    case "locked":
+      return "border-muted-foreground/30 bg-muted/20";
+    default:
+      return "border-border bg-card";
+  }
+};
+
+export const getIconBg = (status: string) => {
+  switch (status) {
+    case "success":
+      return "text-primary";
+    case "info":
+      return "text-info";
+    case "locked":
+      return "text-muted-foreground";
+    default:
+      return "text-muted-foreground";
+  }
+};
+
+export const recentActivity = [
+  {
+    icon: Ticket,
+    title: "Ticket Redeemed",
+    description: "Code: WIN-2024-X",
+    time: "2 hours ago",
+  },
+  {
+    icon: User,
+    title: "Profile Updated",
+    description: "Added bio-data information",
+    time: "1 day ago",
   },
 ];

@@ -165,10 +165,12 @@ const Login = () => {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse-slow" />
 
         <div className="relative z-10 text-center max-w-md">
-          <div className="w-24 h-24 mx-auto rounded-3xl gradient-primary flex items-center justify-center mb-8 animate-float">
-            <Ticket className="w-12 h-12 text-primary-foreground" />
-          </div>
-          <h2 className="text-3xl font-bold text-foreground mb-4">
+          <Link to="/" className="flex items-center justify-center">
+            <div className="w-48 h-24 rounded-3xl flex items-center justify-center animate-pulse-slow">
+              <img src={logo} alt="Vividstream Pro" className="h-36 w-40" />
+            </div>
+          </Link>
+          <h2 className="text-3xl font-bold text-foreground ">
             Your Ticket to the World
           </h2>
           <p className="text-muted-foreground">
