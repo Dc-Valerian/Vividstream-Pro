@@ -18,10 +18,21 @@ const Login = () => {
   const logo = theme === "light" ? vividstreamLogoLight : vividstreamLogoDark;
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  // Clear errors when user starts typing
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
 
   // Redirect if already authenticated
   if (isAuthenticated) {
@@ -32,17 +43,68 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setErrors({});
+
+    // Client-side validation
+    const newErrors: { email?: string; password?: string } = {};
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.password) newErrors.password = "Password is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setIsLoading(false);
+      toast.error("⚠️ Please fill in all required fields", {
+        description: "Check the highlighted fields",
+        duration: 3000,
+      });
+      return;
+    }
 
     try {
       const result = await login(formData.email, formData.password);
       if (result.success) {
-        toast.success("Login successful!");
+        toast.success("🎉 Welcome back! Redirecting to dashboard...", {
+          description: "Login successful",
+          duration: 2000,
+        });
         navigate("/dashboard");
       } else {
-        toast.error(result.error || "Login failed. Please try again.");
+        // Enhanced error messages with icons and better descriptions
+        const errorMessage = result.error || "Login failed";
+
+        if (errorMessage.includes("Invalid credentials")) {
+          setErrors({ password: "Incorrect password" });
+          toast.error("❌ Invalid credentials", {
+            description: "The email or password you entered is incorrect",
+            duration: 4000,
+          });
+        } else if (errorMessage.includes("don't have an account")) {
+          setErrors({ email: "No account found with this email" });
+          toast.error("👤 Account not found", {
+            description: "No account exists with this email address",
+            duration: 4000,
+            action: {
+              label: "Sign up",
+              onClick: () => navigate("/signup"),
+            },
+          });
+        } else if (errorMessage.includes("Network")) {
+          toast.error("🌐 Connection error", {
+            description: "Please check your internet connection",
+            duration: 4000,
+          });
+        } else {
+          toast.error("⚠️ Login failed", {
+            description: errorMessage,
+            duration: 4000,
+          });
+        }
       }
     } catch (error) {
-      toast.error("An unexpected error occurred. Please try again.");
+      toast.error("🚨 Unexpected error", {
+        description: "Something went wrong. Please try again later",
+        duration: 4000,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -62,8 +124,7 @@ const Login = () => {
               </div>
               <Link
                 to="/"
-                className="hidden lg:block bg-[#00A987] py-1 px-2 rounded-md items-center gap-2"
-              >
+                className="hidden lg:block bg-[#00A987] py-1 px-2 rounded-md items-center gap-2">
                 <h2 className="text-sm text-secondary font-bold ">
                   Back to Home
                 </h2>
@@ -83,14 +144,19 @@ const Login = () => {
                   id="email"
                   type="email"
                   placeholder="Enter your email"
-                  className="pl-10"
+                  className={`pl-10 ${
+                    errors.email ? "border-red-500 focus:border-red-500" : ""
+                  }`}
                   value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   required
                 />
               </div>
+              {errors.email && (
+                <p className="text-sm text-red-500 flex items-center gap-1">
+                  <span>⚠️</span> {errors.email}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -101,18 +167,19 @@ const Login = () => {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className="pl-10 pr-10"
+                  className={`pl-10 pr-10 ${
+                    errors.password ? "border-red-500 focus:border-red-500" : ""
+                  }`}
                   value={formData.password}
                   onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
+                    handleInputChange("password", e.target.value)
                   }
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
                   ) : (
@@ -120,6 +187,11 @@ const Login = () => {
                   )}
                 </button>
               </div>
+              {errors.password && (
+                <p className="text-sm text-red-500 flex items-center gap-1">
+                  <span>⚠️</span> {errors.password}
+                </p>
+              )}
             </div>
 
             <div className="flex items-center justify-between">
@@ -131,8 +203,7 @@ const Login = () => {
               </label>
               <Link
                 to="/forgot-password"
-                className="text-sm text-primary hover:underline"
-              >
+                className="text-sm text-primary hover:underline">
                 Forgot password?
               </Link>
             </div>
@@ -142,8 +213,7 @@ const Login = () => {
               variant="gradient"
               size="lg"
               className="w-full"
-              disabled={isLoading}
-            >
+              disabled={isLoading}>
               {isLoading ? "Signing in..." : "Sign In"}
               <ArrowRight className="w-5 h-5" />
             </Button>
@@ -153,8 +223,7 @@ const Login = () => {
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="text-primary font-medium hover:underline"
-            >
+              className="text-primary font-medium hover:underline">
               Sign up
             </Link>
           </p>

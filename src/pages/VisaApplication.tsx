@@ -26,6 +26,7 @@ import { toast } from "sonner";
 
 const VisaApplication = () => {
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     // Personal Info
     firstName: "",
@@ -62,28 +63,106 @@ const VisaApplication = () => {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleSubmit = () => {
-    toast.success(
-      "Visa application submitted successfully! Check your email for confirmation."
-    );
-    setStep(1);
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      dateOfBirth: "",
-      nationality: "",
-      passportNumber: "",
-      passportExpiry: "",
-      placeOfIssue: "",
-      destination: "",
-      travelPurpose: "",
-      arrivalDate: "",
-      departureDate: "",
-      accommodationAddress: "",
-      additionalNotes: "",
-    });
+  const validateForm = () => {
+    const requiredFields = [
+      formData.firstName,
+      formData.lastName,
+      formData.email,
+      formData.phone,
+      formData.dateOfBirth,
+      formData.nationality,
+      formData.passportNumber,
+      formData.passportExpiry,
+      formData.placeOfIssue,
+      formData.destination,
+      formData.travelPurpose,
+      formData.arrivalDate,
+      formData.departureDate,
+      formData.accommodationAddress,
+    ];
+
+    if (requiredFields.some((field) => !field.trim())) {
+      toast.error("Please fill in all required fields.");
+      return false;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      const payload = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phoneNumber: formData.phone,
+        dateOfBirth: formData.dateOfBirth,
+        nationality: formData.nationality,
+        passportNumber: formData.passportNumber,
+        passportExpiryDate: formData.passportExpiry,
+        passportPlaceOfIssue: formData.placeOfIssue,
+        destinationCountry: formData.destination,
+        travelPurpose: formData.travelPurpose,
+        arrivalDate: formData.arrivalDate,
+        departureDate: formData.departureDate,
+        accommodationAddress: formData.accommodationAddress,
+        additionalNotes: formData.additionalNotes,
+      };
+
+      const response = await fetch(
+        "http://localhost:3000/api/visa-applications/apply-visa",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to submit application");
+      }
+
+      const data = await response.json();
+      toast.success(
+        "Visa application submitted successfully! Check your email for confirmation."
+      );
+      setStep(1);
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        dateOfBirth: "",
+        nationality: "",
+        passportNumber: "",
+        passportExpiry: "",
+        placeOfIssue: "",
+        destination: "",
+        travelPurpose: "",
+        arrivalDate: "",
+        departureDate: "",
+        accommodationAddress: "",
+        additionalNotes: "",
+      });
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error("Failed to submit application. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -117,8 +196,7 @@ const VisaApplication = () => {
                         step >= s.number
                           ? "gradient-primary text-primary-foreground"
                           : "bg-secondary text-muted-foreground"
-                      }`}
-                    >
+                      }`}>
                       <s.icon className="w-5 h-5" />
                     </div>
                     <span
@@ -126,8 +204,7 @@ const VisaApplication = () => {
                         step >= s.number
                           ? "text-primary font-medium"
                           : "text-muted-foreground"
-                      }`}
-                    >
+                      }`}>
                       {s.title}
                     </span>
                   </div>
@@ -222,8 +299,7 @@ const VisaApplication = () => {
                       value={formData.nationality}
                       onValueChange={(v) =>
                         setFormData({ ...formData, nationality: v })
-                      }
-                    >
+                      }>
                       <SelectTrigger>
                         <SelectValue placeholder="Select nationality" />
                       </SelectTrigger>
@@ -307,8 +383,7 @@ const VisaApplication = () => {
                       value={formData.destination}
                       onValueChange={(v) =>
                         setFormData({ ...formData, destination: v })
-                      }
-                    >
+                      }>
                       <SelectTrigger>
                         <SelectValue placeholder="Select destination" />
                       </SelectTrigger>
@@ -325,8 +400,7 @@ const VisaApplication = () => {
                       value={formData.travelPurpose}
                       onValueChange={(v) =>
                         setFormData({ ...formData, travelPurpose: v })
-                      }
-                    >
+                      }>
                       <SelectTrigger>
                         <SelectValue placeholder="Select purpose" />
                       </SelectTrigger>
@@ -432,6 +506,12 @@ const VisaApplication = () => {
                         <span className="text-muted-foreground">DOB:</span>{" "}
                         {formData.dateOfBirth}
                       </p>
+                      <p>
+                        <span className="text-muted-foreground">
+                          Nationality:
+                        </span>{" "}
+                        {formData.nationality}
+                      </p>
                     </div>
                   </div>
 
@@ -486,6 +566,20 @@ const VisaApplication = () => {
                         </span>{" "}
                         {formData.departureDate}
                       </p>
+                      <p className="col-span-2">
+                        <span className="text-muted-foreground">
+                          Accommodation:
+                        </span>{" "}
+                        {formData.accommodationAddress}
+                      </p>
+                      {formData.additionalNotes && (
+                        <p className="col-span-2">
+                          <span className="text-muted-foreground">
+                            Additional Notes:
+                          </span>{" "}
+                          {formData.additionalNotes}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -521,8 +615,11 @@ const VisaApplication = () => {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               ) : (
-                <Button variant="gradient" onClick={handleSubmit}>
-                  Submit Application
+                <Button
+                  variant="gradient"
+                  onClick={handleSubmit}
+                  disabled={loading}>
+                  {loading ? "Submitting..." : "Submit Application"}
                   <CheckCircle className="w-4 h-4 ml-2" />
                 </Button>
               )}

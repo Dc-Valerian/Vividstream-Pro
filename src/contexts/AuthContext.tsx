@@ -41,9 +41,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const userData: User = {
-        id: data.user,
-        name: email.split("@")[0],
-        email,
+        id: data.user.id,
+        name: data.user.fullName,
+        email: data.user.email,
         isAdmin: false,
       };
 
