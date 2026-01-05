@@ -15,12 +15,26 @@ const Signup = () => {
   const logo = vividstreamLogoDark;
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<{
+    name?: string;
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  }>({});
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+
+  // Clear errors when user starts typing
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
 
   // Redirect if already authenticated
   if (isAuthenticated) {
@@ -32,24 +46,72 @@ const Signup = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error("🔒 Password mismatch", {
+        description: "Please make sure both passwords match",
+        duration: 4000,
+      });
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast.error("🔐 Password too short", {
+        description: "Password must be at least 6 characters long",
+        duration: 4000,
+      });
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const success = await signup(
+      const result = await signup(
         formData.name,
         formData.email,
         formData.password
       );
-      if (success) {
-        toast.success("Account created successfully!");
+      if (result.success) {
+        toast.success("🎉 Account created successfully!", {
+          description:
+            "Welcome to Vividstream Pro! Redirecting to dashboard...",
+          duration: 3000,
+        });
         navigate("/dashboard");
+      } else {
+        // Enhanced error messages with icons and better descriptions
+        const errorMessage = result.error || "Signup failed";
+        // let description = "Please check your information and try again";
+
+        if (errorMessage.includes("already exists")) {
+          toast.error("👤 Email already registered", {
+            description: "An account with this email already exists",
+            duration: 4000,
+            action: {
+              label: "Login instead",
+              onClick: () => navigate("/login"),
+            },
+          });
+        } else if (errorMessage.includes("required")) {
+          toast.error("📝 Missing information", {
+            description: "Please fill in all required fields",
+            duration: 4000,
+          });
+        } else if (errorMessage.includes("Network")) {
+          toast.error("🌐 Connection error", {
+            description: "Please check your internet connection",
+            duration: 4000,
+          });
+        } else {
+          toast.error("⚠️ Registration failed", {
+            description: errorMessage,
+            duration: 4000,
+          });
+        }
       }
     } catch (error) {
-      toast.error("Signup failed. Please try again.");
+      toast.error("🚨 Unexpected error", {
+        description: "Something went wrong. Please try again later",
+        duration: 4000,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -147,8 +209,7 @@ const Signup = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
                   ) : (
@@ -203,8 +264,7 @@ const Signup = () => {
               variant="gradient"
               size="lg"
               className="w-full"
-              disabled={isLoading}
-            >
+              disabled={isLoading}>
               {isLoading ? "Creating account..." : "Create Account"}
               <ArrowRight className="w-5 h-5" />
             </Button>
@@ -214,8 +274,7 @@ const Signup = () => {
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-primary font-medium hover:underline"
-            >
+              className="text-primary font-medium hover:underline">
               Sign in
             </Link>
           </p>
