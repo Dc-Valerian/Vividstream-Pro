@@ -45,5 +45,6 @@ export const endpoints = {
   },
   admin: {
     stats: `${API_BASE_URL}/admin/stats`,
+    getAdmins: `${API_BASE_URL}/admin/admins`,
   },
 };

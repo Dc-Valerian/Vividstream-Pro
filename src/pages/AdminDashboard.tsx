@@ -29,6 +29,7 @@ import { BettingTab } from "@/components/admin/tabs/BettingTab";
 import { VisaTab } from "@/components/admin/tabs/VisaTab";
 import { PaymentsTab } from "@/components/admin/tabs/PaymentsTab";
 import { UsersTab } from "@/components/admin/tabs/UsersTab";
+import { AdminsTab } from "@/components/admin/tabs/AdminsTab";
 
 const AdminDashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -98,6 +99,7 @@ const AdminDashboard = () => {
     { id: "analytics", label: "Analytics", icon: BarChart3, tab: null },
     { id: "tickets", label: "Tickets", icon: Ticket, tab: "tickets" },
     { id: "users", label: "Users", icon: Users, tab: "users" },
+    { id: "admins", label: "Admins", icon: Users, tab: "admins" },
     { id: "betting", label: "Betting", icon: Trophy, tab: "betting" },
     { id: "visa", label: "Visa Reviews", icon: Plane, tab: "visa" },
     { id: "hotels", label: "Hotels", icon: Hotel, tab: "hotels" },
@@ -230,6 +232,9 @@ const AdminDashboard = () => {
               <TabsTrigger value="users" className="rounded-lg">
                 Users
               </TabsTrigger>
+              <TabsTrigger value="admins" className="rounded-lg">
+                Admins
+              </TabsTrigger>
               <TabsTrigger value="betting" className="rounded-lg">
                 Betting
               </TabsTrigger>
@@ -250,6 +255,10 @@ const AdminDashboard = () => {
 
             <TabsContent value="users">
               <UsersTab />
+            </TabsContent>
+
+            <TabsContent value="admins">
+              <AdminsTab />
             </TabsContent>
 
             <TabsContent value="betting">
