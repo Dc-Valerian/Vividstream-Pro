@@ -38,6 +38,9 @@ import {
 } from "@/components/ui/select";
 
 import { endpoints } from "@/config/api";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BookingFormModal } from "@/components/hotels/BookingFormModal";
+import { MyBookingsTab } from "@/components/hotels/MyBookingsTab";
 
 const Hotels = () => {
   const { user } = useAuth();
@@ -56,8 +59,14 @@ const Hotels = () => {
     amount: 0,
     hotelName: "",
   });
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
+  const [paymentMethod, setPaymentMethod] = useState<
+    "card" | "crypto" | "manual"
+  >("manual");
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+  // Booking Form State
+  const [bookingFormOpen, setBookingFormOpen] = useState(false);
+  const [selectedHotel, setSelectedHotel] = useState<any>(null);
 
   const [hotels, setHotels] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -107,26 +116,17 @@ const Hotels = () => {
     [searchQuery, pagination.limit],
   );
 
-  const handleBook = async (hotel: any) => {
+  const initiateBooking = (hotel: any) => {
     if (!user) {
       toast.error("Please login to book a hotel");
       return;
     }
+    setSelectedHotel(hotel);
+    setBookingFormOpen(true);
+  };
 
-    setBookingLoading(String(hotel.id));
-
-    // Mock booking data (normally would come from a modal/form)
-    const bookingData = {
-      userId: user.id,
-      hotelName: hotel.name,
-      location: hotel.location,
-      checkInDate: new Date().toISOString(), // Default: today
-      checkOutDate: new Date(Date.now() + 86400000).toISOString(), // Default: tomorrow
-      guests: 1,
-      rooms: 1,
-      totalPrice: hotel.price,
-    };
-
+  const handleBookingConfirm = async (bookingData: any) => {
+    setBookingLoading("processing");
     try {
       const response = await fetch(endpoints.hotels.create, {
         method: "POST",
@@ -138,14 +138,15 @@ const Hotels = () => {
 
       if (!response.ok) throw new Error(data.message || "Booking failed");
 
-      toast.success(`Booking request sent for ${hotel.name}!`);
+      toast.success(`Booking request sent for ${selectedHotel.name}!`);
+      setBookingFormOpen(false);
 
       // Open payment modal
       setPaymentModal({
         open: true,
         bookingId: data.booking._id,
-        amount: hotel.price,
-        hotelName: hotel.name,
+        amount: data.booking.totalPrice,
+        hotelName: selectedHotel.name,
       });
     } catch (error: any) {
       toast.error(error.message);
@@ -165,7 +166,7 @@ const Hotels = () => {
         body: JSON.stringify({
           userId: user.id,
           amount: paymentModal.amount,
-          currency: "USD", // Or dynamic
+          currency: "NGN", // Or dynamic
           paymentMethod,
           type: "hotel_booking",
           relatedEntityId: paymentModal.bookingId,
@@ -185,7 +186,9 @@ const Hotels = () => {
         // Redirect to BitPay
         window.location.href = data.invoiceUrl;
       } else {
-        toast.success("Payment initiated!");
+        toast.success(
+          "Payment initiated! Please complete the transfer to verify your booking.",
+        );
         setPaymentModal((prev) => ({ ...prev, open: false }));
       }
     } catch (error: any) {
@@ -214,177 +217,212 @@ const Hotels = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-16 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 gradient-hero opacity-50 dark:opacity-100" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse-slow" />
-
-        <div className="container mx-auto relative z-10">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <Hotel className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-primary">
-                Premium Hotels
-              </span>
-            </div>
-
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Find Your Perfect
-              <span className="text-gradient"> Stay</span>
-            </h1>
-
-            <p className="text-lg text-muted-foreground mb-8">
-              Book premium accommodations near World Cup venues with exclusive
-              partner rates.
-            </p>
-
-            {/* Search Bar */}
-            <div className="flex gap-2 max-w-xl mx-auto">
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
-                  placeholder="Search by city, hotel name..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-12"
-                />
-              </div>
-              <Button variant="gradient" size="lg" className="px-6">
-                <Filter className="w-5 h-5 mr-2" />
-                Filter
-              </Button>
-            </div>
-          </div>
+      <Tabs defaultValue="browse" className="w-full">
+        <div className="container mx-auto px-4 pt-24 pb-4 flex justify-center sticky top-0 z-40 bg-background/80 backdrop-blur-md">
+          <TabsList className="grid w-full max-w-[400px] grid-cols-2">
+            <TabsTrigger value="browse">Browse Hotels</TabsTrigger>
+            <TabsTrigger value="my-bookings">My Bookings</TabsTrigger>
+          </TabsList>
         </div>
-      </section>
 
-      {/* Payment Methods */}
-      <section className="py-8 px-4 border-y border-border bg-secondary/30">
-        <div className="container mx-auto">
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
-            <span className="font-medium">Payment Methods:</span>
-            <div className="flex items-center gap-2">
-              <CreditCard className="w-4 h-4" />
-              <span>Credit/Debit Card</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Bitcoin className="w-4 h-4" />
-              <span>Crypto (BTC, ETH, USDT)</span>
-            </div>
-          </div>
-        </div>
-      </section>
+        <TabsContent value="browse">
+          {/* Hero Section */}
+          <section className="pt-8 pb-16 px-4 relative overflow-hidden">
+            <div className="absolute inset-0 gradient-hero opacity-50 dark:opacity-100" />
+            <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse-slow" />
 
-      {/* Hotels Grid */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-2xl font-bold mb-2">Available Hotels</h2>
-              <p className="text-muted-foreground">
-                {hotels.length} properties found
-              </p>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {hotels.map((hotel) => (
-              <div
-                key={hotel.id}
-                className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-              >
-                {/* Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={hotel.image}
-                    alt={hotel.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  {hotel.featured && (
-                    <div className="absolute top-3 left-3 px-2 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
-                      Featured
-                    </div>
-                  )}
+            <div className="container mx-auto relative z-10">
+              <div className="max-w-2xl mx-auto text-center">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+                  <Hotel className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-medium text-primary">
+                    Premium Hotels
+                  </span>
                 </div>
 
-                {/* Content */}
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold group-hover:text-primary transition-colors">
-                      {hotel.name}
-                    </h3>
-                    <div className="flex items-center gap-1 text-sm">
-                      <Star className="w-4 h-4 fill-warning text-warning" />
-                      <span className="font-medium">{hotel.rating}</span>
-                    </div>
-                  </div>
+                <h1 className="text-4xl md:text-5xl font-bold mb-6">
+                  Find Your Perfect
+                  <span className="text-gradient"> Stay</span>
+                </h1>
 
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground mb-3">
-                    <MapPin className="w-4 h-4" />
-                    <span>{hotel.location}</span>
-                  </div>
+                <p className="text-lg text-muted-foreground mb-8">
+                  Book premium accommodations near World Cup venues with
+                  exclusive partner rates.
+                </p>
 
-                  <div className="flex items-center gap-2 mb-4">
-                    {hotel.amenities.map((amenity) => (
-                      <div
-                        key={amenity}
-                        className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground"
-                        title={amenity}
-                      >
-                        {getAmenityIcon(amenity)}
-                      </div>
-                    ))}
+                {/* Search Bar */}
+                <div className="flex gap-2 max-w-xl mx-auto">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Input
+                      placeholder="Search by city, hotel name..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-12 h-12"
+                    />
                   </div>
+                  <Button variant="gradient" size="lg" className="px-6">
+                    <Filter className="w-5 h-5 mr-2" />
+                    Filter
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </section>
 
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <span className="text-2xl font-bold text-primary">
-                        ₦{hotel.price}
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        /night
-                      </span>
-                    </div>
-                    <Button
-                      variant="gradient"
-                      size="sm"
-                      onClick={() => handleBook(hotel)}
-                      disabled={bookingLoading === String(hotel.id)}
-                    >
-                      {bookingLoading === String(hotel.id) ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        "Book Now"
+          {/* Payment Methods */}
+          <section className="py-8 px-4 border-y border-border bg-secondary/30">
+            <div className="container mx-auto">
+              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+                <span className="font-medium">Payment Methods:</span>
+                <div className="flex items-center gap-2">
+                  <CreditCard className="w-4 h-4" />
+                  <span>Credit/Debit Card</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Bitcoin className="w-4 h-4" />
+                  <span>Crypto (BTC, ETH, USDT)</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Hotels Grid */}
+          <section className="py-16 px-4">
+            <div className="container mx-auto">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h2 className="text-2xl font-bold mb-2">Available Hotels</h2>
+                  <p className="text-muted-foreground">
+                    {hotels.length} properties found
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {hotels.map((hotel) => (
+                  <div
+                    key={hotel.id}
+                    className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                  >
+                    {/* Image */}
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={hotel.image}
+                        alt={hotel.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      {hotel.featured && (
+                        <div className="absolute top-3 left-3 px-2 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
+                          Featured
+                        </div>
                       )}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+                    </div>
 
-      {/* CTA Section */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto">
-          <div className="rounded-3xl gradient-primary p-8 md:p-12 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
-              Complete Your Visa First
-            </h2>
-            <p className="text-primary-foreground/80 mb-6 max-w-xl mx-auto">
-              Hotel booking is unlocked after your visa application is approved.
-              Start your application today!
-            </p>
-            <Button
-              size="lg"
-              className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
-            >
-              Apply for Visa
-            </Button>
+                    {/* Content */}
+                    <div className="p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="font-semibold group-hover:text-primary transition-colors">
+                          {hotel.name}
+                        </h3>
+                        <div className="flex items-center gap-1 text-sm">
+                          <Star className="w-4 h-4 fill-warning text-warning" />
+                          <span className="font-medium">{hotel.rating}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground mb-3">
+                        <MapPin className="w-4 h-4" />
+                        <span>{hotel.location}</span>
+                      </div>
+
+                      <div className="flex items-center gap-2 mb-4">
+                        {hotel.amenities.map((amenity) => (
+                          <div
+                            key={amenity}
+                            className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground"
+                            title={amenity}
+                          >
+                            {getAmenityIcon(amenity)}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex items-end justify-between">
+                        <div>
+                          <span className="text-2xl font-bold text-primary">
+                            ₦{hotel.price}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            /night
+                          </span>
+                        </div>
+                        <Button
+                          variant="gradient"
+                          size="sm"
+                          onClick={() => initiateBooking(hotel)}
+                          disabled={bookingLoading === String(hotel.id)}
+                        >
+                          {bookingLoading === String(hotel.id) ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            "Book Now"
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* CTA Section */}
+          <section className="py-16 px-4">
+            <div className="container mx-auto">
+              <div className="rounded-3xl gradient-primary p-8 md:p-12 text-center">
+                <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-4">
+                  Complete Your Visa First
+                </h2>
+                <p className="text-primary-foreground/80 mb-6 max-w-xl mx-auto">
+                  Hotel booking is unlocked after your visa application is
+                  approved. Start your application today!
+                </p>
+                <Button
+                  size="lg"
+                  className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
+                >
+                  Apply for Visa
+                </Button>
+              </div>
+            </div>
+          </section>
+        </TabsContent>
+
+        <TabsContent value="my-bookings">
+          <div className="container mx-auto px-4 py-8 pt-8">
+            <h2 className="text-2xl font-bold mb-6">My Hotel Reservations</h2>
+            <MyBookingsTab
+              onPay={(booking) =>
+                setPaymentModal({
+                  open: true,
+                  bookingId: booking._id,
+                  amount: booking.totalPrice,
+                  hotelName: booking.hotelName,
+                })
+              }
+            />
           </div>
-        </div>
-      </section>
+        </TabsContent>
+      </Tabs>
+
+      <BookingFormModal
+        open={bookingFormOpen}
+        onOpenChange={setBookingFormOpen}
+        hotel={selectedHotel}
+        onConfirm={handleBookingConfirm}
+        loading={bookingLoading === "processing"}
+      />
 
       {/* Payment Modal */}
       <Dialog
@@ -401,20 +439,33 @@ const Hotels = () => {
           </DialogHeader>
 
           <div className="space-y-4 py-4">
+            <div className="p-4 bg-muted rounded-lg text-sm space-y-2">
+              <p className="font-medium">Bank Transfer Details:</p>
+              <div className="grid grid-cols-2 gap-2">
+                <span className="text-muted-foreground">Bank Name:</span>
+                <span>Zenith Bank</span>
+                <span className="text-muted-foreground">Account Name:</span>
+                <span>VividStream Pro</span>
+                <span className="text-muted-foreground">Account Number:</span>
+                <span className="font-mono">1012345678</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Please use your booking Reference ID as the payment reference.
+              </p>
+            </div>
+
             <div className="space-y-2">
               <Label>Payment Method</Label>
               <Select
                 value={paymentMethod}
                 onValueChange={(val: any) => setPaymentMethod(val)}
+                disabled
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="card">
-                    Credit/Debit Card (Paystack)
-                  </SelectItem>
-                  <SelectItem value="crypto">Crypto (BitPay)</SelectItem>
+                  <SelectItem value="manual">Manual / Bank Transfer</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -440,7 +491,7 @@ const Hotels = () => {
                   Processing...
                 </>
               ) : (
-                "Pay Now"
+                "Confirm Payment Sent"
               )}
             </Button>
           </DialogFooter>

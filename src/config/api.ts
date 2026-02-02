@@ -40,7 +40,8 @@ export const endpoints = {
   },
   hotels: {
     create: `${API_BASE_URL}/hotels/book`,
-    myBookings: (userId: string) => `${API_BASE_URL}/hotels/user/${userId}`,
+    myBookings: (userId: string) =>
+      `${API_BASE_URL}/hotels/bookings/user/${userId}`,
     pay: `${API_BASE_URL}/hotels/pay`,
     verifyPayment: `${API_BASE_URL}/hotels/transactions/verify`,
     getAllTransactions: `${API_BASE_URL}/hotels/transactions/all`,
@@ -51,6 +52,10 @@ export const endpoints = {
     updateHotel: (id: string) => `${API_BASE_URL}/hotels/${id}`,
     deleteHotel: (id: string) => `${API_BASE_URL}/hotels/${id}`,
     getAllBookings: `${API_BASE_URL}/hotels/bookings/all`,
+    updateTransactionStatus: (id: string) =>
+      `${API_BASE_URL}/hotels/transactions/${id}/status`,
+    updateBookingStatus: (id: string) =>
+      `${API_BASE_URL}/hotels/bookings/${id}/status`,
   },
   admin: {
     stats: `${API_BASE_URL}/admin/stats`,

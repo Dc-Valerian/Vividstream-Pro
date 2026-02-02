@@ -49,6 +49,29 @@ export const BookingsTab = () => {
     }
   };
 
+  const handleBookingUpdate = async (id: string, status: string) => {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    try {
+      const res = await fetch(endpoints.hotels.updateBookingStatus(id), {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({ bookingStatus: status }),
+      });
+      if (res.ok) {
+        toast.success(`Booking marked as ${status}`);
+        fetchBookings(pagination.page);
+      } else {
+        throw new Error("Update failed");
+      }
+    } catch (error) {
+      toast.error("Failed to update booking status");
+    }
+  };
+
   useEffect(() => {
     fetchBookings();
   }, [statusFilter]);
@@ -189,6 +212,32 @@ export const BookingsTab = () => {
                   </td>
                   <td className="p-4">
                     <div className="flex gap-2">
+                      {booking.bookingStatus === "pending" && (
+                        <>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-8 w-8 text-success"
+                            title="Confirm Booking"
+                            onClick={() =>
+                              handleBookingUpdate(booking._id, "confirmed")
+                            }
+                          >
+                            <CheckCircle className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-8 w-8 text-destructive"
+                            title="Cancel Booking"
+                            onClick={() =>
+                              handleBookingUpdate(booking._id, "cancelled")
+                            }
+                          >
+                            <XCircle className="w-4 h-4" />
+                          </Button>
+                        </>
+                      )}
                       <Button
                         size="icon"
                         variant="ghost"

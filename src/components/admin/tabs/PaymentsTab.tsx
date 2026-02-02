@@ -6,7 +6,7 @@ import { ViewModal } from "@/components/admin/ViewModal";
 import { DeleteModal } from "@/components/admin/DeleteModal";
 import { endpoints } from "@/config/api";
 import { toast } from "sonner";
-import { Eye, Trash2 } from "lucide-react";
+import { Eye, Trash2, CheckCircle } from "lucide-react";
 
 export const PaymentsTab = () => {
   const [payments, setPayments] = useState<any[]>([]);
@@ -75,6 +75,29 @@ export const PaymentsTab = () => {
       }
     } catch (error) {
       toast.error("Failed to delete payment");
+    }
+  };
+
+  const handleStatusUpdate = async (id: string, status: string) => {
+    const token = localStorage.getItem("token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    try {
+      const res = await fetch(endpoints.hotels.updateTransactionStatus(id), {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({ status }),
+      });
+      if (res.ok) {
+        toast.success(`Payment marked as ${status}`);
+        fetchPayments(pagination.page);
+      } else {
+        throw new Error("Update failed");
+      }
+    } catch (error) {
+      toast.error("Failed to update payment status");
     }
   };
 
@@ -159,6 +182,19 @@ export const PaymentsTab = () => {
                   </td>
                   <td className="p-4">
                     <div className="flex gap-2">
+                      {payment.status === "pending" && (
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-8 w-8 text-success"
+                          title="Verify Payment"
+                          onClick={() =>
+                            handleStatusUpdate(payment._id, "completed")
+                          }
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                        </Button>
+                      )}
                       <Button
                         size="icon"
                         variant="ghost"
