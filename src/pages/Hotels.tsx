@@ -138,7 +138,7 @@ const Hotels = () => {
 
       if (!response.ok) throw new Error(data.message || "Booking failed");
 
-      toast.success(`Booking request sent for ${selectedHotel.name}!`);
+      toast.success(`Booking request sent! Check your email for details.`);
       setBookingFormOpen(false);
 
       // Open payment modal
