@@ -1,10 +1,16 @@
-import { createContext, useContext, useState, ReactNode } from "react";
-import { endpoints } from "@/config/api";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { endpoints, setLogoutHandler } from "@/config/api";
 
 interface User {
   id: string;
   name: string;
-  role: 'admin' | 'user' | 'receptionist';
+  role: "admin" | "user" | "receptionist";
   email: string;
   isAdmin?: boolean;
 }
@@ -14,13 +20,13 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (
     email: string,
-    password: string
+    password: string,
   ) => Promise<{ success: boolean; error?: string }>;
   signup: (
     name: string,
     email: string,
     password: string,
-    role?: "user" | "admin"
+    role?: "user" | "admin",
   ) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
@@ -33,9 +39,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return stored ? JSON.parse(stored) : null;
   });
 
+  // Register logout with the global apiFetch handler so any 401 auto-logs out
+  useEffect(() => {
+    setLogoutHandler(() => {
+      setUser(null);
+      localStorage.removeItem("vividstream_user");
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    });
+  }, []);
+
   const login = async (
     email: string,
-    password: string
+    password: string,
   ): Promise<{ success: boolean; error?: string }> => {
     try {
       const response = await fetch(endpoints.auth.login, {
@@ -76,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     name: string,
     email: string,
     password: string,
-    role: "user" | "admin" = "user"
+    role: "user" | "admin" = "user",
   ): Promise<{ success: boolean; error?: string }> => {
     try {
       const response = await fetch(endpoints.auth.register, {

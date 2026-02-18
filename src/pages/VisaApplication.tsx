@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 
 const VisaApplication = () => {
   const [step, setStep] = useState(1);
@@ -121,7 +121,7 @@ const VisaApplication = () => {
         additionalNotes: formData.additionalNotes,
       };
 
-      const response = await fetch(endpoints.visa.create, {
+      const response = await apiFetch(endpoints.visa.create, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -136,7 +136,7 @@ const VisaApplication = () => {
 
       const data = await response.json();
       toast.success(
-        "Visa application submitted successfully! Check your email for confirmation."
+        "Visa application submitted successfully! Check your email for confirmation.",
       );
       setStep(1);
       setFormData({

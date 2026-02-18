@@ -5,7 +5,7 @@ import { PaginationControls } from "@/components/admin/PaginationControls";
 import { ViewModal } from "@/components/admin/ViewModal";
 import { TicketModal } from "@/components/admin/modals/TicketModal";
 import { DeleteModal } from "@/components/admin/DeleteModal";
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 import { toast } from "sonner";
 import { Eye, Edit, Trash2, Ticket } from "lucide-react";
 
@@ -48,17 +48,10 @@ export const TicketsTab = () => {
   });
 
   const fetchTickets = async (page = 1) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
-
     try {
       setLoading(true);
-      const res = await fetch(
+      const res = await apiFetch(
         `${endpoints.tickets.getAll}?page=${page}&limit=10`,
-        { headers },
       );
       if (res.ok) {
         const data = await res.json();
@@ -82,26 +75,20 @@ export const TicketsTab = () => {
   }, []);
 
   const handleSaveTicket = async (data: any) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
-
     try {
       let res;
       if (ticketModal.ticket) {
         // Update
-        res = await fetch(endpoints.tickets.update(ticketModal.ticket._id), {
+        res = await apiFetch(endpoints.tickets.update(ticketModal.ticket._id), {
           method: "PUT",
-          headers,
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
       } else {
         // Create
-        res = await fetch(endpoints.tickets.create, {
+        res = await apiFetch(endpoints.tickets.create, {
           method: "POST",
-          headers,
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
       }
@@ -122,15 +109,10 @@ export const TicketsTab = () => {
   };
 
   const handleDelete = async (id: string | number) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
     try {
-      const res = await fetch(endpoints.tickets.delete(String(id)), {
+      const res = await apiFetch(endpoints.tickets.delete(String(id)), {
         method: "DELETE",
-        headers,
+        headers: { "Content-Type": "application/json" },
       });
       if (res.ok) {
         toast.success("Ticket deleted successfully");

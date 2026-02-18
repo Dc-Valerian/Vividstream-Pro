@@ -21,7 +21,7 @@ import {
   TrendingDown,
   Hotel,
 } from "lucide-react";
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 
 import { HotelsTab } from "@/components/admin/tabs/HotelsTab";
 import { BookingsTab } from "@/components/admin/tabs/BookingsTab";
@@ -50,13 +50,8 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       if (!user || user.role === "receptionist") return; // Skip stats for receptionist
-      const token = localStorage.getItem("token");
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      };
       try {
-        const statsRes = await fetch(endpoints.admin.stats, { headers });
+        const statsRes = await apiFetch(endpoints.admin.stats);
         if (statsRes.ok) setStatsData(await statsRes.json());
       } catch (error) {
         console.error("Error fetching admin stats:", error);

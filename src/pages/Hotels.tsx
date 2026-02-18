@@ -37,7 +37,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookingFormModal } from "@/components/hotels/BookingFormModal";
 import { MyBookingsTab } from "@/components/hotels/MyBookingsTab";
@@ -94,7 +94,7 @@ const Hotels = () => {
           search: searchQuery,
         });
 
-        const response = await fetch(
+        const response = await apiFetch(
           `${endpoints.hotels.getAll}?${queryParams}`,
         );
         if (response.ok) {
@@ -128,7 +128,7 @@ const Hotels = () => {
   const handleBookingConfirm = async (bookingData: any) => {
     setBookingLoading("processing");
     try {
-      const response = await fetch(endpoints.hotels.create, {
+      const response = await apiFetch(endpoints.hotels.create, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingData),
@@ -160,7 +160,7 @@ const Hotels = () => {
 
     setIsProcessingPayment(true);
     try {
-      const response = await fetch(endpoints.hotels.pay, {
+      const response = await apiFetch(endpoints.hotels.pay, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

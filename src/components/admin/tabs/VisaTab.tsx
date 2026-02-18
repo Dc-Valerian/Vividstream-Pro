@@ -5,7 +5,7 @@ import { PaginationControls } from "@/components/admin/PaginationControls";
 import { ViewModal } from "@/components/admin/ViewModal";
 import { EditModal } from "@/components/admin/EditModal";
 import { DeleteModal } from "@/components/admin/DeleteModal";
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 import { toast } from "sonner";
 import { Eye, Edit, Trash2 } from "lucide-react";
 
@@ -37,13 +37,10 @@ export const VisaTab = () => {
   }>({ open: false, title: "", id: null, type: "visa" });
 
   const fetchVisa = async (page = 1) => {
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
     try {
       setLoading(true);
-      const res = await fetch(
+      const res = await apiFetch(
         `${endpoints.visa.getAll}?page=${page}&limit=10`,
-        { headers }
       );
       if (res.ok) {
         const data = await res.json();
@@ -66,22 +63,19 @@ export const VisaTab = () => {
   }, []);
 
   const handleSaveEdit = async (updatedData: any) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
     try {
       const id = updatedData.id || updatedData._id;
-      const res = await fetch(endpoints.visa.update(id), {
+      const res = await apiFetch(endpoints.visa.update(id), {
         method: "PUT",
-        headers,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),
       });
       if (res.ok) {
         const data = await res.json();
         setVisaApplications((prev) =>
-          prev.map((v) => (v._id === id || v.id === id ? { ...v, ...data } : v))
+          prev.map((v) =>
+            v._id === id || v.id === id ? { ...v, ...data } : v,
+          ),
         );
         setEditModal((prev) => ({ ...prev, open: false }));
         toast.success("Visa application updated");
@@ -94,16 +88,13 @@ export const VisaTab = () => {
   };
 
   const handleDelete = async (id: any) => {
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
     try {
-      const res = await fetch(endpoints.visa.delete(String(id)), {
+      const res = await apiFetch(endpoints.visa.delete(String(id)), {
         method: "DELETE",
-        headers,
       });
       if (res.ok) {
         setVisaApplications((prev) =>
-          prev.filter((v) => v._id !== id && v.id !== id)
+          prev.filter((v) => v._id !== id && v.id !== id),
         );
         setDeleteModal((prev) => ({ ...prev, open: false }));
         toast.success("Visa application deleted");
@@ -180,7 +171,7 @@ export const VisaTab = () => {
                   <td className="p-4">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(
-                        visa.status
+                        visa.status,
                       )}`}
                     >
                       {visa.status}

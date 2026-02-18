@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 
 const RedeemTicket = () => {
   const { user } = useAuth();
@@ -39,7 +39,7 @@ const RedeemTicket = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(endpoints.tickets.redeem, {
+      const response = await apiFetch(endpoints.tickets.redeem, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +58,7 @@ const RedeemTicket = () => {
 
       setIsRedeemed(true);
       toast.success("Congratulations! Your ticket has been redeemed!");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
       toast.error(err.message);

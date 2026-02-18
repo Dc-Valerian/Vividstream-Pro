@@ -5,7 +5,7 @@ import { PaginationControls } from "@/components/admin/PaginationControls";
 import { ViewModal } from "@/components/admin/ViewModal";
 import { EditModal } from "@/components/admin/EditModal";
 import { DeleteModal } from "@/components/admin/DeleteModal";
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 import { toast } from "sonner";
 import { Eye, Edit, Trash2 } from "lucide-react";
 
@@ -53,19 +53,10 @@ export const AdminsTab = () => {
   });
 
   const fetchAdmins = async (page = 1) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
-
     try {
       setLoading(true);
-      const res = await fetch(
+      const res = await apiFetch(
         `${endpoints.admin.getAdmins}?page=${page}&limit=10`,
-        {
-          headers,
-        },
       );
       if (res.ok) {
         const data = await res.json();
@@ -89,17 +80,11 @@ export const AdminsTab = () => {
   }, []);
 
   const handleSaveEdit = async (updatedData: Record<string, any>) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
-
     try {
       const id = updatedData.id || updatedData._id;
-      const response = await fetch(endpoints.auth.update(id), {
+      const response = await apiFetch(endpoints.auth.update(id), {
         method: "PUT",
-        headers,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),
       });
 
@@ -121,15 +106,10 @@ export const AdminsTab = () => {
   };
 
   const handleDelete = async (id: string | number) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    };
     try {
-      const res = await fetch(endpoints.auth.delete(String(id)), {
+      const res = await apiFetch(endpoints.auth.delete(String(id)), {
         method: "DELETE",
-        headers,
+        headers: { "Content-Type": "application/json" },
       });
       if (res.ok) {
         toast.success("Admin deleted successfully");

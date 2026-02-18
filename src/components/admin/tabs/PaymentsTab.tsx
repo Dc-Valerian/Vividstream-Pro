@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { PaginationControls } from "@/components/admin/PaginationControls";
 import { ViewModal } from "@/components/admin/ViewModal";
 import { DeleteModal } from "@/components/admin/DeleteModal";
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 import { toast } from "sonner";
 import { Eye, Trash2, CheckCircle } from "lucide-react";
 
@@ -30,13 +30,10 @@ export const PaymentsTab = () => {
   }>({ open: false, title: "", id: null, type: "payment" });
 
   const fetchPayments = async (page = 1) => {
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
     try {
       setLoading(true);
-      const res = await fetch(
+      const res = await apiFetch(
         `${endpoints.hotels.getAllTransactions}?page=${page}&limit=10`,
-        { headers },
       );
       if (res.ok) {
         const data = await res.json();
@@ -59,13 +56,13 @@ export const PaymentsTab = () => {
   }, []);
 
   const handleDelete = async (id: any) => {
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
     try {
-      const res = await fetch(endpoints.hotels.deleteTransaction(String(id)), {
-        method: "DELETE",
-        headers,
-      });
+      const res = await apiFetch(
+        endpoints.hotels.deleteTransaction(String(id)),
+        {
+          method: "DELETE",
+        },
+      );
       if (res.ok) {
         toast.success("Payment deleted successfully");
         fetchPayments(pagination.page);
@@ -79,15 +76,10 @@ export const PaymentsTab = () => {
   };
 
   const handleStatusUpdate = async (id: string, status: string) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    };
     try {
-      const res = await fetch(endpoints.hotels.updateTransactionStatus(id), {
+      const res = await apiFetch(endpoints.hotels.updateTransactionStatus(id), {
         method: "PUT",
-        headers,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       });
       if (res.ok) {

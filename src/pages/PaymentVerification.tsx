@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 
 const PaymentVerification = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [status, setStatus] = useState<"loading" | "success" | "failed">(
-    "loading"
+    "loading",
   );
   const reference = searchParams.get("reference") || searchParams.get("trxref"); // Paystack sends reference or trxref
 
@@ -26,7 +26,7 @@ const PaymentVerification = () => {
 
   const verifyPayment = async (ref: string) => {
     try {
-      const response = await fetch(endpoints.hotels.verifyPayment, {
+      const response = await apiFetch(endpoints.hotels.verifyPayment, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reference: ref }),

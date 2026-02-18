@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { PaginationControls } from "@/components/admin/PaginationControls";
 import { HotelModal } from "@/components/admin/modals/HotelModal";
 import { DeleteModal } from "@/components/admin/DeleteModal";
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 import { toast } from "sonner";
 import { Edit, Trash2, Plus, MapPin, DollarSign } from "lucide-react";
 
@@ -38,8 +38,8 @@ export const HotelsTab = () => {
   const fetchHotels = async (page = 1) => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `${endpoints.hotels.getAll}?page=${page}&limit=10`
+      const response = await apiFetch(
+        `${endpoints.hotels.getAll}?page=${page}&limit=10`,
       );
       if (response.ok) {
         const data = await response.json();
@@ -63,35 +63,28 @@ export const HotelsTab = () => {
   }, []);
 
   const handleSaveHotel = async (formData: FormData) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
     try {
       let response;
       if (hotelModal.hotel) {
         // Update
-        response = await fetch(
+        response = await apiFetch(
           endpoints.hotels.updateHotel(hotelModal.hotel._id),
           {
             method: "PUT",
-            headers, // Do not set Content-Type for FormData, browser sets it with boundary
             body: formData,
-          }
+          },
         );
       } else {
         // Create
-        response = await fetch(endpoints.hotels.createHotel, {
+        response = await apiFetch(endpoints.hotels.createHotel, {
           method: "POST",
-          headers,
           body: formData,
         });
       }
 
       if (response.ok) {
         toast.success(
-          `Hotel ${hotelModal.hotel ? "updated" : "created"} successfully`
+          `Hotel ${hotelModal.hotel ? "updated" : "created"} successfully`,
         );
         fetchHotels(pagination.page);
       } else {
@@ -106,14 +99,13 @@ export const HotelsTab = () => {
   };
 
   const handleDelete = async (id: string | number) => {
-    const token = localStorage.getItem("token");
     try {
-      const response = await fetch(endpoints.hotels.deleteHotel(String(id)), {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await apiFetch(
+        endpoints.hotels.deleteHotel(String(id)),
+        {
+          method: "DELETE",
         },
-      });
+      );
 
       if (response.ok) {
         toast.success("Hotel deleted successfully");

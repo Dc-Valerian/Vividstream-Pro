@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 import { toast } from "sonner";
 import {
   Table,
@@ -32,7 +32,7 @@ export const MyBookingsTab = ({ onPay }: MyBookingsTabProps) => {
 
   const fetchBookings = async () => {
     try {
-      const response = await fetch(endpoints.hotels.myBookings(user.id));
+      const response = await apiFetch(endpoints.hotels.myBookings(user.id));
       if (response.ok) {
         const data = await response.json();
         setBookings(data.docs || []);

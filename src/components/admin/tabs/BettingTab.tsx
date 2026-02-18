@@ -5,7 +5,7 @@ import { PaginationControls } from "@/components/admin/PaginationControls";
 import { ViewModal } from "@/components/admin/ViewModal";
 import { DeleteModal } from "@/components/admin/DeleteModal";
 import { MatchModal } from "@/components/admin/modals/MatchModal";
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 import { toast } from "sonner";
 import { Eye, Edit, Trash2, Plus } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -52,7 +52,7 @@ export const BettingTab = () => {
   const fetchMatches = async (page = 1) => {
     try {
       setMatchesLoading(true);
-      const res = await fetch(
+      const res = await apiFetch(
         `${endpoints.worldcup.matches}?page=${page}&limit=10`,
       );
       if (res.ok) {
@@ -73,13 +73,10 @@ export const BettingTab = () => {
 
   // --- Fetch Predictions ---
   const fetchPredictions = async (page = 1) => {
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
     try {
       setPredictionsLoading(true);
-      const res = await fetch(
+      const res = await apiFetch(
         `${endpoints.worldcup.getAllPredictions}?page=${page}&limit=10`,
-        { headers },
       );
       if (res.ok) {
         const data = await res.json();
@@ -104,11 +101,6 @@ export const BettingTab = () => {
 
   // --- Match Actions ---
   const handleSaveMatch = async (data: any) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
     try {
       // Create FormData object
       const formData = new FormData();
@@ -137,18 +129,16 @@ export const BettingTab = () => {
 
       let res;
       if (matchModal.match) {
-        res = await fetch(
+        res = await apiFetch(
           endpoints.worldcup.updateMatch(matchModal.match._id),
           {
             method: "PUT",
-            headers,
             body: formData,
           },
         );
       } else {
-        res = await fetch(endpoints.worldcup.matches, {
+        res = await apiFetch(endpoints.worldcup.matches, {
           method: "POST",
-          headers,
           body: formData,
         });
       }
@@ -167,12 +157,9 @@ export const BettingTab = () => {
   };
 
   const handleDeleteMatch = async (id: string | number) => {
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
     try {
-      const res = await fetch(endpoints.worldcup.deleteMatch(String(id)), {
+      const res = await apiFetch(endpoints.worldcup.deleteMatch(String(id)), {
         method: "DELETE",
-        headers,
       });
       if (res.ok) {
         toast.success("Match deleted successfully");
@@ -188,13 +175,13 @@ export const BettingTab = () => {
 
   // --- Prediction Actions ---
   const handleDeletePrediction = async (id: string | number) => {
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
     try {
-      const res = await fetch(endpoints.worldcup.deletePrediction(String(id)), {
-        method: "DELETE",
-        headers,
-      });
+      const res = await apiFetch(
+        endpoints.worldcup.deletePrediction(String(id)),
+        {
+          method: "DELETE",
+        },
+      );
       if (res.ok) {
         toast.success("Prediction deleted successfully");
         fetchPredictions(predictionsPagination.page);

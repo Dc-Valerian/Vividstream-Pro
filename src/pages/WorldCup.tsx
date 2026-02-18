@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 
 // Define interface for Match from backend
 interface Match {
@@ -83,7 +83,7 @@ const WorldCup = () => {
 
   const fetchMatches = async () => {
     try {
-      const response = await fetch(endpoints.worldcup.matches);
+      const response = await apiFetch(endpoints.worldcup.matches);
       if (!response.ok) throw new Error("Failed to fetch matches");
       const data = await response.json();
       setMatches(data.docs || data); // Handle pagination response
@@ -127,7 +127,7 @@ const WorldCup = () => {
 
     setPlacingBet(true);
     try {
-      const response = await fetch(endpoints.worldcup.predict, {
+      const response = await apiFetch(endpoints.worldcup.predict, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

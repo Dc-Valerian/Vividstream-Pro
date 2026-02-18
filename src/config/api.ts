@@ -1,6 +1,49 @@
 export const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
+// ---------------------------------------------------------------------------
+// Centralised fetch wrapper with automatic 401 → logout handling
+// ---------------------------------------------------------------------------
+
+/** Registered by AuthContext so apiFetch can trigger logout without circular deps. */
+let _logoutHandler: (() => void) | null = null;
+
+export function setLogoutHandler(handler: () => void) {
+  _logoutHandler = handler;
+}
+
+/**
+ * Drop-in replacement for `fetch` that:
+ *  - Automatically attaches the stored Bearer token (if present)
+ *  - Calls the registered logout handler when the server returns 401
+ */
+export async function apiFetch(
+  input: RequestInfo | URL,
+  init: RequestInit = {},
+): Promise<Response> {
+  const token = localStorage.getItem("token");
+
+  const headers = new Headers(init.headers);
+  if (token && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  const response = await fetch(input, { ...init, headers });
+
+  if (response.status === 401) {
+    if (_logoutHandler) {
+      _logoutHandler();
+    } else {
+      // Fallback: clear storage directly if handler not yet registered
+      localStorage.removeItem("vividstream_user");
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
+  }
+
+  return response;
+}
+
 export const endpoints = {
   auth: {
     login: `${API_BASE_URL}/users/login-user`,

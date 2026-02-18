@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PaginationControls } from "@/components/admin/PaginationControls";
 import { ViewModal } from "@/components/admin/ViewModal";
-import { endpoints } from "@/config/api";
+import { endpoints, apiFetch } from "@/config/api";
 import { toast } from "sonner";
 import { Eye, CheckCircle, XCircle } from "lucide-react";
 
@@ -24,15 +24,13 @@ export const BookingsTab = () => {
   }>({ open: false, title: "", data: null });
 
   const fetchBookings = async (page = 1) => {
-    const token = localStorage.getItem("token");
-    const headers = { Authorization: `Bearer ${token}` };
     try {
       setLoading(true);
       let url = `${endpoints.hotels.getAllBookings}?page=${page}&limit=10`;
       if (statusFilter) {
         url += `&status=${statusFilter}`;
       }
-      const res = await fetch(url, { headers });
+      const res = await apiFetch(url);
       if (res.ok) {
         const data = await res.json();
         setBookings(data.docs || []);
@@ -50,15 +48,10 @@ export const BookingsTab = () => {
   };
 
   const handleBookingUpdate = async (id: string, status: string) => {
-    const token = localStorage.getItem("token");
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    };
     try {
-      const res = await fetch(endpoints.hotels.updateBookingStatus(id), {
+      const res = await apiFetch(endpoints.hotels.updateBookingStatus(id), {
         method: "PUT",
-        headers,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bookingStatus: status }),
       });
       if (res.ok) {
