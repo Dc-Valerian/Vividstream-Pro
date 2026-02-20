@@ -11,18 +11,20 @@ const DashboardHeader = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      await logout();
-      toast.success("👋 Logged out successfully", {
-        description: "See you next time!",
-        duration: 2000,
-      });
-      navigate("/");
-    } catch (error) {
-      toast.error("⚠️ Logout error", {
-        description: "There was an issue logging out",
-        duration: 3000,
-      });
+    if (window.confirm("Are you sure you want to log out?")) {
+      try {
+        await logout();
+        toast.success("👋 Logged out successfully", {
+          description: "See you next time!",
+          duration: 2000,
+        });
+        navigate("/");
+      } catch (error) {
+        toast.error("⚠️ Logout error", {
+          description: "There was an issue logging out",
+          duration: 3000,
+        });
+      }
     }
   };
 

@@ -26,8 +26,10 @@ const MobileHeader = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    logout();
-    navigate("/");
+    if (window.confirm("Are you sure you want to log out?")) {
+      logout();
+      navigate("/");
+    }
   };
   return (
     <header className="lg:hidden fixed top-0 left-0 right-0 h-16 border-b border-border bg-card/80 backdrop-blur-sm z-40 flex items-center justify-between px-4">
