@@ -20,6 +20,11 @@ export function Navbar() {
   // Public links (visible only when NOT authenticated)
   const publicLinks = [
     { href: "/", label: "Home" },
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/dashboard/redeem", label: "Redeem Ticket" },
+    { href: "/dashboard/visa", label: "Visa Services" },
+    { href: "/dashboard/hotels", label: "Hotels" },
+    { href: "/dashboard/world-cup", label: "World Cup" },
   ];
 
   // Protected links (only visible when authenticated - no Home)
