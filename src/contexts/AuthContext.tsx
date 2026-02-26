@@ -1,10 +1,16 @@
-import { createContext, useContext, useState, ReactNode } from "react";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { endpoints, setLogoutHandler } from "@/config/api";
 
 interface User {
   id: string;
   name: string;
+  role: "admin" | "user" | "receptionist";
   email: string;
   isAdmin?: boolean;
 }
@@ -12,8 +18,16 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  signup: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (
+    email: string,
+    password: string,
+  ) => Promise<{ success: boolean; error?: string }>;
+  signup: (
+    name: string,
+    email: string,
+    password: string,
+    role?: "user" | "admin",
+  ) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
 
@@ -25,9 +39,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return stored ? JSON.parse(stored) : null;
   });
 
-  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+  // Register logout with the global apiFetch handler so any 401 auto-logs out
+  useEffect(() => {
+    setLogoutHandler(() => {
+      setUser(null);
+      localStorage.removeItem("vividstream_user");
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    });
+  }, []);
+
+  const login = async (
+    email: string,
+    password: string,
+  ): Promise<{ success: boolean; error?: string }> => {
     try {
-      const response = await fetch(`${API_URL}/api/users/login-user`, {
+      const response = await fetch(endpoints.auth.login, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -44,7 +71,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         id: data.user.id,
         name: data.user.fullName,
         email: data.user.email,
-        isAdmin: false,
+        isAdmin: data.user.role === "admin",
+        role: data.user.role,
       };
 
       setUser(userData);
@@ -53,17 +81,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: true };
     } catch (error) {
       console.error("Login error:", error);
-      return { success: false, error: "Network error. Please check your connection." };
+      return {
+        success: false,
+        error: "Network error. Please check your connection.",
+      };
     }
   };
 
   const signup = async (
     name: string,
     email: string,
-    password: string
+    password: string,
+    role: "user" | "admin" = "user",
   ): Promise<{ success: boolean; error?: string }> => {
     try {
-      const response = await fetch(`${API_URL}/api/users/register-user`, {
+      const response = await fetch(endpoints.auth.register, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -71,6 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email,
           password,
           confirmPassword: password,
+          role,
         }),
       });
 
@@ -86,6 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: data.user.fullName,
         email: data.user.email,
         isAdmin: false,
+        role: data.user.role,
       };
 
       setUser(userData);
@@ -93,7 +127,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: true };
     } catch (error) {
       console.error("Signup error:", error);
-      return { success: false, error: "Network error. Please check your connection." };
+      return {
+        success: false,
+        error: "Network error. Please check your connection.",
+      };
     }
   };
 
@@ -102,11 +139,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Optional: Call backend logout endpoint if you implement token invalidation
       const token = localStorage.getItem("token");
       if (token) {
-        await fetch(`${API_URL}/api/users/logout`, {
+        await fetch(endpoints.auth.logout, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
       }
@@ -128,7 +165,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         signup,
         logout,
-      }}>
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

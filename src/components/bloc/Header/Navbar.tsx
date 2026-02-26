@@ -34,9 +34,11 @@ export function Navbar() {
   const navLinks = isAuthenticated ? protectedLinks : publicLinks;
 
   const handleLogout = () => {
-    logout();
-    navigate("/");
-    setIsOpen(false);
+    if (window.confirm("Are you sure you want to log out?")) {
+      logout();
+      navigate("/");
+      setIsOpen(false);
+    }
   };
 
   return (

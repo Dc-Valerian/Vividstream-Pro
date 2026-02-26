@@ -16,8 +16,10 @@ const Sidebar = () => {
   const logo = theme === "light" ? vividstreamLogoLight : vividstreamLogoDark;
 
   const handleLogout = () => {
-    logout();
-    navigate("/");
+    if (window.confirm("Are you sure you want to log out?")) {
+      logout();
+      navigate("/");
+    }
   };
   return (
     <aside className="fixed left-0 top-0 h-full w-64 border-r border-border bg-card/50 backdrop-blur-sm hidden lg:block">
