@@ -53,6 +53,7 @@ export const endpoints = {
     update: (id: string) => `${API_BASE_URL}/users/${id}`,
     delete: (id: string) => `${API_BASE_URL}/users/${id}`,
     logout: `${API_BASE_URL}/users/logout`,
+    setPassword: `${API_BASE_URL}/users/set-password`,
   },
   visa: {
     create: `${API_BASE_URL}/visa-applications/apply-visa`,
@@ -69,6 +70,13 @@ export const endpoints = {
     create: `${API_BASE_URL}/tickets/create`,
     update: (id: string) => `${API_BASE_URL}/tickets/${id}`,
     delete: (id: string) => `${API_BASE_URL}/tickets/${id}`,
+    stadium: {
+      all: `${API_BASE_URL}/tickets/stadium/all`,
+      create: `${API_BASE_URL}/tickets/stadium/create`,
+      update: (id: string) => `${API_BASE_URL}/tickets/stadium/${id}`,
+      delete: (id: string) => `${API_BASE_URL}/tickets/stadium/${id}`,
+      purchase: `${API_BASE_URL}/tickets/stadium/purchase`,
+    },
   },
   worldcup: {
     matches: `${API_BASE_URL}/worldcup/matches`,

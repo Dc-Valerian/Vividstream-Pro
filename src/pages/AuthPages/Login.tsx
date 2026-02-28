@@ -19,7 +19,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
+    {},
   );
   const [formData, setFormData] = useState({
     email: "",
@@ -88,6 +88,17 @@ const Login = () => {
               onClick: () => navigate("/signup"),
             },
           });
+        } else if (errorMessage.includes("stadium ticket first")) {
+          toast.error("🎟️ Ticket Required", {
+            description:
+              "You must purchase a stadium ticket to access your dashboard.",
+            duration: 4000,
+            action: {
+              label: "Get Ticket",
+              onClick: () => navigate("/"),
+            },
+          });
+          setTimeout(() => navigate("/"), 2000);
         } else if (errorMessage.includes("Network")) {
           toast.error("🌐 Connection error", {
             description: "Please check your internet connection",
@@ -124,7 +135,8 @@ const Login = () => {
               </div>
               <Link
                 to="/"
-                className="hidden lg:block bg-[#00A987] py-1 px-2 rounded-md items-center gap-2">
+                className="hidden lg:block bg-[#00A987] py-1 px-2 rounded-md items-center gap-2"
+              >
                 <h2 className="text-sm text-secondary font-bold ">
                   Back to Home
                 </h2>
@@ -179,7 +191,8 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
                   ) : (
@@ -203,7 +216,8 @@ const Login = () => {
               </label>
               <Link
                 to="/forgot-password"
-                className="text-sm text-primary hover:underline">
+                className="text-sm text-primary hover:underline"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -213,7 +227,8 @@ const Login = () => {
               variant="gradient"
               size="lg"
               className="w-full"
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               {isLoading ? "Signing in..." : "Sign In"}
               <ArrowRight className="w-5 h-5" />
             </Button>
@@ -223,7 +238,8 @@ const Login = () => {
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="text-primary font-medium hover:underline">
+              className="text-primary font-medium hover:underline"
+            >
               Sign up
             </Link>
           </p>

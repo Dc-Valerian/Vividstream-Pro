@@ -20,12 +20,14 @@ import {
   TrendingUp,
   TrendingDown,
   Hotel,
+  Building,
 } from "lucide-react";
 import { endpoints, apiFetch } from "@/config/api";
 
 import { HotelsTab } from "@/components/admin/tabs/HotelsTab";
 import { BookingsTab } from "@/components/admin/tabs/BookingsTab";
 import { TicketsTab } from "@/components/admin/tabs/TicketsTab";
+import { StadiumTicketsTab } from "@/components/admin/tabs/StadiumTicketsTab";
 import { BettingTab } from "@/components/admin/tabs/BettingTab";
 import { VisaTab } from "@/components/admin/tabs/VisaTab";
 import { PaymentsTab } from "@/components/admin/tabs/PaymentsTab";
@@ -106,6 +108,12 @@ const AdminDashboard = () => {
       : [
           { id: "analytics", label: "Analytics", icon: BarChart3, tab: null },
           { id: "tickets", label: "Tickets", icon: Ticket, tab: "tickets" },
+          {
+            id: "stadium",
+            label: "Stadium Tickets",
+            icon: Building,
+            tab: "stadium",
+          },
           { id: "users", label: "Users", icon: Users, tab: "users" },
           { id: "admins", label: "Admins", icon: Users, tab: "admins" },
           { id: "betting", label: "Betting", icon: Trophy, tab: "betting" },
@@ -260,6 +268,9 @@ const AdminDashboard = () => {
                   <TabsTrigger value="tickets" className="rounded-lg">
                     Tickets
                   </TabsTrigger>
+                  <TabsTrigger value="stadium" className="rounded-lg">
+                    Stadium
+                  </TabsTrigger>
                   <TabsTrigger value="users" className="rounded-lg">
                     Users
                   </TabsTrigger>
@@ -291,6 +302,10 @@ const AdminDashboard = () => {
 
             <TabsContent value="tickets">
               <TicketsTab />
+            </TabsContent>
+
+            <TabsContent value="stadium">
+              <StadiumTicketsTab />
             </TabsContent>
 
             <TabsContent value="users">

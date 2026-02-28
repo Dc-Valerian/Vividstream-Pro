@@ -434,7 +434,7 @@ const Hotels = () => {
             <DialogTitle>Complete Your Booking</DialogTitle>
             <DialogDescription>
               Pay for your stay at <strong>{paymentModal.hotelName}</strong>.
-              Amount: <strong>${paymentModal.amount}</strong>
+              Amount: <strong>₦{paymentModal.amount}</strong>
             </DialogDescription>
           </DialogHeader>
 

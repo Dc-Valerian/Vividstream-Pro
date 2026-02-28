@@ -67,7 +67,7 @@ const Signup = () => {
       const result = await signup(
         formData.name,
         formData.email,
-        formData.password
+        formData.password,
       );
       if (result.success) {
         toast.success("🎉 Account created successfully!", {
@@ -148,133 +148,42 @@ const Signup = () => {
 
         <div className="mx-auto w-full max-w-lg ">
           <div className="mb-8 mt-40 lg:mt-16">
-            <h1 className="text-3xl font-bold mb-2">Create an account</h1>
+            <h1 className="text-3xl font-bold mb-2">Get Your Ticket</h1>
             <p className="text-muted-foreground">
-              Get started with Vividstream Pro and unlock exclusive features.
+              Access to Vividstream Pro requires a stadium ticket. Once you
+              purchase a ticket, your account will be automatically set up for
+              you.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Enter your full name"
-                  className="pl-10"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  required
-                />
-              </div>
+          <div className="space-y-5">
+            <div className="p-6 bg-secondary/50 border border-border rounded-xl">
+              <h3 className="font-semibold mb-2 text-lg">Ticket Required</h3>
+              <p className="text-sm text-muted-foreground mb-6">
+                Vividstream Pro is an exclusive platform for ticket holders.
+                Purchasing a stadium ticket grants you full access to dashboard
+                services including visa applications, hotel bookings, and other
+                premium tools.
+              </p>
+              <Button
+                type="button"
+                variant="gradient"
+                size="lg"
+                className="w-full"
+                onClick={() => navigate("/")}
+              >
+                Browse Stadium Tickets
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  className="pl-10"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Create a password"
-                  className="pl-10 pr-10"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
-                  id="confirmPassword"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Confirm your password"
-                  className="pl-10"
-                  value={formData.confirmPassword}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      confirmPassword: e.target.value,
-                    })
-                  }
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2">
-              <input
-                type="checkbox"
-                id="terms"
-                className="rounded border-border mt-1"
-                required
-              />
-              <label htmlFor="terms" className="text-sm text-muted-foreground">
-                I agree to the{" "}
-                <a href="#" className="text-primary hover:underline">
-                  Terms of Service
-                </a>{" "}
-                and{" "}
-                <a href="#" className="text-primary hover:underline">
-                  Privacy Policy
-                </a>
-              </label>
-            </div>
-
-            <Button
-              type="submit"
-              variant="gradient"
-              size="lg"
-              className="w-full"
-              disabled={isLoading}>
-              {isLoading ? "Creating account..." : "Create Account"}
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-          </form>
+          </div>
 
           <p className="mt-8 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-primary font-medium hover:underline">
+              className="text-primary font-medium hover:underline"
+            >
               Sign in
             </Link>
           </p>
