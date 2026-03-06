@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { CartItem, BuyerDetails, CATEGORIES } from "../types";
 
 export function ConfirmationStep({
@@ -7,13 +9,33 @@ export function ConfirmationStep({
   buyer,
   onDone,
   isNewUser,
+  isLoggedIn,
 }: {
   cart: CartItem[];
   total: number;
   buyer: BuyerDetails;
   onDone: () => void;
   isNewUser: boolean;
+  isLoggedIn?: boolean;
 }) {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [password, setPassword] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [loginError, setLoginError] = useState("");
+
+  const handleLogin = async () => {
+    setIsLoggingIn(true);
+    setLoginError("");
+    const res = await login(buyer.email, password);
+    setIsLoggingIn(false);
+    if (res.success) {
+      navigate("/dashboard/hotels");
+    } else {
+      setLoginError(res.error || "Login failed");
+    }
+  };
+
   const [ref] = useState(
     "WC26-" + Math.random().toString(36).slice(2, 8).toUpperCase(),
   );
@@ -130,13 +152,39 @@ export function ConfirmationStep({
         </span>
       </div>
 
-      <button
-        onClick={onDone}
-        className="w-full rounded-xl py-4 text-sm font-black tracking-widest text-black hover:scale-[1.02] active:scale-95 transition-all"
-        style={{ background: "linear-gradient(135deg, #FFD700, #FF6B35)" }}
-      >
-        GO TO DASHBOARD
-      </button>
+      {!isNewUser && !isLoggedIn ? (
+        <div className="w-full flex flex-col gap-3 mt-2">
+          <div className="text-left space-y-1">
+            <label className="text-xs text-gray-400">
+              Enter password to log in & proceed
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Your password"
+              className="w-full bg-white/[0.05] border border-[#374151] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-yellow-400 transition-colors"
+            />
+            {loginError && <p className="text-xs text-red-400">{loginError}</p>}
+          </div>
+          <button
+            onClick={handleLogin}
+            disabled={isLoggingIn || !password}
+            className="w-full rounded-xl py-4 text-sm font-black tracking-widest text-black hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+            style={{ background: "linear-gradient(135deg, #FFD700, #FF6B35)" }}
+          >
+            {isLoggingIn ? "LOGGING IN..." : "LOGIN TO CONTINUE"}
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={onDone}
+          className="w-full rounded-xl py-4 text-sm font-black tracking-widest text-black hover:scale-[1.02] active:scale-95 transition-all"
+          style={{ background: "linear-gradient(135deg, #FFD700, #FF6B35)" }}
+        >
+          GO TO DASHBOARD
+        </button>
+      )}
     </div>
   );
 }

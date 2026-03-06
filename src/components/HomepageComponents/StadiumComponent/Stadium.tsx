@@ -66,6 +66,7 @@ function CheckoutDrawer({
   payment,
   processing,
   isNewUser,
+  isLoggedIn,
   onClose,
   onStepChange,
   onQtyChange,
@@ -83,6 +84,7 @@ function CheckoutDrawer({
   payment: PaymentDetails;
   processing: boolean;
   isNewUser: boolean;
+  isLoggedIn?: boolean;
   onClose: () => void;
   onStepChange: (s: CheckoutStep) => void;
   onQtyChange: (id: string, qty: number) => void;
@@ -177,6 +179,7 @@ function CheckoutDrawer({
               buyer={buyer}
               onDone={onDone}
               isNewUser={isNewUser}
+              isLoggedIn={isLoggedIn}
             />
           )}
         </div>
@@ -347,7 +350,11 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
     setCheckoutStep("cart");
     setBuyer({ firstName: "", lastName: "", email: "", phone: "" });
     setPayment({ cardNumber: "", expiry: "", cvv: "", nameOnCard: "" });
-    if (isNewUser && !user) navigate(loginPath);
+    if (isNewUser && !user) {
+      navigate(loginPath);
+    } else {
+      navigate("/dashboard/hotels");
+    }
   };
 
   return (
@@ -807,6 +814,7 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
         payment={payment}
         processing={processing}
         isNewUser={isNewUser}
+        isLoggedIn={!!user}
         onClose={() => setDrawerOpen(false)}
         onStepChange={setCheckoutStep}
         onQtyChange={(id, qty) =>

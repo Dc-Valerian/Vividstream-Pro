@@ -11,6 +11,7 @@ export function PaymentStep({
   onNext,
   processing,
 }: {
+  payment: PaymentDetails;
   onChange: (p: PaymentDetails) => void;
   total: number;
   onBack: () => void;
