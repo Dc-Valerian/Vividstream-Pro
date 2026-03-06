@@ -359,7 +359,7 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
             ⚽
           </div>
           <div>
-            <p className="font-black text-base tracking-widest text-yellow-400 uppercase leading-none">
+            <p className="font-black text-base tracking-widest text-yellow-400  leading-none">
               FIFA World Cup 2026
             </p>
             <p className="text-[10px] text-gray-500 tracking-widest uppercase mt-0.5">
