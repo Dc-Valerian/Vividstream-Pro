@@ -14,22 +14,23 @@ export function Navbar() {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
   const { theme } = useTheme();
-  
+
   const logo = theme === "light" ? vividstreamLogoLight : vividstreamLogoDark;
 
   // Public links (visible only when NOT authenticated)
   const publicLinks = [
     { href: "/", label: "Home" },
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/dashboard/redeem", label: "Redeem Ticket" },
-    { href: "/dashboard/visa", label: "Visa Services" },
-    { href: "/dashboard/hotels", label: "Hotels" },
-    { href: "/dashboard/world-cup", label: "World Cup" },
+    { href: "/about", label: "About" },
+    { href: "/redeem-ticket", label: "Redeem Ticket" },
+    { href: "/visa-application", label: "Visa Services" },
+    { href: "/hotels", label: "Hotels" },
+    { href: "/worldcup", label: "World Cup" },
   ];
 
   // Protected links (only visible when authenticated - no Home)
   const protectedLinks = [
     { href: "/dashboard", label: "Dashboard" },
+    { href: "/about", label: "About" },
     { href: "/dashboard/redeem", label: "Redeem Ticket" },
     { href: "/dashboard/visa", label: "Visa Services" },
     { href: "/dashboard/hotels", label: "Hotels" },
@@ -51,10 +52,13 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to={isAuthenticated ? "/dashboard" : "/"} className="flex items-center">
-            <img 
-              src={logo} 
-              alt="Vividstream Pro" 
+          <Link
+            to={isAuthenticated ? "/dashboard" : "/"}
+            className="flex items-center"
+          >
+            <img
+              src={logo}
+              alt="Vividstream Pro"
               className="h-20 w-32 object-contain"
             />
           </Link>
@@ -87,7 +91,12 @@ export function Navbar() {
                     {user?.name || "Dashboard"}
                   </Button>
                 </Link>
-                <Button variant="outline" size="sm" onClick={handleLogout} className="gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="gap-2"
+                >
                   <LogOut className="w-4 h-4" />
                   Logout
                 </Button>
@@ -116,7 +125,11 @@ export function Navbar() {
               size="icon"
               onClick={() => setIsOpen(!isOpen)}
             >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </Button>
           </div>
         </div>
@@ -142,25 +155,41 @@ export function Navbar() {
               <div className="flex gap-2 pt-4 border-t border-border/50">
                 {isAuthenticated ? (
                   <>
-                    <Link to="/dashboard" className="flex-1" onClick={() => setIsOpen(false)}>
+                    <Link
+                      to="/dashboard"
+                      className="flex-1"
+                      onClick={() => setIsOpen(false)}
+                    >
                       <Button variant="ghost" className="w-full gap-2">
                         <User className="w-4 h-4" />
                         Dashboard
                       </Button>
                     </Link>
-                    <Button variant="outline" className="flex-1 gap-2" onClick={handleLogout}>
+                    <Button
+                      variant="outline"
+                      className="flex-1 gap-2"
+                      onClick={handleLogout}
+                    >
                       <LogOut className="w-4 h-4" />
                       Logout
                     </Button>
                   </>
                 ) : (
                   <>
-                    <Link to="/login" className="flex-1" onClick={() => setIsOpen(false)}>
+                    <Link
+                      to="/login"
+                      className="flex-1"
+                      onClick={() => setIsOpen(false)}
+                    >
                       <Button variant="ghost" className="w-full">
                         Sign In
                       </Button>
                     </Link>
-                    <Link to="/signup" className="flex-1" onClick={() => setIsOpen(false)}>
+                    <Link
+                      to="/signup"
+                      className="flex-1"
+                      onClick={() => setIsOpen(false)}
+                    >
                       <Button variant="gradient" className="w-full">
                         Get Started
                       </Button>

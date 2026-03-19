@@ -1,3 +1,5 @@
+
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,6 +21,7 @@ import Hotels from "./pages/Hotels";
 import RedeemTicket from "./pages/RedeemTicket";
 import PaymentVerification from "./pages/PaymentVerification";
 import NotFound from "./pages/NotFound";
+import About from "./pages/About";
 import BulkTicketUpload from "./pages/admin/BulkTicketUpload";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BackToTopButton from "./components/bloc/BackToTopButton/BackToTopButton";
@@ -45,7 +48,9 @@ const App = () => (
               <Route path="/admin/login" element={<AdminAuth />} />
               <Route path="/visa-application" element={<VisaApplication />} />
               <Route path="/hotels" element={<Hotels />} />
+              <Route path="/about" element={<About />} />
               <Route path="/redeem-ticket" element={<RedeemTicket />} />
+              <Route path="/worldcup" element={<WorldCup />} />
               <Route
                 path="/dashboard"
                 element={

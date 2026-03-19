@@ -128,7 +128,12 @@ const HeroPage = () => {
                 <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
-            <Link to="/signup">
+            <Link to="/redeem-ticket">
+              <Button variant="gradient" size="xl">
+                Redeem Ticket
+              </Button>
+            </Link>
+            <Link to="/worldcup">
               <Button variant="glass" size="xl">
                 Explore World Cup
               </Button>

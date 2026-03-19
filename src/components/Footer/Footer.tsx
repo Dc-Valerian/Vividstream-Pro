@@ -25,7 +25,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <Link
-                  to="/world-cup"
+                  to="/worldcup"
                   className="hover:text-primary transition-colors"
                 >
                   World Cup
@@ -33,7 +33,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/visa"
+                  to="/visa-application"
                   className="hover:text-primary transition-colors"
                 >
                   Visa Services
@@ -47,20 +47,34 @@ const Footer = () => {
                   Hotels
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/redeem-ticket"
+                  className="hover:text-primary transition-colors"
+                >
+                  Redeem Ticket
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <Link
+                  to="/about"
+                  className="hover:text-primary transition-colors"
+                >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <Link
+                  to="/about"
+                  className="hover:text-primary transition-colors"
+                >
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="hover:text-primary transition-colors">
@@ -96,6 +110,47 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
+          <div>
+            <h4 className="font-semibold mb-4">Contact</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <span className="block">
+                  119 W 33rd St, New York, NY 10001, USA
+                </span>
+              </li>
+              <li>
+                <span className="block">+1 (929) 459-5216</span>
+              </li>
+              <li>
+                <span className="block">support@vividstreampro.com</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">Follow Us</h4>
+            <div className="flex gap-4">
+              <a
+                href="#"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                Facebook
+              </a>
+              <a
+                href="#"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                Twitter
+              </a>
+              <a
+                href="#"
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                Instagram
+              </a>
+            </div>
           </div>
         </div>
         <div className="pt-8 border-t border-border/50 text-center text-sm text-muted-foreground">
