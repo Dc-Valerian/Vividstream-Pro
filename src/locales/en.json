@@ -30,11 +30,6 @@
     "cta": "Join Thousands of Fans",
     "trust": "Trusted by Fans Worldwide"
   },
-  "stadium": {
-    "listings": "Listings",
-    "venue": "Venue",
-    "capacity": "Capacity"
-  },
   "stats": {
     "ticketsRedeemed": "Tickets Redeemed",
     "countriesServed": "Countries Served",
@@ -360,18 +355,25 @@
     }
   },
   "stadium": {
-    "title": "FIFA World Cup 2026",
-    "subtitle": "Official Ticket Platform",
-    "game": "Brazil vs Argentina",
-    "gameDetails": "Group Stage · Jul 14, 2026 · 20:00",
-    "listingsCount": "{{count}} Listings",
-    "ticket": "ticket",
-    "tickets": "tickets",
-    "inCart": "In Cart",
-    "addToCart": "Add to Cart",
-    "clear": "Clear",
-    "loading": "Loading tickets...",
+    "badge": "FIFA World Cup 2026",
+    "platform": "Official Ticket Platform",
+    "matchInfo": "Brazil vs Argentina",
+    "matchDetails": "Group Stage · Jul 14, 2026 · 20:00",
+    "listings": "Listings",
+    "venue": "Venue",
+    "capacity": "Capacity",
+    "clickToExpand": "Click to expand",
+    "fromPrice": "From ₦{{price}}",
+    "available": "{{count}} available",
+    "viewLabel": "{{view}} View",
+    "bestPrice": "Best Price",
+    "bestDeal": "Best Deal",
+    "bestView": "Best View",
+    "checkoutCount": "CHECKOUT ({{count}})",
+    "checkoutButton": "CHECKOUT",
+    "loadError": "Failed to load tickets",
     "noTickets": "No tickets available",
+    "loading": "Loading tickets...",
     "buyerGuarantee": "100% buyer guarantee",
     "authentic": "Guaranteed authentic",
     "summary": {
