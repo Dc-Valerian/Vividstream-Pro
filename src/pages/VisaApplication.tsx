@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/bloc/Header/Navbar";
 import { ChatWidget } from "@/components/ChatWidget";
@@ -38,6 +38,8 @@ import {
 import { toast } from "sonner";
 
 import { endpoints, apiFetch } from "@/config/api";
+import { PaymentStep } from "@/components/HomepageComponents/StadiumComponent/components/PaymentStep";
+import { PaymentDetails } from "@/components/HomepageComponents/StadiumComponent/types";
 
 const VisaApplication = () => {
   const { t } = useTranslation();
@@ -48,9 +50,49 @@ const VisaApplication = () => {
   const [loading, setLoading] = useState(false);
   const [showHotelPopup, setShowHotelPopup] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
-  const [profilePhotoPreview, setProfilePhotoPreview] = useState<string | null>(
-    null,
-  );
+  const [profilePhotoPreview, setProfilePhotoPreview] = useState<string | null>(null);
+
+  const [existingApp, setExistingApp] = useState<any>(null);
+  const [loadingApp, setLoadingApp] = useState(true);
+  const [payment, setPayment] = useState<PaymentDetails>({
+    cardNumber: "",
+    expiry: "",
+    cvv: "",
+    nameOnCard: "",
+  });
+
+  useEffect(() => {
+    const fetchExistingApp = async () => {
+      if (!user) {
+        setLoadingApp(false);
+        return;
+      }
+      try {
+        const token = localStorage.getItem("token");
+        const userId = (user as any).id;
+        if (!userId) {
+            setLoadingApp(false);
+            return;
+        }
+
+        const res = await fetch(endpoints.visa.getByUser(userId), {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.length > 0) {
+             setExistingApp(data[0]);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch visa applications", err);
+      } finally {
+        setLoadingApp(false);
+      }
+    };
+    fetchExistingApp();
+  }, [user]);
   const [formData, setFormData] = useState({
     // Personal Info
     firstName: "",
@@ -77,6 +119,7 @@ const VisaApplication = () => {
     { number: 2, title: "Passport Details", icon: FileText },
     { number: 3, title: "Travel Info", icon: MapPin },
     { number: 4, title: "Review", icon: CheckCircle },
+    { number: 5, title: "Payment", icon: CheckCircle },
   ];
 
   const validateStep = (currentStep: number): boolean => {
@@ -125,8 +168,12 @@ const VisaApplication = () => {
   };
 
   const handleNext = () => {
+    if (step === 4) {
+      setStep(5);
+      return;
+    }
     if (validateStep(step)) {
-      if (step < 4) setStep(step + 1);
+      if (step < 5) setStep(step + 1);
     }
   };
 
@@ -230,7 +277,7 @@ const VisaApplication = () => {
 
       // Add userId if user is logged in
       if (user) {
-        formDataToSend.append("userId", (user as any)._id);
+        formDataToSend.append("userId", (user as any).id);
       }
 
       if (profilePhoto) {
@@ -270,6 +317,54 @@ const VisaApplication = () => {
       navigate("/dashboard");
     }
   };
+
+  if (loadingApp) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex justify-center items-center">
+          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+        </div>
+      </div>
+    );
+  }
+
+  if (existingApp) {
+    return (
+      <div className="min-h-screen bg-background pb-16">
+        <Navbar />
+        <main className="pt-24 px-4 container mx-auto max-w-3xl">
+            <div className="rounded-2xl border border-border bg-card p-8 text-center animate-fade-in mt-12 shadow-sm">
+               <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                  <Plane className="w-8 h-8 text-primary" />
+               </div>
+               <h2 className="text-2xl font-bold mb-2">Application Submitted</h2>
+               <p className="text-muted-foreground mb-6">Your visa application is currently being processed.</p>
+               
+               <div className="bg-secondary/50 rounded-xl p-6 mb-8 max-w-sm mx-auto">
+                 <div className="flex justify-between items-center mb-3">
+                   <span className="text-sm text-muted-foreground">Status</span>
+                   <span className="font-semibold text-primary capitalize">{existingApp.status || "submitted"}</span>
+                 </div>
+                 <div className="flex justify-between items-center mb-3">
+                   <span className="text-sm text-muted-foreground">Destination</span>
+                   <span className="font-semibold uppercase">{existingApp.destinationCountry || "N/A"}</span>
+                 </div>
+                 <div className="flex justify-between items-center">
+                   <span className="text-sm text-muted-foreground">Submitted</span>
+                   <span className="font-semibold">{new Date(existingApp.submittedAt || Date.now()).toLocaleDateString()}</span>
+                 </div>
+               </div>
+
+               <Button variant="outline" onClick={() => navigate("/dashboard")}>
+                 Back to Dashboard
+               </Button>
+            </div>
+        </main>
+        <ChatWidget />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -416,44 +511,146 @@ const VisaApplication = () => {
                         <SelectItem value="af">Afghanistan</SelectItem>
                         <SelectItem value="al">Albania</SelectItem>
                         <SelectItem value="dz">Algeria</SelectItem>
+                        <SelectItem value="ad">Andorra</SelectItem>
+                        <SelectItem value="ao">Angola</SelectItem>
+                        <SelectItem value="ag">Antigua and Barbuda</SelectItem>
                         <SelectItem value="ar">Argentina</SelectItem>
+                        <SelectItem value="am">Armenia</SelectItem>
                         <SelectItem value="au">Australia</SelectItem>
                         <SelectItem value="at">Austria</SelectItem>
+                        <SelectItem value="az">Azerbaijan</SelectItem>
+                        <SelectItem value="bs">Bahamas</SelectItem>
                         <SelectItem value="bh">Bahrain</SelectItem>
                         <SelectItem value="bd">Bangladesh</SelectItem>
+                        <SelectItem value="bb">Barbados</SelectItem>
+                        <SelectItem value="by">Belarus</SelectItem>
                         <SelectItem value="be">Belgium</SelectItem>
+                        <SelectItem value="bz">Belize</SelectItem>
+                        <SelectItem value="bj">Benin</SelectItem>
+                        <SelectItem value="bt">Bhutan</SelectItem>
+                        <SelectItem value="bo">Bolivia</SelectItem>
+                        <SelectItem value="ba">
+                          Bosnia and Herzegovina
+                        </SelectItem>
+                        <SelectItem value="bw">Botswana</SelectItem>
                         <SelectItem value="br">Brazil</SelectItem>
+                        <SelectItem value="bn">Brunei</SelectItem>
+                        <SelectItem value="bg">Bulgaria</SelectItem>
+                        <SelectItem value="bf">Burkina Faso</SelectItem>
+                        <SelectItem value="bi">Burundi</SelectItem>
+                        <SelectItem value="cv">Cabo Verde</SelectItem>
+                        <SelectItem value="kh">Cambodia</SelectItem>
+                        <SelectItem value="cm">Cameroon</SelectItem>
                         <SelectItem value="ca">Canada</SelectItem>
+                        <SelectItem value="cf">
+                          Central African Republic
+                        </SelectItem>
+                        <SelectItem value="td">Chad</SelectItem>
+                        <SelectItem value="cl">Chile</SelectItem>
                         <SelectItem value="cn">China</SelectItem>
                         <SelectItem value="co">Colombia</SelectItem>
+                        <SelectItem value="km">Comoros</SelectItem>
+                        <SelectItem value="cg">Congo</SelectItem>
+                        <SelectItem value="cd">
+                          Congo (Democratic Republic)
+                        </SelectItem>
+                        <SelectItem value="cr">Costa Rica</SelectItem>
+                        <SelectItem value="ci">Côte d'Ivoire</SelectItem>
                         <SelectItem value="hr">Croatia</SelectItem>
+                        <SelectItem value="cu">Cuba</SelectItem>
+                        <SelectItem value="cy">Cyprus</SelectItem>
                         <SelectItem value="cz">Czech Republic</SelectItem>
                         <SelectItem value="dk">Denmark</SelectItem>
+                        <SelectItem value="dj">Djibouti</SelectItem>
+                        <SelectItem value="dm">Dominica</SelectItem>
+                        <SelectItem value="do">Dominican Republic</SelectItem>
+                        <SelectItem value="ec">Ecuador</SelectItem>
                         <SelectItem value="eg">Egypt</SelectItem>
+                        <SelectItem value="sv">El Salvador</SelectItem>
+                        <SelectItem value="gq">Equatorial Guinea</SelectItem>
+                        <SelectItem value="er">Eritrea</SelectItem>
+                        <SelectItem value="ee">Estonia</SelectItem>
+                        <SelectItem value="sz">Eswatini</SelectItem>
+                        <SelectItem value="et">Ethiopia</SelectItem>
+                        <SelectItem value="fj">Fiji</SelectItem>
                         <SelectItem value="fi">Finland</SelectItem>
                         <SelectItem value="fr">France</SelectItem>
+                        <SelectItem value="ga">Gabon</SelectItem>
+                        <SelectItem value="gm">Gambia</SelectItem>
+                        <SelectItem value="ge">Georgia</SelectItem>
                         <SelectItem value="de">Germany</SelectItem>
                         <SelectItem value="gh">Ghana</SelectItem>
                         <SelectItem value="gr">Greece</SelectItem>
-                        <SelectItem value="hk">Hong Kong</SelectItem>
+                        <SelectItem value="gd">Grenada</SelectItem>
+                        <SelectItem value="gt">Guatemala</SelectItem>
+                        <SelectItem value="gn">Guinea</SelectItem>
+                        <SelectItem value="gw">Guinea-Bissau</SelectItem>
+                        <SelectItem value="gy">Guyana</SelectItem>
+                        <SelectItem value="ht">Haiti</SelectItem>
+                        <SelectItem value="hn">Honduras</SelectItem>
                         <SelectItem value="hu">Hungary</SelectItem>
+                        <SelectItem value="is">Iceland</SelectItem>
                         <SelectItem value="in">India</SelectItem>
                         <SelectItem value="id">Indonesia</SelectItem>
+                        <SelectItem value="ir">Iran</SelectItem>
+                        <SelectItem value="iq">Iraq</SelectItem>
                         <SelectItem value="ie">Ireland</SelectItem>
                         <SelectItem value="il">Israel</SelectItem>
                         <SelectItem value="it">Italy</SelectItem>
+                        <SelectItem value="jm">Jamaica</SelectItem>
                         <SelectItem value="jp">Japan</SelectItem>
+                        <SelectItem value="jo">Jordan</SelectItem>
+                        <SelectItem value="kz">Kazakhstan</SelectItem>
                         <SelectItem value="ke">Kenya</SelectItem>
-                        <SelectItem value="kr">South Korea</SelectItem>
+                        <SelectItem value="ki">Kiribati</SelectItem>
+                        <SelectItem value="kp">Korea (North)</SelectItem>
+                        <SelectItem value="kr">Korea (South)</SelectItem>
                         <SelectItem value="kw">Kuwait</SelectItem>
+                        <SelectItem value="kg">Kyrgyzstan</SelectItem>
+                        <SelectItem value="la">Laos</SelectItem>
+                        <SelectItem value="lv">Latvia</SelectItem>
+                        <SelectItem value="lb">Lebanon</SelectItem>
+                        <SelectItem value="ls">Lesotho</SelectItem>
+                        <SelectItem value="lr">Liberia</SelectItem>
+                        <SelectItem value="ly">Libya</SelectItem>
+                        <SelectItem value="li">Liechtenstein</SelectItem>
+                        <SelectItem value="lt">Lithuania</SelectItem>
+                        <SelectItem value="lu">Luxembourg</SelectItem>
+                        <SelectItem value="mg">Madagascar</SelectItem>
+                        <SelectItem value="mw">Malawi</SelectItem>
                         <SelectItem value="my">Malaysia</SelectItem>
+                        <SelectItem value="mv">Maldives</SelectItem>
+                        <SelectItem value="ml">Mali</SelectItem>
+                        <SelectItem value="mt">Malta</SelectItem>
+                        <SelectItem value="mh">Marshall Islands</SelectItem>
+                        <SelectItem value="mr">Mauritania</SelectItem>
+                        <SelectItem value="mu">Mauritius</SelectItem>
                         <SelectItem value="mx">Mexico</SelectItem>
+                        <SelectItem value="fm">Micronesia</SelectItem>
+                        <SelectItem value="md">Moldova</SelectItem>
+                        <SelectItem value="mc">Monaco</SelectItem>
+                        <SelectItem value="mn">Mongolia</SelectItem>
+                        <SelectItem value="me">Montenegro</SelectItem>
                         <SelectItem value="ma">Morocco</SelectItem>
+                        <SelectItem value="moz">Mozambique</SelectItem>
+                        <SelectItem value="mm">Myanmar</SelectItem>
+                        <SelectItem value="na">Namibia</SelectItem>
+                        <SelectItem value="nr">Nauru</SelectItem>
+                        <SelectItem value="np">Nepal</SelectItem>
                         <SelectItem value="nl">Netherlands</SelectItem>
                         <SelectItem value="nz">New Zealand</SelectItem>
+                        <SelectItem value="ni">Nicaragua</SelectItem>
+                        <SelectItem value="ne">Niger</SelectItem>
                         <SelectItem value="ng">Nigeria</SelectItem>
+                        <SelectItem value="mk">North Macedonia</SelectItem>
                         <SelectItem value="no">Norway</SelectItem>
+                        <SelectItem value="om">Oman</SelectItem>
                         <SelectItem value="pk">Pakistan</SelectItem>
+                        <SelectItem value="pw">Palau</SelectItem>
+                        <SelectItem value="ps">Palestine</SelectItem>
+                        <SelectItem value="pa">Panama</SelectItem>
+                        <SelectItem value="pg">Papua New Guinea</SelectItem>
+                        <SelectItem value="py">Paraguay</SelectItem>
                         <SelectItem value="pe">Peru</SelectItem>
                         <SelectItem value="ph">Philippines</SelectItem>
                         <SelectItem value="pl">Poland</SelectItem>
@@ -461,21 +658,64 @@ const VisaApplication = () => {
                         <SelectItem value="qa">Qatar</SelectItem>
                         <SelectItem value="ro">Romania</SelectItem>
                         <SelectItem value="ru">Russia</SelectItem>
+                        <SelectItem value="rw">Rwanda</SelectItem>
+                        <SelectItem value="kn">
+                          Saint Kitts and Nevis
+                        </SelectItem>
+                        <SelectItem value="lc">Saint Lucia</SelectItem>
+                        <SelectItem value="vc">
+                          Saint Vincent and the Grenadines
+                        </SelectItem>
+                        <SelectItem value="ws">Samoa</SelectItem>
+                        <SelectItem value="sm">San Marino</SelectItem>
+                        <SelectItem value="st">
+                          Sao Tome and Principe
+                        </SelectItem>
                         <SelectItem value="sa">Saudi Arabia</SelectItem>
+                        <SelectItem value="sn">Senegal</SelectItem>
+                        <SelectItem value="rs">Serbia</SelectItem>
+                        <SelectItem value="sc">Seychelles</SelectItem>
+                        <SelectItem value="sl">Sierra Leone</SelectItem>
                         <SelectItem value="sg">Singapore</SelectItem>
+                        <SelectItem value="sk">Slovakia</SelectItem>
+                        <SelectItem value="si">Slovenia</SelectItem>
+                        <SelectItem value="sb">Solomon Islands</SelectItem>
+                        <SelectItem value="so">Somalia</SelectItem>
                         <SelectItem value="za">South Africa</SelectItem>
+                        <SelectItem value="ss">South Sudan</SelectItem>
                         <SelectItem value="es">Spain</SelectItem>
+                        <SelectItem value="lk">Sri Lanka</SelectItem>
+                        <SelectItem value="sd">Sudan</SelectItem>
+                        <SelectItem value="sr">Suriname</SelectItem>
                         <SelectItem value="se">Sweden</SelectItem>
                         <SelectItem value="ch">Switzerland</SelectItem>
+                        <SelectItem value="sy">Syria</SelectItem>
                         <SelectItem value="tw">Taiwan</SelectItem>
+                        <SelectItem value="tj">Tajikistan</SelectItem>
+                        <SelectItem value="tz">Tanzania</SelectItem>
                         <SelectItem value="th">Thailand</SelectItem>
+                        <SelectItem value="tl">Timor-Leste</SelectItem>
+                        <SelectItem value="tg">Togo</SelectItem>
+                        <SelectItem value="to">Tonga</SelectItem>
+                        <SelectItem value="tt">Trinidad and Tobago</SelectItem>
+                        <SelectItem value="tn">Tunisia</SelectItem>
                         <SelectItem value="tr">Turkey</SelectItem>
+                        <SelectItem value="tm">Turkmenistan</SelectItem>
+                        <SelectItem value="tv">Tuvalu</SelectItem>
+                        <SelectItem value="ug">Uganda</SelectItem>
                         <SelectItem value="ua">Ukraine</SelectItem>
                         <SelectItem value="ae">United Arab Emirates</SelectItem>
-                        <SelectItem value="uk">United Kingdom</SelectItem>
+                        <SelectItem value="gb">United Kingdom</SelectItem>
                         <SelectItem value="us">United States</SelectItem>
+                        <SelectItem value="uy">Uruguay</SelectItem>
+                        <SelectItem value="uz">Uzbekistan</SelectItem>
+                        <SelectItem value="vu">Vanuatu</SelectItem>
+                        <SelectItem value="va">Vatican City</SelectItem>
                         <SelectItem value="ve">Venezuela</SelectItem>
                         <SelectItem value="vn">Vietnam</SelectItem>
+                        <SelectItem value="ye">Yemen</SelectItem>
+                        <SelectItem value="zm">Zambia</SelectItem>
+                        <SelectItem value="zw">Zimbabwe</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -602,10 +842,215 @@ const VisaApplication = () => {
                       <SelectTrigger>
                         <SelectValue placeholder="Select destination" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="us">United States</SelectItem>
+                      <SelectContent className="max-h-80">
+                        <SelectItem value="af">Afghanistan</SelectItem>
+                        <SelectItem value="al">Albania</SelectItem>
+                        <SelectItem value="dz">Algeria</SelectItem>
+                        <SelectItem value="ad">Andorra</SelectItem>
+                        <SelectItem value="ao">Angola</SelectItem>
+                        <SelectItem value="ag">Antigua and Barbuda</SelectItem>
+                        <SelectItem value="ar">Argentina</SelectItem>
+                        <SelectItem value="am">Armenia</SelectItem>
+                        <SelectItem value="au">Australia</SelectItem>
+                        <SelectItem value="at">Austria</SelectItem>
+                        <SelectItem value="az">Azerbaijan</SelectItem>
+                        <SelectItem value="bs">Bahamas</SelectItem>
+                        <SelectItem value="bh">Bahrain</SelectItem>
+                        <SelectItem value="bd">Bangladesh</SelectItem>
+                        <SelectItem value="bb">Barbados</SelectItem>
+                        <SelectItem value="by">Belarus</SelectItem>
+                        <SelectItem value="be">Belgium</SelectItem>
+                        <SelectItem value="bz">Belize</SelectItem>
+                        <SelectItem value="bj">Benin</SelectItem>
+                        <SelectItem value="bt">Bhutan</SelectItem>
+                        <SelectItem value="bo">Bolivia</SelectItem>
+                        <SelectItem value="ba">
+                          Bosnia and Herzegovina
+                        </SelectItem>
+                        <SelectItem value="bw">Botswana</SelectItem>
+                        <SelectItem value="br">Brazil</SelectItem>
+                        <SelectItem value="bn">Brunei</SelectItem>
+                        <SelectItem value="bg">Bulgaria</SelectItem>
+                        <SelectItem value="bf">Burkina Faso</SelectItem>
+                        <SelectItem value="bi">Burundi</SelectItem>
+                        <SelectItem value="cv">Cabo Verde</SelectItem>
+                        <SelectItem value="kh">Cambodia</SelectItem>
+                        <SelectItem value="cm">Cameroon</SelectItem>
                         <SelectItem value="ca">Canada</SelectItem>
+                        <SelectItem value="cf">
+                          Central African Republic
+                        </SelectItem>
+                        <SelectItem value="td">Chad</SelectItem>
+                        <SelectItem value="cl">Chile</SelectItem>
+                        <SelectItem value="cn">China</SelectItem>
+                        <SelectItem value="co">Colombia</SelectItem>
+                        <SelectItem value="km">Comoros</SelectItem>
+                        <SelectItem value="cg">Congo</SelectItem>
+                        <SelectItem value="cd">
+                          Congo (Democratic Republic)
+                        </SelectItem>
+                        <SelectItem value="cr">Costa Rica</SelectItem>
+                        <SelectItem value="ci">Côte d'Ivoire</SelectItem>
+                        <SelectItem value="hr">Croatia</SelectItem>
+                        <SelectItem value="cu">Cuba</SelectItem>
+                        <SelectItem value="cy">Cyprus</SelectItem>
+                        <SelectItem value="cz">Czech Republic</SelectItem>
+                        <SelectItem value="dk">Denmark</SelectItem>
+                        <SelectItem value="dj">Djibouti</SelectItem>
+                        <SelectItem value="dm">Dominica</SelectItem>
+                        <SelectItem value="do">Dominican Republic</SelectItem>
+                        <SelectItem value="ec">Ecuador</SelectItem>
+                        <SelectItem value="eg">Egypt</SelectItem>
+                        <SelectItem value="sv">El Salvador</SelectItem>
+                        <SelectItem value="gq">Equatorial Guinea</SelectItem>
+                        <SelectItem value="er">Eritrea</SelectItem>
+                        <SelectItem value="ee">Estonia</SelectItem>
+                        <SelectItem value="sz">Eswatini</SelectItem>
+                        <SelectItem value="et">Ethiopia</SelectItem>
+                        <SelectItem value="fj">Fiji</SelectItem>
+                        <SelectItem value="fi">Finland</SelectItem>
+                        <SelectItem value="fr">France</SelectItem>
+                        <SelectItem value="ga">Gabon</SelectItem>
+                        <SelectItem value="gm">Gambia</SelectItem>
+                        <SelectItem value="ge">Georgia</SelectItem>
+                        <SelectItem value="de">Germany</SelectItem>
+                        <SelectItem value="gh">Ghana</SelectItem>
+                        <SelectItem value="gr">Greece</SelectItem>
+                        <SelectItem value="gd">Grenada</SelectItem>
+                        <SelectItem value="gt">Guatemala</SelectItem>
+                        <SelectItem value="gn">Guinea</SelectItem>
+                        <SelectItem value="gw">Guinea-Bissau</SelectItem>
+                        <SelectItem value="gy">Guyana</SelectItem>
+                        <SelectItem value="ht">Haiti</SelectItem>
+                        <SelectItem value="hn">Honduras</SelectItem>
+                        <SelectItem value="hu">Hungary</SelectItem>
+                        <SelectItem value="is">Iceland</SelectItem>
+                        <SelectItem value="in">India</SelectItem>
+                        <SelectItem value="id">Indonesia</SelectItem>
+                        <SelectItem value="ir">Iran</SelectItem>
+                        <SelectItem value="iq">Iraq</SelectItem>
+                        <SelectItem value="ie">Ireland</SelectItem>
+                        <SelectItem value="il">Israel</SelectItem>
+                        <SelectItem value="it">Italy</SelectItem>
+                        <SelectItem value="jm">Jamaica</SelectItem>
+                        <SelectItem value="jp">Japan</SelectItem>
+                        <SelectItem value="jo">Jordan</SelectItem>
+                        <SelectItem value="kz">Kazakhstan</SelectItem>
+                        <SelectItem value="ke">Kenya</SelectItem>
+                        <SelectItem value="ki">Kiribati</SelectItem>
+                        <SelectItem value="kp">Korea (North)</SelectItem>
+                        <SelectItem value="kr">Korea (South)</SelectItem>
+                        <SelectItem value="kw">Kuwait</SelectItem>
+                        <SelectItem value="kg">Kyrgyzstan</SelectItem>
+                        <SelectItem value="la">Laos</SelectItem>
+                        <SelectItem value="lv">Latvia</SelectItem>
+                        <SelectItem value="lb">Lebanon</SelectItem>
+                        <SelectItem value="ls">Lesotho</SelectItem>
+                        <SelectItem value="lr">Liberia</SelectItem>
+                        <SelectItem value="ly">Libya</SelectItem>
+                        <SelectItem value="li">Liechtenstein</SelectItem>
+                        <SelectItem value="lt">Lithuania</SelectItem>
+                        <SelectItem value="lu">Luxembourg</SelectItem>
+                        <SelectItem value="mg">Madagascar</SelectItem>
+                        <SelectItem value="mw">Malawi</SelectItem>
+                        <SelectItem value="my">Malaysia</SelectItem>
+                        <SelectItem value="mv">Maldives</SelectItem>
+                        <SelectItem value="ml">Mali</SelectItem>
+                        <SelectItem value="mt">Malta</SelectItem>
+                        <SelectItem value="mh">Marshall Islands</SelectItem>
+                        <SelectItem value="mr">Mauritania</SelectItem>
+                        <SelectItem value="mu">Mauritius</SelectItem>
                         <SelectItem value="mx">Mexico</SelectItem>
+                        <SelectItem value="fm">Micronesia</SelectItem>
+                        <SelectItem value="md">Moldova</SelectItem>
+                        <SelectItem value="mc">Monaco</SelectItem>
+                        <SelectItem value="mn">Mongolia</SelectItem>
+                        <SelectItem value="me">Montenegro</SelectItem>
+                        <SelectItem value="ma">Morocco</SelectItem>
+                        <SelectItem value="moz">Mozambique</SelectItem>
+                        <SelectItem value="mm">Myanmar</SelectItem>
+                        <SelectItem value="na">Namibia</SelectItem>
+                        <SelectItem value="nr">Nauru</SelectItem>
+                        <SelectItem value="np">Nepal</SelectItem>
+                        <SelectItem value="nl">Netherlands</SelectItem>
+                        <SelectItem value="nz">New Zealand</SelectItem>
+                        <SelectItem value="ni">Nicaragua</SelectItem>
+                        <SelectItem value="ne">Niger</SelectItem>
+                        <SelectItem value="ng">Nigeria</SelectItem>
+                        <SelectItem value="mk">North Macedonia</SelectItem>
+                        <SelectItem value="no">Norway</SelectItem>
+                        <SelectItem value="om">Oman</SelectItem>
+                        <SelectItem value="pk">Pakistan</SelectItem>
+                        <SelectItem value="pw">Palau</SelectItem>
+                        <SelectItem value="ps">Palestine</SelectItem>
+                        <SelectItem value="pa">Panama</SelectItem>
+                        <SelectItem value="pg">Papua New Guinea</SelectItem>
+                        <SelectItem value="py">Paraguay</SelectItem>
+                        <SelectItem value="pe">Peru</SelectItem>
+                        <SelectItem value="ph">Philippines</SelectItem>
+                        <SelectItem value="pl">Poland</SelectItem>
+                        <SelectItem value="pt">Portugal</SelectItem>
+                        <SelectItem value="qa">Qatar</SelectItem>
+                        <SelectItem value="ro">Romania</SelectItem>
+                        <SelectItem value="ru">Russia</SelectItem>
+                        <SelectItem value="rw">Rwanda</SelectItem>
+                        <SelectItem value="kn">
+                          Saint Kitts and Nevis
+                        </SelectItem>
+                        <SelectItem value="lc">Saint Lucia</SelectItem>
+                        <SelectItem value="vc">
+                          Saint Vincent and the Grenadines
+                        </SelectItem>
+                        <SelectItem value="ws">Samoa</SelectItem>
+                        <SelectItem value="sm">San Marino</SelectItem>
+                        <SelectItem value="st">
+                          Sao Tome and Principe
+                        </SelectItem>
+                        <SelectItem value="sa">Saudi Arabia</SelectItem>
+                        <SelectItem value="sn">Senegal</SelectItem>
+                        <SelectItem value="rs">Serbia</SelectItem>
+                        <SelectItem value="sc">Seychelles</SelectItem>
+                        <SelectItem value="sl">Sierra Leone</SelectItem>
+                        <SelectItem value="sg">Singapore</SelectItem>
+                        <SelectItem value="sk">Slovakia</SelectItem>
+                        <SelectItem value="si">Slovenia</SelectItem>
+                        <SelectItem value="sb">Solomon Islands</SelectItem>
+                        <SelectItem value="so">Somalia</SelectItem>
+                        <SelectItem value="za">South Africa</SelectItem>
+                        <SelectItem value="ss">South Sudan</SelectItem>
+                        <SelectItem value="es">Spain</SelectItem>
+                        <SelectItem value="lk">Sri Lanka</SelectItem>
+                        <SelectItem value="sd">Sudan</SelectItem>
+                        <SelectItem value="sr">Suriname</SelectItem>
+                        <SelectItem value="se">Sweden</SelectItem>
+                        <SelectItem value="ch">Switzerland</SelectItem>
+                        <SelectItem value="sy">Syria</SelectItem>
+                        <SelectItem value="tw">Taiwan</SelectItem>
+                        <SelectItem value="tj">Tajikistan</SelectItem>
+                        <SelectItem value="tz">Tanzania</SelectItem>
+                        <SelectItem value="th">Thailand</SelectItem>
+                        <SelectItem value="tl">Timor-Leste</SelectItem>
+                        <SelectItem value="tg">Togo</SelectItem>
+                        <SelectItem value="to">Tonga</SelectItem>
+                        <SelectItem value="tt">Trinidad and Tobago</SelectItem>
+                        <SelectItem value="tn">Tunisia</SelectItem>
+                        <SelectItem value="tr">Turkey</SelectItem>
+                        <SelectItem value="tm">Turkmenistan</SelectItem>
+                        <SelectItem value="tv">Tuvalu</SelectItem>
+                        <SelectItem value="ug">Uganda</SelectItem>
+                        <SelectItem value="ua">Ukraine</SelectItem>
+                        <SelectItem value="ae">United Arab Emirates</SelectItem>
+                        <SelectItem value="gb">United Kingdom</SelectItem>
+                        <SelectItem value="us">United States</SelectItem>
+                        <SelectItem value="uy">Uruguay</SelectItem>
+                        <SelectItem value="uz">Uzbekistan</SelectItem>
+                        <SelectItem value="vu">Vanuatu</SelectItem>
+                        <SelectItem value="va">Vatican City</SelectItem>
+                        <SelectItem value="ve">Venezuela</SelectItem>
+                        <SelectItem value="vn">Vietnam</SelectItem>
+                        <SelectItem value="ye">Yemen</SelectItem>
+                        <SelectItem value="zm">Zambia</SelectItem>
+                        <SelectItem value="zw">Zimbabwe</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -814,33 +1259,49 @@ const VisaApplication = () => {
               </div>
             )}
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8 pt-6 border-t border-border">
-              {step > 1 ? (
-                <Button variant="outline" onClick={handleBack}>
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back
-                </Button>
-              ) : (
-                <div />
-              )}
+            {/* Step 5: Payment */}
+            {step === 5 && (
+              <div className="space-y-6 animate-fade-in">
+                <h2 className="text-xl font-semibold mb-6">Application Fee Payment</h2>
+                <PaymentStep
+                  payment={payment}
+                  onChange={setPayment}
+                  total={150}
+                  onBack={handleBack}
+                  onNext={handleSubmit}
+                  processing={loading}
+                />
+              </div>
+            )}
 
-              {step < 4 ? (
-                <Button variant="gradient" onClick={handleNext}>
-                  Next
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              ) : (
-                <Button
-                  variant="gradient"
-                  onClick={handleSubmit}
-                  disabled={loading}
-                >
-                  {loading ? "Submitting..." : "Submit Application"}
-                  <CheckCircle className="w-4 h-4 ml-2" />
-                </Button>
-              )}
-            </div>
+            {/* Navigation Buttons */}
+            {step < 5 && (
+              <div className="flex justify-between mt-8 pt-6 border-t border-border">
+                {step > 1 ? (
+                  <Button variant="outline" onClick={handleBack}>
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Back
+                  </Button>
+                ) : (
+                  <div />
+                )}
+
+                {step < 4 ? (
+                  <Button variant="gradient" onClick={handleNext}>
+                    Next
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                ) : (
+                  <Button
+                    variant="gradient"
+                    onClick={handleNext}
+                  >
+                    Proceed to Payment
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </main>

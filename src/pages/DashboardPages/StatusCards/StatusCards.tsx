@@ -27,7 +27,7 @@ const StatusCards = () => {
         // Get user data including visa status
         const token = localStorage.getItem("token");
         const userRes = await fetch(
-          `${API_BASE_URL}/users/${(user as any)._id}`,
+          `${API_BASE_URL}/users/get-user/${(user as any).id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
@@ -39,7 +39,7 @@ const StatusCards = () => {
           const userJson = await userRes.json();
 
           // Check for visa applications
-          const userId = (user as any)._id;
+          const userId = (user as any).id;
           const visaRes = await fetch(
             `${API_BASE_URL}/visa-applications/user/${userId}`,
             {
@@ -100,7 +100,12 @@ const StatusCards = () => {
       approved: { value: "Approved", status: "success" },
       rejected: { value: "Rejected", status: "error" },
     };
-    return statusMap[visaStatus] || { value: "Not Started", status: "info" };
+    return (
+      statusMap[visaStatus.toLowerCase()] || {
+        value: "Not Started",
+        status: "info",
+      }
+    );
   };
 
   const visaStatus = getVisaStatus();

@@ -369,6 +369,9 @@
     "bestPrice": "Best Price",
     "bestDeal": "Best Deal",
     "bestView": "Best View",
+    "listingsCount": "{{count}} Listings",
+    "amazing": "Amazing",
+    "addToCart": "Add to Cart",
     "checkoutCount": "CHECKOUT ({{count}})",
     "checkoutButton": "CHECKOUT",
     "loadError": "Failed to load tickets",
@@ -440,8 +443,8 @@
         "loginToContinue": "LOGIN TO CONTINUE",
         "applyVisa": "APPLY FOR VISA",
         "goToDashboard": "GO TO DASHBOARD",
-        "ticket_one": "{{count}} ticket",
-        "ticket_other": "{{count}} tickets"
+        "ticketCount_one": "{{count}} ticket",
+        "ticketCount_other": "{{count}} tickets"
       }
     },
     "guaranteedAuthenticShort": "🔒 Guaranteed authentic"

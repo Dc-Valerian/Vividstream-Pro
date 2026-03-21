@@ -438,17 +438,19 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
                 </span>
               </button>
             )}
-            <button
-              onClick={() => setIsMaximized(!isMaximized)}
-              className="p-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-gray-400 hover:text-white"
-              title={isMax ? "Minimize" : "Full Screen"}
-            >
-              {isMax ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Maximize2 className="w-5 h-5" />
-              )}
-            </button>
+            {!isMobile && (
+              <button
+                onClick={() => setIsMaximized(!isMaximized)}
+                className="p-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-gray-400 hover:text-white"
+                title={isMax ? "Minimize" : "Full Screen"}
+              >
+                {isMax ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Maximize2 className="w-5 h-5" />
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
