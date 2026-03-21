@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { apiFetch, endpoints } from "@/config/api";
 import { toast } from "sonner";
+import { createPortal } from "react-dom";
+import { apiFetch, endpoints } from "@/config/api";
 import { X, Maximize2 } from "lucide-react";
 import {
   CategoryId,
@@ -374,7 +375,7 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
     }
   };
 
-  return (
+  const stadiumContent = (
     <div
       className={`text-white overflow-hidden font-sans relative flex-1 bg-[#0a0c10] transition-all duration-500 ease-in-out ${
         isMaximized
@@ -886,6 +887,10 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
       `}</style>
     </div>
   );
+
+  return isMaximized && typeof document !== "undefined"
+    ? createPortal(stadiumContent, document.body)
+    : stadiumContent;
 };
 
 export default Stadium;
