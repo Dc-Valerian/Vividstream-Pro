@@ -98,7 +98,7 @@ const AdminDashboard = () => {
     },
     {
       title: "Revenue",
-      value: `₦${statsData.financials?.totalRevenue?.toLocaleString() || "0"}`,
+      value: `${statsData.financials?.totalRevenue?.toLocaleString() || "0"}`,
       change: "0%",
       trend: "neutral",
       icon: CreditCard,

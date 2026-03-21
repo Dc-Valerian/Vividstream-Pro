@@ -43,23 +43,35 @@ const FIELD_PATH =
   "M282,192 Q340,167 400,167 Q460,167 518,192 Q548,222 548,265 Q548,308 518,338 Q460,363 400,363 Q340,363 282,338 Q252,308 252,265 Q252,222 282,192 Z";
 
 const PRICE_LABELS = [
-  { cat: 1 as CategoryId, x: 400, y: 143, price: "₦1,480+" },
-  { cat: 2 as CategoryId, x: 400, y: 110, price: "₦620+" },
-  { cat: 3 as CategoryId, x: 400, y: 77, price: "₦303+" },
-  { cat: 4 as CategoryId, x: 400, y: 44, price: "₦363+" },
+  { cat: 1 as CategoryId, x: 400, y: 143, price: "$1,480+" },
+  { cat: 2 as CategoryId, x: 400, y: 110, price: "$620+" },
+  { cat: 3 as CategoryId, x: 400, y: 77, price: "$303+" },
+  { cat: 4 as CategoryId, x: 400, y: 44, price: "$363+" },
 ];
 
-const TAG_STYLES: Record<string, { color: string; bg: string; emoji: string; labelKey: string }> =
-  {
-    "Best Price": {
-      color: "#4FC3F7",
-      bg: "rgba(79,195,247,0.12)",
-      emoji: "💰",
-      labelKey: "stadium.bestPrice",
-    },
-    "Best Deal": { color: "#4ade80", bg: "rgba(74,222,128,0.12)", emoji: "🏷️", labelKey: "stadium.bestDeal" },
-    "Best View": { color: "#FFD700", bg: "rgba(255,215,0,0.12)", emoji: "👁️", labelKey: "stadium.bestView" },
-  };
+const TAG_STYLES: Record<
+  string,
+  { color: string; bg: string; emoji: string; labelKey: string }
+> = {
+  "Best Price": {
+    color: "#4FC3F7",
+    bg: "rgba(79,195,247,0.12)",
+    emoji: "💰",
+    labelKey: "stadium.bestPrice",
+  },
+  "Best Deal": {
+    color: "#4ade80",
+    bg: "rgba(74,222,128,0.12)",
+    emoji: "🏷️",
+    labelKey: "stadium.bestDeal",
+  },
+  "Best View": {
+    color: "#FFD700",
+    bg: "rgba(255,215,0,0.12)",
+    emoji: "👁️",
+    labelKey: "stadium.bestView",
+  },
+};
 
 function CheckoutDrawer({
   open,
@@ -377,10 +389,10 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
 
   const renderStadium = (isMax = false) => (
     <div
-      className={`text-white overflow-hidden font-sans relative flex-1 bg-[#0a0c10] transition-all duration-500 ease-in-out ${
+      className={`text-white overflow-y-auto overflow-x-hidden font-sans relative flex-1 bg-[#0a0c10] transition-all duration-500 ease-in-out ${
         isMax
           ? "h-screen w-screen flex flex-col"
-          : "relative h-[680px] md:h-[580px] rounded-3xl border border-[#1f2937]"
+          : "relative h-[680px] md:h-[580px] rounded-3xl border border-[#1f2937] overflow-hidden md:overflow-y-auto"
       }`}
     >
       {/* ── Banner ───────────────────────── */}
@@ -476,7 +488,7 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
                 />
                 {t(cat.labelKey)}
                 <span className="font-bold" style={{ color: cat.color }}>
-                  ₦{cat.minPrice}+
+                  ${cat.minPrice}+
                 </span>
               </button>
             ))}
@@ -742,7 +754,9 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
               filtered.map((listing, i) => {
                 const cat = CATEGORIES.find((c) => c.id === listing.category)!;
                 const tagStyle = listing.tag ? TAG_STYLES[listing.tag] : null;
-                const inCart = cart.some((ci) => ci.listing._id === listing._id);
+                const inCart = cart.some(
+                  (ci) => ci.listing._id === listing._id,
+                );
                 return (
                   <div
                     key={listing._id}
@@ -804,11 +818,11 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
                       <div className="flex flex-col items-end gap-1.5 shrink-0">
                         <div className="text-right">
                           <p className="font-black text-xl leading-none text-gray-200">
-                            ₦{(listing.price * ticketCount).toLocaleString()}
+                            ${(listing.price * ticketCount).toLocaleString()}
                           </p>
                           {ticketCount > 1 && (
                             <p className="text-[10px] text-gray-500">
-                              ₦{listing.price}/
+                              ${listing.price}/
                               {t("stadium.checkout.confirmation.ticket_one", {
                                 count: 1,
                               })}
@@ -874,7 +888,9 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
               style={{
                 background: "linear-gradient(135deg, #FFD700, #FF6B35)",
                 animation:
-                  cartCount > 0 ? "scPulseGold 2s ease-in-out infinite" : "none",
+                  cartCount > 0
+                    ? "scPulseGold 2s ease-in-out infinite"
+                    : "none",
               }}
             >
               {cartCount > 0

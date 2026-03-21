@@ -158,7 +158,7 @@ export const PaymentsTab = () => {
                   <td className="p-4">
                     {payment.user?.fullName || payment.user?.name || "N/A"}
                   </td>
-                  <td className="p-4 font-medium">₦{payment.amount}</td>
+                  <td className="p-4 font-medium">${payment.amount}</td>
                   <td className="p-4 capitalize">{payment.paymentMethod}</td>
                   <td className="p-4">
                     <span

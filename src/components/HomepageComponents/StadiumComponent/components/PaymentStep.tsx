@@ -65,7 +65,9 @@ export function PaymentStep({
     <div className="flex flex-col gap-4">
       <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex flex-col items-center text-center space-y-2">
         <Building className="w-8 h-8 text-blue-400" />
-        <h3 className="font-semibold text-blue-100">{t("stadium.checkout.payment.manualTransfer")}</h3>
+        <h3 className="font-semibold text-blue-100">
+          {t("stadium.checkout.payment.manualTransfer")}
+        </h3>
         <p className="text-sm text-blue-200/70">
           {t("stadium.checkout.payment.transferInstruction")}
         </p>
@@ -83,7 +85,8 @@ export function PaymentStep({
                 {t("stadium.checkout.payment.bankName")}
               </p>
               <p className="font-semibold text-gray-200">
-                {settings.bankName || t("stadium.checkout.payment.notConfigured")}
+                {settings.bankName ||
+                  t("stadium.checkout.payment.notConfigured")}
               </p>
             </div>
           </div>
@@ -93,7 +96,8 @@ export function PaymentStep({
                 {t("stadium.checkout.payment.accountName")}
               </p>
               <p className="font-semibold text-gray-200">
-                {settings.accountName || t("stadium.checkout.payment.notConfigured")}
+                {settings.accountName ||
+                  t("stadium.checkout.payment.notConfigured")}
               </p>
             </div>
           </div>
@@ -103,7 +107,8 @@ export function PaymentStep({
                 {t("stadium.checkout.payment.accountNumber")}
               </p>
               <p className="font-mono text-lg text-yellow-500">
-                {settings.accountNumber || t("stadium.checkout.payment.notConfigured")}
+                {settings.accountNumber ||
+                  t("stadium.checkout.payment.notConfigured")}
               </p>
             </div>
             {settings.accountNumber && (
@@ -123,9 +128,11 @@ export function PaymentStep({
       )}
 
       <div className="bg-white/[0.03] border border-[#1f2937] rounded-xl px-4 py-3 flex justify-between items-center">
-        <span className="text-sm text-gray-400">{t("stadium.checkout.payment.totalToCharge")}</span>
+        <span className="text-sm text-gray-400">
+          {t("stadium.checkout.payment.totalToCharge")}
+        </span>
         <span className="font-black text-yellow-400 text-lg">
-          ₦{total.toLocaleString()}
+          ${total.toLocaleString()}
         </span>
       </div>
 
@@ -174,7 +181,9 @@ export function PaymentStep({
               {t("common.loading").toUpperCase()}…
             </>
           ) : (
-            t("stadium.checkout.payment.sentConfirmation", { amount: total.toLocaleString() })
+            t("stadium.checkout.payment.sentConfirmation", {
+              amount: total.toLocaleString(),
+            })
           )}
         </button>
       </div>

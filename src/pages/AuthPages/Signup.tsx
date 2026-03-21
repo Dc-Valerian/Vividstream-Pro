@@ -149,9 +149,6 @@ const Signup = () => {
         <div className="mx-auto w-full max-w-lg ">
           <div className="mb-8 mt-40 lg:mt-16">
             <h1 className="text-3xl font-bold mb-2">{t("signup.getTicket")}</h1>
-            <p className="text-muted-foreground">
-              {t("signup.ticketRequired")}
-            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">

@@ -60,6 +60,8 @@ export const endpoints = {
     getAll: `${API_BASE_URL}/visa-applications/get-visa-applications`,
     getOne: (id: string) =>
       `${API_BASE_URL}/visa-applications/get-visa-application/${id}`,
+    getByUser: (userId: string) =>
+      `${API_BASE_URL}/visa-applications/user/${userId}`,
     update: (id: string) => `${API_BASE_URL}/visa-applications/${id}`,
     delete: (id: string) => `${API_BASE_URL}/visa-applications/${id}`,
   },

@@ -66,7 +66,9 @@ export function CartStep({
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-500">{t("stadium.checkout.cart.qtyLabel")}:</span>
+                    <span className="text-xs text-gray-500">
+                      {t("stadium.checkout.cart.qtyLabel")}:
+                    </span>
                     <div className="flex items-center bg-white/[0.06] border border-[#374151] rounded-full overflow-hidden">
                       <button
                         onClick={() =>
@@ -95,9 +97,14 @@ export function CartStep({
                 </div>
                 <div className="text-right">
                   <p className="font-black text-xl">
-                    ₦{(listing.price * qty).toLocaleString()}
+                    ${(listing.price * qty).toLocaleString()}
                   </p>
-                  <p className="text-xs text-gray-500">₦{listing.price}/{t("stadium.checkout.confirmation.ticket_one", { count: 1 })}</p>
+                  <p className="text-xs text-gray-500">
+                    ${listing.price}/
+                    {t("stadium.checkout.confirmation.ticket_one", {
+                      count: 1,
+                    })}
+                  </p>
                   <button
                     onClick={() => onRemove(listing._id)}
                     className="text-[11px] text-red-400/60 hover:text-red-400 mt-2 transition-colors block"
@@ -115,15 +122,15 @@ export function CartStep({
       <div className="bg-white/[0.03] border border-[#1f2937] rounded-2xl p-4 space-y-2">
         <div className="flex justify-between text-sm text-gray-400">
           <span>{t("stadium.summary.listings")}</span>
-          <span className="text-white">₦{subtotal.toLocaleString()}</span>
+          <span className="text-white">${subtotal.toLocaleString()}</span>
         </div>
         <div className="flex justify-between text-sm text-gray-400">
           <span>{t("stadium.checkout.cart.serviceFee", { percent: 12 })}</span>
-          <span className="text-white">₦{fees.toLocaleString()}</span>
+          <span className="text-white">${fees.toLocaleString()}</span>
         </div>
         <div className="flex justify-between font-black text-base border-t border-[#1f2937] pt-2 mt-1">
           <span className="text-white">{t("stadium.categories.details")}</span>
-          <span className="text-yellow-400">₦{total.toLocaleString()}</span>
+          <span className="text-yellow-400">${total.toLocaleString()}</span>
         </div>
       </div>
 

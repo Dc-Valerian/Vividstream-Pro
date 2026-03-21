@@ -36,8 +36,8 @@ export const HotelModal = ({
     amenities: "",
     featured: false,
   });
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   useEffect(() => {
     if (hotel) {
@@ -49,7 +49,7 @@ export const HotelModal = ({
         amenities: hotel.amenities ? hotel.amenities.join(", ") : "",
         featured: hotel.featured || false,
       });
-      setImagePreview(hotel.image || "");
+      setImagePreviews(hotel.images || []);
     } else {
       resetForm();
     }
@@ -64,8 +64,8 @@ export const HotelModal = ({
       amenities: "",
       featured: false,
     });
-    setImageFile(null);
-    setImagePreview("");
+    setImageFiles([]);
+    setImagePreviews([]);
   };
 
   const handleInputChange = (
@@ -80,14 +80,19 @@ export const HotelModal = ({
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const newFiles = Array.from(files);
+      setImageFiles((prev) => [...prev, ...newFiles].slice(0, 5));
+      
+      // Generate previews
+      newFiles.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreviews((prev) => [...prev, reader.result as string].slice(0, 5));
+        };
+        reader.readAsDataURL(file);
+      });
     }
   };
 
@@ -102,8 +107,10 @@ export const HotelModal = ({
     data.append("description", formData.description);
     data.append("amenities", formData.amenities);
     data.append("featured", String(formData.featured));
-    if (imageFile) {
-      data.append("image", imageFile);
+    if (imageFiles.length > 0) {
+      imageFiles.forEach((file) => {
+        data.append("images", file);
+      });
     }
 
     try {
@@ -126,24 +133,44 @@ export const HotelModal = ({
 
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="grid w-full items-center gap-1.5">
-            <Label htmlFor="image">Hotel Image</Label>
-            <div className="flex items-center gap-4">
-              {imagePreview && (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-20 h-20 object-cover rounded-md border"
-                />
+            <Label htmlFor="images">Hotel Images (max 5)</Label>
+            <div className="flex flex-col gap-4">
+              {imagePreviews.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {imagePreviews.map((preview, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={preview}
+                        alt={`Preview ${index + 1}`}
+                        className="w-20 h-20 object-cover rounded-md border"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+                          setImageFiles((prev) => prev.filter((_, i) => i !== index));
+                        }}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
               )}
               <div className="flex-1">
                 <Input
-                  id="image"
+                  id="images"
                   type="file"
                   accept="image/*"
+                  multiple
                   onChange={handleImageChange}
                   className="cursor-pointer"
-                  required={!hotel} // Required only when creating new hotel
+                  disabled={imagePreviews.length >= 5}
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {imagePreviews.length}/5 images selected
+                </p>
               </div>
             </div>
           </div>

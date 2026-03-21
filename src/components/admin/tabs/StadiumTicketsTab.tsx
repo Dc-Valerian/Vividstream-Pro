@@ -194,7 +194,7 @@ export const StadiumTicketsTab = () => {
                     {ticket.section} - Row {ticket.row}
                   </td>
                   <td className="p-4 font-mono text-sm">{ticket.category}</td>
-                  <td className="p-4 font-mono text-sm">₦{ticket.price}</td>
+                  <td className="p-4 font-mono text-sm">${ticket.price}</td>
                   <td className="p-4 font-mono text-sm">
                     {ticket.ticketsAvailable} tickets
                   </td>

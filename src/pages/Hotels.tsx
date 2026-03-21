@@ -316,13 +316,31 @@ const Hotels = () => {
                     key={hotel.id}
                     className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                   >
-                    {/* Image */}
+                    {/* Image Carousel */}
                     <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={hotel.image}
-                        alt={hotel.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
+                      {hotel.images && hotel.images.length > 0 ? (
+                        <>
+                          <img
+                            src={hotel.images[0]}
+                            alt={hotel.name}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                          {hotel.images.length > 1 && (
+                            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                              {hotel.images.map((_, idx) => (
+                                <div
+                                  key={idx}
+                                  className="w-2 h-2 rounded-full bg-white/70"
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                          <span className="text-gray-400">No Image</span>
+                        </div>
+                      )}
                       {hotel.featured && (
                         <div className="absolute top-3 left-3 px-2 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
                           Featured
@@ -362,7 +380,7 @@ const Hotels = () => {
                       <div className="flex items-end justify-between">
                         <div>
                           <span className="text-2xl font-bold text-primary">
-                            ₦{hotel.price}
+                            ${hotel.price}
                           </span>
                           <span className="text-sm text-muted-foreground">
                             /night
@@ -445,7 +463,7 @@ const Hotels = () => {
             <DialogTitle>Complete Your Booking</DialogTitle>
             <DialogDescription>
               Pay for your stay at <strong>{paymentModal.hotelName}</strong>.
-              Amount: <strong>₦{paymentModal.amount}</strong>
+              Amount: <strong>${paymentModal.amount}</strong>
             </DialogDescription>
           </DialogHeader>
 

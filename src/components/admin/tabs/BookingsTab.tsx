@@ -184,7 +184,7 @@ export const BookingsTab = () => {
                     {new Date(booking.checkInDate).toLocaleDateString()} -{" "}
                     {new Date(booking.checkOutDate).toLocaleDateString()}
                   </td>
-                  <td className="p-4 font-medium">₦{booking.totalPrice}</td>
+                  <td className="p-4 font-medium">${booking.totalPrice}</td>
                   <td className="p-4">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${getPaymentStatusBadge(

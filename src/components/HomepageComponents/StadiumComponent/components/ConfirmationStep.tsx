@@ -103,7 +103,9 @@ export function ConfirmationStep({
           </div>
         ) : (
           <div className="bg-green-500/10 border border-green-500 text-green-400 text-sm p-3 rounded-lg mb-4">
-            {t("stadium.checkout.confirmation.existingUserMsg", { email: buyer.email })}
+            {t("stadium.checkout.confirmation.existingUserMsg", {
+              email: buyer.email,
+            })}
           </div>
         )}
       </div>
@@ -133,11 +135,14 @@ export function ConfirmationStep({
                   {listing.section} · {listing.row}
                 </p>
                 <p className="text-xs text-gray-500">
-                  {t("stadium.checkout.confirmation.ticketCount", { count: qty })} · {listing.view}
+                  {t("stadium.checkout.confirmation.ticketCount", {
+                    count: qty,
+                  })}{" "}
+                  · {listing.view}
                 </p>
               </div>
               <p className="font-black text-white">
-                ₦{(listing.price * qty).toLocaleString()}
+                ${(listing.price * qty).toLocaleString()}
               </p>
             </div>
           );
@@ -145,9 +150,11 @@ export function ConfirmationStep({
       </div>
 
       <div className="w-full flex justify-between items-center border-t border-[#1f2937] pt-3 mb-4">
-        <span className="text-sm text-gray-400">{t("stadium.checkout.confirmation.totalPaid")}</span>
+        <span className="text-sm text-gray-400">
+          {t("stadium.checkout.confirmation.totalPaid")}
+        </span>
         <span className="font-black text-yellow-400 text-lg">
-          ₦{total.toLocaleString()}
+          ${total.toLocaleString()}
         </span>
       </div>
 
@@ -172,7 +179,9 @@ export function ConfirmationStep({
             className="w-full rounded-xl py-4 text-sm font-black tracking-widest text-black hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
             style={{ background: "linear-gradient(135deg, #FFD700, #FF6B35)" }}
           >
-            {isLoggingIn ? t("common.loading").toUpperCase() + "..." : t("stadium.checkout.confirmation.loginToContinue")}
+            {isLoggingIn
+              ? t("common.loading").toUpperCase() + "..."
+              : t("stadium.checkout.confirmation.loginToContinue")}
           </button>
         </div>
       ) : (

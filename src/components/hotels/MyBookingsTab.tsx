@@ -131,7 +131,7 @@ export const MyBookingsTab = ({ onPay }: MyBookingsTabProps) => {
                   </div>
                 </TableCell>
                 <TableCell className="font-semibold text-primary">
-                  ₦{booking.totalPrice?.toLocaleString()}
+                  ${booking.totalPrice?.toLocaleString()}
                 </TableCell>
                 <TableCell>
                   <Badge

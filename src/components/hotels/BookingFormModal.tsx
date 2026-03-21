@@ -279,7 +279,7 @@ export const BookingFormModal = ({
               Total Price (Approx.):
             </span>
             <span className="text-xl font-bold text-primary">
-              ₦{calculateTotalPrice().toLocaleString()}
+              ${calculateTotalPrice().toLocaleString()}
             </span>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/contexts/AuthContext";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -40,6 +41,7 @@ import { endpoints, apiFetch } from "@/config/api";
 
 const VisaApplication = () => {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(1);
@@ -77,8 +79,55 @@ const VisaApplication = () => {
     { number: 4, title: "Review", icon: CheckCircle },
   ];
 
+  const validateStep = (currentStep: number): boolean => {
+    let fieldsToValidate: string[] = [];
+
+    if (currentStep === 1) {
+      fieldsToValidate = [
+        formData.firstName,
+        formData.lastName,
+        formData.email,
+        formData.phone,
+        formData.dateOfBirth,
+        formData.nationality,
+      ];
+    } else if (currentStep === 2) {
+      fieldsToValidate = [
+        formData.passportNumber,
+        formData.passportExpiry,
+        formData.placeOfIssue,
+      ];
+    } else if (currentStep === 3) {
+      fieldsToValidate = [
+        formData.destination,
+        formData.travelPurpose,
+        formData.arrivalDate,
+        formData.departureDate,
+        formData.accommodationAddress,
+      ];
+    }
+
+    if (fieldsToValidate.some((field) => !field.trim())) {
+      toast.error("Please fill in all required fields before continuing.");
+      return false;
+    }
+
+    // Validate email for step 1
+    if (currentStep === 1) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        toast.error("Please enter a valid email address.");
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const handleNext = () => {
-    if (step < 4) setStep(step + 1);
+    if (validateStep(step)) {
+      if (step < 4) setStep(step + 1);
+    }
   };
 
   const handleBack = () => {
@@ -178,6 +227,11 @@ const VisaApplication = () => {
         formData.accommodationAddress,
       );
       formDataToSend.append("additionalNotes", formData.additionalNotes);
+
+      // Add userId if user is logged in
+      if (user) {
+        formDataToSend.append("userId", (user as any)._id);
+      }
 
       if (profilePhoto) {
         formDataToSend.append("profilePhoto", profilePhoto);
@@ -358,15 +412,70 @@ const VisaApplication = () => {
                       <SelectTrigger>
                         <SelectValue placeholder="Select nationality" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="us">United States</SelectItem>
-                        <SelectItem value="uk">United Kingdom</SelectItem>
-                        <SelectItem value="ca">Canada</SelectItem>
+                      <SelectContent className="max-h-80">
+                        <SelectItem value="af">Afghanistan</SelectItem>
+                        <SelectItem value="al">Albania</SelectItem>
+                        <SelectItem value="dz">Algeria</SelectItem>
+                        <SelectItem value="ar">Argentina</SelectItem>
                         <SelectItem value="au">Australia</SelectItem>
-                        <SelectItem value="de">Germany</SelectItem>
+                        <SelectItem value="at">Austria</SelectItem>
+                        <SelectItem value="bh">Bahrain</SelectItem>
+                        <SelectItem value="bd">Bangladesh</SelectItem>
+                        <SelectItem value="be">Belgium</SelectItem>
+                        <SelectItem value="br">Brazil</SelectItem>
+                        <SelectItem value="ca">Canada</SelectItem>
+                        <SelectItem value="cn">China</SelectItem>
+                        <SelectItem value="co">Colombia</SelectItem>
+                        <SelectItem value="hr">Croatia</SelectItem>
+                        <SelectItem value="cz">Czech Republic</SelectItem>
+                        <SelectItem value="dk">Denmark</SelectItem>
+                        <SelectItem value="eg">Egypt</SelectItem>
+                        <SelectItem value="fi">Finland</SelectItem>
                         <SelectItem value="fr">France</SelectItem>
+                        <SelectItem value="de">Germany</SelectItem>
+                        <SelectItem value="gh">Ghana</SelectItem>
+                        <SelectItem value="gr">Greece</SelectItem>
+                        <SelectItem value="hk">Hong Kong</SelectItem>
+                        <SelectItem value="hu">Hungary</SelectItem>
+                        <SelectItem value="in">India</SelectItem>
+                        <SelectItem value="id">Indonesia</SelectItem>
+                        <SelectItem value="ie">Ireland</SelectItem>
+                        <SelectItem value="il">Israel</SelectItem>
+                        <SelectItem value="it">Italy</SelectItem>
+                        <SelectItem value="jp">Japan</SelectItem>
+                        <SelectItem value="ke">Kenya</SelectItem>
+                        <SelectItem value="kr">South Korea</SelectItem>
+                        <SelectItem value="kw">Kuwait</SelectItem>
+                        <SelectItem value="my">Malaysia</SelectItem>
+                        <SelectItem value="mx">Mexico</SelectItem>
+                        <SelectItem value="ma">Morocco</SelectItem>
+                        <SelectItem value="nl">Netherlands</SelectItem>
+                        <SelectItem value="nz">New Zealand</SelectItem>
                         <SelectItem value="ng">Nigeria</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        <SelectItem value="no">Norway</SelectItem>
+                        <SelectItem value="pk">Pakistan</SelectItem>
+                        <SelectItem value="pe">Peru</SelectItem>
+                        <SelectItem value="ph">Philippines</SelectItem>
+                        <SelectItem value="pl">Poland</SelectItem>
+                        <SelectItem value="pt">Portugal</SelectItem>
+                        <SelectItem value="qa">Qatar</SelectItem>
+                        <SelectItem value="ro">Romania</SelectItem>
+                        <SelectItem value="ru">Russia</SelectItem>
+                        <SelectItem value="sa">Saudi Arabia</SelectItem>
+                        <SelectItem value="sg">Singapore</SelectItem>
+                        <SelectItem value="za">South Africa</SelectItem>
+                        <SelectItem value="es">Spain</SelectItem>
+                        <SelectItem value="se">Sweden</SelectItem>
+                        <SelectItem value="ch">Switzerland</SelectItem>
+                        <SelectItem value="tw">Taiwan</SelectItem>
+                        <SelectItem value="th">Thailand</SelectItem>
+                        <SelectItem value="tr">Turkey</SelectItem>
+                        <SelectItem value="ua">Ukraine</SelectItem>
+                        <SelectItem value="ae">United Arab Emirates</SelectItem>
+                        <SelectItem value="uk">United Kingdom</SelectItem>
+                        <SelectItem value="us">United States</SelectItem>
+                        <SelectItem value="ve">Venezuela</SelectItem>
+                        <SelectItem value="vn">Vietnam</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -551,7 +660,7 @@ const VisaApplication = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="accommodation">Accommodation Address</Label>
+                  <Label htmlFor="accommodation">Current Address</Label>
                   <Textarea
                     id="accommodation"
                     value={formData.accommodationAddress}
@@ -561,7 +670,7 @@ const VisaApplication = () => {
                         accommodationAddress: e.target.value,
                       })
                     }
-                    placeholder="Enter hotel or accommodation address"
+                    placeholder="Enter current address"
                     rows={3}
                   />
                 </div>
@@ -675,7 +784,7 @@ const VisaApplication = () => {
                       </p>
                       <p className="col-span-2">
                         <span className="text-muted-foreground">
-                          Accommodation:
+                          Current Address:
                         </span>{" "}
                         {formData.accommodationAddress}
                       </p>

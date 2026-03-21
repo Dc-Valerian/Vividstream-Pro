@@ -499,7 +499,7 @@ const WorldCup = () => {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="stake">Stake Amount (₦)</Label>
+              <Label htmlFor="stake">Stake Amount ($)</Label>
               <Input
                 id="stake"
                 type="number"
@@ -512,7 +512,7 @@ const WorldCup = () => {
               <div className="p-3 bg-secondary rounded-lg text-sm flex justify-between">
                 <span>Potential Win:</span>
                 <span className="font-bold text-primary">
-                  ₦{(Number(wagerAmount) * predictionModal.odds).toFixed(2)}
+                  ${(Number(wagerAmount) * predictionModal.odds).toFixed(2)}
                 </span>
               </div>
             )}
