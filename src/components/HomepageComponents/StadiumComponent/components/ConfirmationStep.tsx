@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { CartItem, BuyerDetails, CATEGORIES } from "../types";
 
@@ -18,6 +19,7 @@ export function ConfirmationStep({
   isNewUser: boolean;
   isLoggedIn?: boolean;
 }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { login } = useAuth();
   const [password, setPassword] = useState("");
@@ -32,7 +34,7 @@ export function ConfirmationStep({
     if (res.success) {
       navigate("/dashboard/hotels");
     } else {
-      setLoginError(res.error || "Login failed");
+      setLoginError(res.error || t("auth.toast.loginError"));
     }
   };
 
@@ -89,22 +91,19 @@ export function ConfirmationStep({
 
       <div>
         <h2 className="text-2xl font-black tracking-widest text-yellow-400">
-          YOU'RE IN!
+          {t("stadium.checkout.confirmation.title")}
         </h2>
         <p className="text-gray-400 text-sm mt-1 mb-2">
-          Booking confirmed for {buyer.email}
+          {t("stadium.checkout.confirmation.subtitle", { email: buyer.email })}
         </p>
 
         {isNewUser ? (
           <div className="bg-yellow-400/10 border border-yellow-400 text-yellow-400 text-sm p-3 rounded-lg mb-4">
-            <strong>Check your email!</strong> We've sent you a link to set your
-            password so you can access your dashboard and other platform
-            features.
+            {t("stadium.checkout.confirmation.newUserMsg")}
           </div>
         ) : (
           <div className="bg-green-500/10 border border-green-500 text-green-400 text-sm p-3 rounded-lg mb-4">
-            <strong>Tickets confirmed!</strong> We've emailed your tickets to{" "}
-            {buyer.email}. You can also view them in your dashboard.
+            {t("stadium.checkout.confirmation.existingUserMsg", { email: buyer.email })}
           </div>
         )}
       </div>
@@ -112,7 +111,7 @@ export function ConfirmationStep({
       {/* Ref */}
       <div className="w-full bg-white/[0.05] border border-yellow-400/30 rounded-2xl px-5 py-4">
         <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">
-          Booking Reference
+          {t("stadium.checkout.confirmation.reference")}
         </p>
         <p className="font-mono text-2xl font-black text-yellow-400 tracking-widest">
           {ref}
@@ -134,7 +133,7 @@ export function ConfirmationStep({
                   {listing.section} · {listing.row}
                 </p>
                 <p className="text-xs text-gray-500">
-                  {qty} ticket{qty > 1 ? "s" : ""} · {listing.view}
+                  {t("stadium.checkout.confirmation.ticketCount", { count: qty })} · {listing.view}
                 </p>
               </div>
               <p className="font-black text-white">
@@ -146,7 +145,7 @@ export function ConfirmationStep({
       </div>
 
       <div className="w-full flex justify-between items-center border-t border-[#1f2937] pt-3 mb-4">
-        <span className="text-sm text-gray-400">Total Paid</span>
+        <span className="text-sm text-gray-400">{t("stadium.checkout.confirmation.totalPaid")}</span>
         <span className="font-black text-yellow-400 text-lg">
           ₦{total.toLocaleString()}
         </span>
@@ -156,13 +155,13 @@ export function ConfirmationStep({
         <div className="w-full flex flex-col gap-3 mt-2">
           <div className="text-left space-y-1">
             <label className="text-xs text-gray-400">
-              Enter password to log in & proceed
+              {t("stadium.checkout.confirmation.passwordLabel")}
             </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Your password"
+              placeholder={t("auth.passwordPlaceholder")}
               className="w-full bg-white/[0.05] border border-[#374151] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-yellow-400 transition-colors"
             />
             {loginError && <p className="text-xs text-red-400">{loginError}</p>}
@@ -173,7 +172,7 @@ export function ConfirmationStep({
             className="w-full rounded-xl py-4 text-sm font-black tracking-widest text-black hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
             style={{ background: "linear-gradient(135deg, #FFD700, #FF6B35)" }}
           >
-            {isLoggingIn ? "LOGGING IN..." : "LOGIN TO CONTINUE"}
+            {isLoggingIn ? t("common.loading").toUpperCase() + "..." : t("stadium.checkout.confirmation.loginToContinue")}
           </button>
         </div>
       ) : (
@@ -183,14 +182,14 @@ export function ConfirmationStep({
             className="w-full rounded-xl py-4 text-sm font-black tracking-widest text-white hover:scale-[1.02] active:scale-95 transition-all"
             style={{ background: "linear-gradient(135deg, #00A987, #00D4AA)" }}
           >
-            APPLY FOR VISA
+            {t("stadium.checkout.confirmation.applyVisa")}
           </button>
           <button
             onClick={onDone}
             className="w-full rounded-xl py-4 text-sm font-black tracking-widest text-black hover:scale-[1.02] active:scale-95 transition-all"
             style={{ background: "linear-gradient(135deg, #FFD700, #FF6B35)" }}
           >
-            GO TO DASHBOARD
+            {t("stadium.checkout.confirmation.goToDashboard")}
           </button>
         </div>
       )}

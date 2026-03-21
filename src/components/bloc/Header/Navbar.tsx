@@ -43,7 +43,7 @@ export function Navbar() {
   const navLinks = isAuthenticated ? protectedLinks : publicLinks;
 
   const handleLogout = () => {
-    if (window.confirm("Are you sure you want to log out?")) {
+    if (window.confirm(t("nav.logoutConfirm"))) {
       logout();
       navigate("/");
       setIsOpen(false);
@@ -92,7 +92,7 @@ export function Navbar() {
                 <Link to="/dashboard">
                   <Button variant="ghost" size="sm" className="gap-2">
                     <User className="w-4 h-4" />
-                    {user?.name || "Dashboard"}
+                    {user?.name || t("nav.dashboard")}
                   </Button>
                 </Link>
                 <Button
@@ -167,7 +167,7 @@ export function Navbar() {
                     >
                       <Button variant="ghost" className="w-full gap-2">
                         <User className="w-4 h-4" />
-                        Dashboard
+                        {t("nav.dashboard")}
                       </Button>
                     </Link>
                     <Button
@@ -176,7 +176,7 @@ export function Navbar() {
                       onClick={handleLogout}
                     >
                       <LogOut className="w-4 h-4" />
-                      Logout
+                      {t("nav.logout")}
                     </Button>
                   </>
                 ) : (
@@ -187,7 +187,7 @@ export function Navbar() {
                       onClick={() => setIsOpen(false)}
                     >
                       <Button variant="ghost" className="w-full">
-                        Sign In
+                        {t("nav.signIn")}
                       </Button>
                     </Link>
                     <Link
@@ -196,7 +196,7 @@ export function Navbar() {
                       onClick={() => setIsOpen(false)}
                     >
                       <Button variant="gradient" className="w-full">
-                        Get Started
+                        {t("nav.getStarted")}
                       </Button>
                     </Link>
                   </>

@@ -5,7 +5,7 @@ import vividstreamLogoLight from "@/assets/vividstream-logo-light-mode.png";
 import { useTheme } from "../ThemeProvider";
 
 const Footer = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { theme } = useTheme();
   const logo = theme === "light" ? vividstreamLogoLight : vividstreamLogoDark;
 
@@ -107,7 +107,7 @@ const Footer = () => {
                   to="/admin/login"
                   className="hover:text-primary transition-colors"
                 >
-                  Admin Portal
+                  {t("footer.adminPortal")}
                 </Link>
               </li>
             </ul>
@@ -119,11 +119,11 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <span className="block">
-                  119 W 33rd St, New York, NY 10001, USA
+                  {t("footer.address")}
                 </span>
               </li>
               <li>
-                <span className="block">+1 (929) 459-5216</span>
+                <span className="block">{t("footer.phone")}</span>
               </li>
               {/* <li>
                 <span className="block">support@vividstreampro.com</span>
@@ -157,11 +157,11 @@ const Footer = () => {
         <div className="pt-8 border-t border-border/50 text-center text-sm text-muted-foreground">
           <p>
             ©{" "}
-            {new Date().toLocaleDateString("en-US", {
+            {new Date().toLocaleDateString(i18n.language, {
               month: "long",
               year: "numeric",
             })}{" "}
-            Vividstream Pro. All rights reserved.
+            Vividstream Pro. {t("footer.allRightsReserved")}
           </p>
         </div>
       </div>

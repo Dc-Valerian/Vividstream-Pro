@@ -68,6 +68,12 @@
     "subtitle": "¡La Copa Mundial más grande de la historia con 48 equipos! Predice resultados de partidos, gana recompensas de Vividstream y canjéalas por premios exclusivos. Únete a miles de aficionados compitiendo por la gloria.",
     "button": "Comenzar a Predecir"
   },
+  "worldCupShowcase": {
+    "participatingNations": "Naciones Participantes",
+    "topContenders": "Principales Candidatos a la Gloria",
+    "topContendersDesc": "Los mejores equipos del mundo compitiendo por el premio máximo",
+    "group": "Grupo"
+  },
   "about": {
     "title": "Sobre Vividstream Pro",
     "subtitle": "Somos la plataforma principal para la gestión de entradas de la Copa FIFA 2026, solicitudes de visa y alojamiento de viajes.",
@@ -142,6 +148,60 @@
       "subtitle": "Únete a miles de aficionados que ya han asegurado sus lugares para el mayor evento deportivo del mundo."
     }
   },
+  "stadium": {
+    "checkout": {
+      "titles": {
+        "cart": "Tu Carrito",
+        "details": "Tus Datos",
+        "payment": "Pago",
+        "confirmation": "Reserva Confirmada"
+      },
+      "details": {
+        "personalInfo": "Información Personal",
+        "firstNamePlaceholder": "Juan",
+        "lastNamePlaceholder": "Pérez",
+        "emailPlaceholder": "juan@ejemplo.com",
+        "phonePlaceholder": "+1 234 567 8900",
+        "ticketInfo": "🎫 Las entradas electrónicas se enviarán a su correo como PDF. Muéstrelas en la puerta desde su teléfono o imprímalas."
+      },
+      "payment": {
+        "manualTransfer": "Transferencia Bancaria Manual",
+        "transferInstruction": "Por favor, transfiera el monto total exacto a la cuenta a continuación para asegurar sus boletos.",
+        "bankName": "Nombre del Banco",
+        "accountName": "Nombre de la Cuenta",
+        "accountNumber": "Número de Cuenta",
+        "notConfigured": "No configurado",
+        "loadError": "Error al cargar los detalles bancarios.",
+        "totalToCharge": "Total a pagar",
+        "sentConfirmation": "HE ENVIADO ₦{{amount}} →",
+        "copied": "¡Copiado al portapapeles!",
+        "ticket_one": "{{count}} entrada",
+        "ticket_other": "{{count}} entradas"
+      },
+      "badge": "FIFA World Cup 2026",
+      "platform": "Plataforma Oficial de Entradas",
+      "matchInfo": "Brasil vs Argentina",
+      "matchDetails": "Fase de Grupos · 14 de jul, 2026 · 20:00",
+      "listingsCount": "{{count}} Listados",
+      "available": "{{count}} disponibles",
+      "viewLabel": "👁️ {{view}}",
+      "amazing": "Increíble",
+      "inCart": "En el Carrito ✓",
+      "addToCart": "Añadir al Carrito",
+      "buyerGuarantee": "🛡️ 100% garantía del comprador",
+      "checkoutButton": "PAGAR",
+      "checkoutCount": "PAGAR ({{count}})",
+      "clear": "✕ Limpiar",
+      "listings": "Listados",
+      "venue": "Sede",
+      "capacity": "Capacidad",
+      "guaranteedAuthenticShort": "🔒 Autenticidad garantizada",
+      "fromPrice": "Desde ₦{{price}} · {{count}} listados",
+      "bestPrice": "Mejor Precio",
+      "bestDeal": "Mejor Oferta",
+      "bestView": "Mejor Vista"
+    }
+  },
   "auth": {
     "signIn": "Iniciar Sesión",
     "signUp": "Registrarse",
@@ -149,6 +209,10 @@
     "password": "Contraseña",
     "confirmPassword": "Confirmar Contraseña",
     "name": "Nombre Completo",
+    "namePlaceholder": "Ingrese su nombre completo",
+    "emailPlaceholder": "ejemplo@email.com",
+    "passwordPlaceholder": "Ingrese su contraseña",
+    "confirmPasswordPlaceholder": "Confirme su contraseña",
     "forgotPassword": "Olvidaste tu Contraseña?",
     "noAccount": "No tienes una cuenta?",
     "hasAccount": "Ya tienes una cuenta?",
@@ -178,7 +242,12 @@
     "yes": "Sí",
     "no": "No",
     "or": "o",
-    "learnMore": "Más Información"
+    "learnMore": "Más Información",
+    "fillRequired": "Por favor complete todos los campos requeridos",
+    "checkFields": "Revise los campos resaltados",
+    "backToHome": "Volver al Inicio",
+    "backToDashboard": "Volver al Panel",
+    "guaranteedAuthentic": "Autenticidad garantizada"
   },
   "footer": {
     "services": "Servicios",
@@ -203,7 +272,8 @@
     "phone": "+1 (929) 459-5216",
     "facebook": "Facebook",
     "twitter": "Twitter",
-    "instagram": "Instagram"
+    "instagram": "Instagram",
+    "findCode": "Cómo encontrar tu código:"
   },
   "language": {
     "select": "Seleccionar Idioma",

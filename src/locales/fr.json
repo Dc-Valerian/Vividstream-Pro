@@ -13,11 +13,13 @@
     "logout": "Déconnexion"
   },
   "hero": {
-    "title": "Votre Passerelle vers la Coupe du Monde 2026",
+    "title": "Coupe du Monde 2026",
+    "fullTitle": "Votre Passerelle vers la Coupe du Monde 2026",
     "subtitle": "Échangez des billets gagnants, demandez des visas et réservez des hôtels, tout sur une plateforme transparente. Vivez le plus grand événement sportif avec Vividstream Pro.",
     "getStarted": "Commencer",
     "redeemTicket": "Échanger le Billet",
-    "exploreWorldCup": "Explorer la Coupe du Monde"
+    "exploreWorldCup": "Explorer la Coupe du Monde",
+    "fifaWorldCup": "Coupe du Monde FIFA 2026"
   },
   "home": {
     "stadium": "Billets de Stade",
@@ -26,6 +28,51 @@
     "stats": "Statistiques",
     "cta": "Rejoignez des Milliers de Fans",
     "trust": "Approuvé par des Fans du Monde Entier"
+  },
+  "stats": {
+    "ticketsRedeemed": "Billets Échangés",
+    "countriesServed": "Pays Desservis",
+    "uptime": "Disponibilité",
+    "support": "Support"
+  },
+  "features": {
+    "title": "Tout ce dont Vous Avez Besoin",
+    "subtitle": "De l'échange de billets aux arrangements de voyage, nous vous couvrons avec notre suite complète de services.",
+    "ticketRedemption": {
+      "title": "Échange de Billets",
+      "description": "Échangez vos billets gagnants instantanément avec notre système de validation sécurisé."
+    },
+    "visaServices": {
+      "title": "Services Visa",
+      "description": "Processus de demande de visa simplifié avec accompagnement expert."
+    },
+    "hotelBooking": {
+      "title": "Réservation d'Hôtels",
+      "description": "Réservez des hébergements premium à des tarifs exclusifs de partenaires."
+    },
+    "worldCupBetting": {
+      "title": "Paris Coupe du Monde",
+      "description": "Prédisez les résultats des matchs et gagnez des récompenses Vividstream."
+    }
+  },
+  "trust": {
+    "secureEncrypted": "Sécurisé et Chiffré",
+    "secureEncryptedDesc": "Vos données sont protégées avec une sécurité de niveau entreprise et chiffrement SSL.",
+    "multiplePayment": "Options de Paiement Multiples",
+    "multiplePaymentDesc": "Payez en crypto (BTC, ETH, USDT) ou par paiements par carte traditionnels.",
+    "globalCoverage": "Couverture Mondiale",
+    "globalCoverageDesc": "Servir les clients dans plus de 120 pays avec un support localisé."
+  },
+  "worldCupCTA": {
+    "title": "Prédictions Coupe du Monde 2026",
+    "subtitle": "La plus grande Coupe du Monde de l'histoire avec 48 équipes! Prédisez les résultats des matchs, gagnez des récompenses Vividstream et échangez-les contre des prix exclusifs. Rejoignez des milliers de fans en compétition pour la gloire.",
+    "button": "Commencer à Prédire"
+  },
+  "worldCupShowcase": {
+    "participatingNations": "Nations Participantes",
+    "topContenders": "Principaux Candidats à la Gloire",
+    "topContendersDesc": "Les meilleures équipes du monde concourant pour le prix ultime",
+    "group": "Groupe"
   },
   "about": {
     "title": "À Propos de Vividstream Pro",
@@ -149,7 +196,20 @@
     "cookiePolicy": "Politique des Cookies",
     "adminPortal": "Portail Admin",
     "careers": "Carrières",
-    "allRightsReserved": "Tous droits réservés."
+    "allRightsReserved": "Tous droits réservés.",
+    "worldCup": "Coupe du Monde",
+    "visaServices": "Services Visa",
+    "hotels": "Hôtels",
+    "redeemTicket": "Échanger le Billet",
+    "aboutUs": "À Propos",
+    "contactUs": "Contact",
+    "followUs": "Suivez-Nous",
+    "tagline": "Votre plateforme de confiance pour l'échange de billets, les services visa et les réservations de voyage.",
+    "address": "119 W 33rd St, New York, NY 10001, USA",
+    "phone": "+1 (929) 459-5216",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "instagram": "Instagram"
   },
   "language": {
     "select": "Sélectionner la Langue",

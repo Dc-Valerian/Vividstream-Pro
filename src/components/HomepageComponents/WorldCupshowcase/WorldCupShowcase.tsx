@@ -8,8 +8,11 @@ import {
 import { Fade } from "react-awesome-reveal";
 import { Flag } from "lucide-react";
 import { worldCupCountries } from "@/types/types";
+import { useTranslation } from "react-i18next";
 
 const WorldCupShowcase = () => {
+  const { t } = useTranslation();
+  
   return (
     <section className="py-12 px-4 relative overflow-hidden">
       {/* Background decoration */}
@@ -20,15 +23,15 @@ const WorldCupShowcase = () => {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
             <Flag className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary uppercase tracking-wider">
-              Participating Nations
+              {t("worldCupShowcase.participatingNations")}
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-2">
-            Top Contenders for Glory
+            {t("worldCupShowcase.topContenders")}
           </h2>
           <Fade>
             <p className="text-muted-foreground">
-              The world's best teams competing for the ultimate prize
+              {t("worldCupShowcase.topContendersDesc")}
             </p>
           </Fade>
         </div>
@@ -76,7 +79,7 @@ const WorldCupShowcase = () => {
                           className="px-2 py-0.5 rounded-full text-xs font-medium text-white"
                           style={{ backgroundColor: country.colors[0] }}
                         >
-                          Group {country.group}
+                          {t("worldCupShowcase.group")} {country.group}
                         </span>
                       </div>
                     </div>

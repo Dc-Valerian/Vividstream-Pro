@@ -13,11 +13,13 @@
     "logout": "Abmelden"
   },
   "hero": {
-    "title": "Ihr Tor zur Weltmeister 2026",
+    "title": "Weltmeister 2026",
+    "fullTitle": "Ihr Tor zur Weltmeister 2026",
     "subtitle": "Lösen Sie Gewinnertickets ein, beantragen Sie Visa und buchen Sie Hotels – alles auf einer nahtlosen Plattform. Erleben Sie das größte Sportereignis mit Vividstream Pro.",
     "getStarted": "Loslegen",
     "redeemTicket": "Ticket Einlösen",
-    "exploreWorldCup": "Weltmeister Erkunden"
+    "exploreWorldCup": "Weltmeister Erkunden",
+    "fifaWorldCup": "FIFA Weltmeister 2026"
   },
   "home": {
     "stadium": "Stadien-Tickets",
@@ -26,6 +28,51 @@
     "stats": "Statistiken",
     "cta": "Schließen Sie Sich Tausenden von Fans an",
     "trust": "Von Fans Weltweit Vertraut"
+  },
+  "stats": {
+    "ticketsRedeemed": "Tickets Eingelöst",
+    "countriesServed": "Bediente Länder",
+    "uptime": "Verfügbarkeit",
+    "support": "Support"
+  },
+  "features": {
+    "title": "Alles was Sie Brauchen",
+    "subtitle": "Von Ticketeinlösung bis Reiseplanung - wir haben Sie mit unserem umfassenden Servicepaket abgedeckt.",
+    "ticketRedemption": {
+      "title": "Ticketeinlösung",
+      "description": "Lösen Sie Ihre Gewinnertickets sofort mit unserem sicheren Validierungssystem ein."
+    },
+    "visaServices": {
+      "title": "Visa-Dienstleistungen",
+      "description": "Optimierter Visa-Antragsprozess mit Expertenberatung."
+    },
+    "hotelBooking": {
+      "title": "Hotelbuchung",
+      "description": "Buchen Sie Premium-Unterkünfte zu exklusiven Partnerpreisen."
+    },
+    "worldCupBetting": {
+      "title": "Weltmeister Wetten",
+      "description": "Sagen Sie Spielergebnisse vorher und gewinnen Sie Vividstream-Belohnungen."
+    }
+  },
+  "trust": {
+    "secureEncrypted": "Sicher & Verschlüsselt",
+    "secureEncryptedDesc": "Ihre Daten sind mit Enterprise-Sicherheit und SSL-Verschlüsselung geschützt.",
+    "multiplePayment": "Zahlungsoptionen",
+    "multiplePaymentDesc": "Bezahlen Sie mit Krypto (BTC, ETH, USDT) oder traditionellen Kartenzahlungen.",
+    "globalCoverage": "Globale Abdeckung",
+    "globalCoverageDesc": "Wir bedienen Kunden in über 120 Ländern mit lokalisierter Unterstützung."
+  },
+  "worldCupCTA": {
+    "title": "Weltmeister 2026 Vorhersagen",
+    "subtitle": "Das größte FIFA Weltmeister aller Zeiten mit 48 Teams! Sagen Sie Spielergebnisse vorher, verdienen Sie Vividstream-Belohnungen und lösen Sie sie für exklusive Preise ein. Schließen Sie sich Tausenden von Fans an, die um Ruhm kämpfen.",
+    "button": "Vorhersagen Starten"
+  },
+  "worldCupShowcase": {
+    "participatingNations": "Teilnehmende Nationen",
+    "topContenders": "Top-Anwärter auf den Ruhm",
+    "topContendersDesc": "Die besten Teams der Welt konkurrieren um den ultimativen Preis",
+    "group": "Gruppe"
   },
   "about": {
     "title": "Über Vividstream Pro",
@@ -149,7 +196,20 @@
     "cookiePolicy": "Cookie-Richtlinie",
     "adminPortal": "Admin-Portal",
     "careers": "Karriere",
-    "allRightsReserved": "Alle Rechte vorbehalten."
+    "allRightsReserved": "Alle Rechte vorbehalten.",
+    "worldCup": "Weltmeister",
+    "visaServices": "Visa-Dienstleistungen",
+    "hotels": "Hotels",
+    "redeemTicket": "Ticket Einlösen",
+    "aboutUs": "Über Uns",
+    "contactUs": "Kontakt",
+    "followUs": "Folgen Sie Uns",
+    "tagline": "Ihre vertrauenswürdige Plattform für Ticketeinlösung, Visa-Dienstleistungen und Reisebuchungen.",
+    "address": "119 W 33rd St, New York, NY 10001, USA",
+    "phone": "+1 (929) 459-5216",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "instagram": "Instagram"
   },
   "language": {
     "select": "Sprache Auswählen",

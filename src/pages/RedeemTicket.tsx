@@ -42,7 +42,7 @@ const RedeemTicket = () => {
 
   const handleRedeem = async () => {
     if (!ticketCode.trim()) {
-      setError("Please enter a ticket code");
+      setError(t("redeem.errors.enterCode"));
       return;
     }
 
@@ -50,7 +50,7 @@ const RedeemTicket = () => {
     const isBulkTicket = ticketCode.toUpperCase().startsWith("VS-");
 
     if (isBulkTicket && !email.trim()) {
-      setError("Please enter your email address");
+      setError(t("redeem.errors.enterEmail"));
       return;
     }
 
@@ -76,7 +76,7 @@ const RedeemTicket = () => {
         data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.message || "Failed to redeem ticket");
+          throw new Error(data.message || t("redeem.errors.failed"));
         }
 
         // Auto-login with the returned token
@@ -99,7 +99,7 @@ const RedeemTicket = () => {
         }
 
         setIsRedeemed(true);
-        toast.success("Congratulations! Your ticket has been redeemed!");
+        toast.success(t("redeem.toast.success"));
       } else {
         // Regular ticket redemption (requires login)
         if (!user) {
@@ -122,11 +122,11 @@ const RedeemTicket = () => {
         data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.message || "Failed to redeem ticket");
+          throw new Error(data.message || t("redeem.errors.failed"));
         }
 
         setIsRedeemed(true);
-        toast.success("Congratulations! Your ticket has been redeemed!");
+        toast.success(t("redeem.toast.success"));
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -146,7 +146,7 @@ const RedeemTicket = () => {
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span>Back to Dashboard</span>
+          <span>{t("common.backToDashboard")}</span>
         </Link>
         <ThemeToggle />
       </header>
@@ -160,9 +160,9 @@ const RedeemTicket = () => {
                 <div className="w-20 h-20 mx-auto rounded-3xl gradient-primary flex items-center justify-center mb-6 animate-float">
                   <Ticket className="w-10 h-10 text-primary-foreground" />
                 </div>
-                <h1 className="text-3xl font-bold mb-2">Redeem Your Ticket</h1>
+                <h1 className="text-3xl font-bold mb-2">{t("redeem.title")}</h1>
                 <p className="text-muted-foreground">
-                  Enter your winning ticket code below to claim your prize.
+                  {t("redeem.instructions")}
                 </p>
               </div>
 
@@ -173,7 +173,7 @@ const RedeemTicket = () => {
                   {(!user || ticketCode.toUpperCase().startsWith("VS-")) && (
                     <div className="space-y-2">
                       <Label htmlFor="email" className="text-sm font-medium">
-                        Email Address
+                        {t("redeem.emailLabel")}
                       </Label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -182,20 +182,19 @@ const RedeemTicket = () => {
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          placeholder="your@email.com"
+                          placeholder={t("redeem.emailPlaceholder")}
                           className="pl-10"
                         />
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Enter the email address where you received your ticket
-                        code
+                        {t("redeem.emailHint")}
                       </p>
                     </div>
                   )}
 
                   <div className="space-y-2">
                     <label htmlFor="code" className="text-sm font-medium">
-                      Ticket Code
+                      {t("redeem.ticketCodeLabel")}
                     </label>
                     <Input
                       id="code"
@@ -203,7 +202,7 @@ const RedeemTicket = () => {
                       onChange={(e) =>
                         setTicketCode(e.target.value.toUpperCase())
                       }
-                      placeholder="e.g. VS-XXXX or WIN-2024-XXXX"
+                      placeholder={t("redeem.ticketCodePlaceholder")}
                       className="text-center text-lg font-mono tracking-wider h-14"
                     />
                     {error && (
@@ -224,11 +223,11 @@ const RedeemTicket = () => {
                     {isLoading ? (
                       <>
                         <span className="animate-spin mr-2">⏳</span>
-                        Validating...
+                        {t("redeem.validating")}
                       </>
                     ) : (
                       <>
-                        Redeem Ticket
+                        {t("redeem.redeemButton")}
                         <Sparkles className="w-5 h-5" />
                       </>
                     )}
@@ -236,26 +235,16 @@ const RedeemTicket = () => {
                 </div>
 
                 <div className="mt-8 pt-6 border-t border-border">
-                  <h3 className="font-medium mb-4">How to find your code:</h3>
+                  <h3 className="font-medium mb-4">{t("redeem.howToFind")}</h3>
                   <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li className="flex items-start gap-2">
-                      <span className="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs flex-shrink-0">
-                        1
-                      </span>
-                      Check your email for the ticket notification
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs flex-shrink-0">
-                        2
-                      </span>
-                      Look for the unique code (starts with "VS-" or "WIN-")
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs flex-shrink-0">
-                        3
-                      </span>
-                      Enter it above and click redeem
-                    </li>
+                    {(t("redeem.steps", { returnObjects: true }) as string[]).map((step: string, index: number) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs flex-shrink-0">
+                          {index + 1}
+                        </span>
+                        {step}
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -268,36 +257,35 @@ const RedeemTicket = () => {
               </div>
 
               <h1 className="text-3xl font-bold mb-4 text-gradient">
-                Congratulations!
+                {t("redeem.success.title")}
               </h1>
               <p className="text-lg text-muted-foreground mb-8">
-                Your ticket has been successfully redeemed. You've won:
+                {t("redeem.success.message")}
               </p>
 
               <div className="rounded-2xl gradient-accent p-8 mb-8">
                 <Gift className="w-12 h-12 text-accent-foreground mx-auto mb-4" />
                 <h2 className="text-2xl font-bold text-accent-foreground mb-2">
-                  World Cup 2026 Package
+                  {t("redeem.success.package")}
                 </h2>
                 <p className="text-accent-foreground/80">
-                  Includes match tickets + 5,000 Vividstream bonus
+                  {t("redeem.success.packageDesc")}
                 </p>
               </div>
 
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  Next steps: Complete your visa application to unlock hotel
-                  booking.
+                  {t("redeem.success.nextSteps")}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link to="/dashboard/visa" className="flex-1">
                     <Button variant="gradient" className="w-full">
-                      Apply for Visa
+                      {t("redeem.success.applyVisa")}
                     </Button>
                   </Link>
                   <Link to="/dashboard" className="flex-1">
                     <Button variant="outline" className="w-full">
-                      Go to Dashboard
+                      {t("redeem.success.goToDashboard")}
                     </Button>
                   </Link>
                 </div>
@@ -314,10 +302,10 @@ const RedeemTicket = () => {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-center text-xl">
-              Sign in to Redeem Your Ticket
+              {t("redeem.authModal.title")}
             </DialogTitle>
             <DialogDescription className="text-center">
-              You need an account to redeem your ticket. Choose an option below:
+              {t("redeem.authModal.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-3 mt-4">
@@ -331,7 +319,7 @@ const RedeemTicket = () => {
               }}
             >
               <LogIn className="w-5 h-5 mr-2" />
-              Sign In
+              {t("redeem.authModal.signIn")}
             </Button>
             <Button
               variant="outline"
@@ -343,7 +331,7 @@ const RedeemTicket = () => {
               }}
             >
               <UserPlus className="w-5 h-5 mr-2" />
-              Sign Up
+              {t("redeem.authModal.signUp")}
             </Button>
           </div>
         </DialogContent>

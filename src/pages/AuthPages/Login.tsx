@@ -153,13 +153,13 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t("login.emailLabel")}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t("login.emailPlaceholder")}
                   className={`pl-10 ${
                     errors.email ? "border-red-500 focus:border-red-500" : ""
                   }`}
@@ -176,13 +176,13 @@ const Login = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t("login.passwordLabel")}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder={t("login.passwordPlaceholder")}
                   className={`pl-10 pr-10 ${
                     errors.password ? "border-red-500 focus:border-red-500" : ""
                   }`}
@@ -215,14 +215,14 @@ const Login = () => {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" className="rounded border-border" />
                 <span className="text-sm text-muted-foreground">
-                  Remember me
+                  {t("login.rememberMe")}
                 </span>
               </label>
               <Link
                 to="/forgot-password"
                 className="text-sm text-primary hover:underline"
               >
-                Forgot password?
+                {t("login.forgotPassword")}
               </Link>
             </div>
 
@@ -233,18 +233,18 @@ const Login = () => {
               className="w-full"
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Sign In"}
+              {isLoading ? t("login.signingIn") : t("login.loginButton")}
               <ArrowRight className="w-5 h-5" />
             </Button>
           </form>
 
           <p className="mt-8 text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            {t("login.noAccount")}{" "}
             <Link
               to="/signup"
               className="text-primary font-medium hover:underline"
             >
-              Sign up
+              {t("login.signUp")}
             </Link>
           </p>
         </div>
@@ -262,11 +262,10 @@ const Login = () => {
             </div>
           </Link>
           <h2 className="text-3xl font-bold text-foreground ">
-            Your Ticket to the World
+            {t("login.subtitle")}
           </h2>
           <p className="text-muted-foreground">
-            Access exclusive events, manage your visa applications, and book
-            premium accommodations all in one place.
+            {t("hero.subtitle")}
           </p>
         </div>
       </div>

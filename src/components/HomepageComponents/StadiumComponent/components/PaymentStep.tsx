@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { PaymentDetails } from "../types";
 import { apiFetch } from "@/config/api";
 import { Loader2, Copy, Building } from "lucide-react";
@@ -18,6 +19,7 @@ export function PaymentStep({
   onNext: () => void;
   processing: boolean;
 }) {
+  const { t } = useTranslation();
   const [settings, setSettings] = useState<{
     bankName: string;
     accountName: string;
@@ -26,9 +28,6 @@ export function PaymentStep({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // We update payment to a dummy object just to pass validation if any, though card validation upstream should be removed.
-    // Wait, the parent component might rely on payment state to be filled to enable the buy button?
-    // In our refactored backend it doesn't need card number length 16 anymore.
     onChange({
       cardNumber: "manual",
       expiry: "12/99",
@@ -57,7 +56,7 @@ export function PaymentStep({
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard!");
+    toast.success(t("stadium.checkout.payment.copied"));
   };
 
   const valid = true; // Always valid for manual payment
@@ -66,10 +65,9 @@ export function PaymentStep({
     <div className="flex flex-col gap-4">
       <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex flex-col items-center text-center space-y-2">
         <Building className="w-8 h-8 text-blue-400" />
-        <h3 className="font-semibold text-blue-100">Manual Bank Transfer</h3>
+        <h3 className="font-semibold text-blue-100">{t("stadium.checkout.payment.manualTransfer")}</h3>
         <p className="text-sm text-blue-200/70">
-          Please transfer the exact total amount to the account below to secure
-          your tickets.
+          {t("stadium.checkout.payment.transferInstruction")}
         </p>
       </div>
 
@@ -82,30 +80,30 @@ export function PaymentStep({
           <div className="flex justify-between items-center group">
             <div>
               <p className="text-[10px] text-gray-500 uppercase tracking-widest">
-                Bank Name
+                {t("stadium.checkout.payment.bankName")}
               </p>
               <p className="font-semibold text-gray-200">
-                {settings.bankName || "Not configured"}
+                {settings.bankName || t("stadium.checkout.payment.notConfigured")}
               </p>
             </div>
           </div>
           <div className="flex justify-between items-center group">
             <div>
               <p className="text-[10px] text-gray-500 uppercase tracking-widest">
-                Account Name
+                {t("stadium.checkout.payment.accountName")}
               </p>
               <p className="font-semibold text-gray-200">
-                {settings.accountName || "Not configured"}
+                {settings.accountName || t("stadium.checkout.payment.notConfigured")}
               </p>
             </div>
           </div>
           <div className="flex justify-between items-center group">
             <div>
               <p className="text-[10px] text-gray-500 uppercase tracking-widest">
-                Account Number
+                {t("stadium.checkout.payment.accountNumber")}
               </p>
               <p className="font-mono text-lg text-yellow-500">
-                {settings.accountNumber || "Not configured"}
+                {settings.accountNumber || t("stadium.checkout.payment.notConfigured")}
               </p>
             </div>
             {settings.accountNumber && (
@@ -120,12 +118,12 @@ export function PaymentStep({
         </div>
       ) : (
         <div className="text-center text-sm text-red-400 py-4">
-          Failed to load bank details.
+          {t("stadium.checkout.payment.loadError")}
         </div>
       )}
 
       <div className="bg-white/[0.03] border border-[#1f2937] rounded-xl px-4 py-3 flex justify-between items-center">
-        <span className="text-sm text-gray-400">Total to charge</span>
+        <span className="text-sm text-gray-400">{t("stadium.checkout.payment.totalToCharge")}</span>
         <span className="font-black text-yellow-400 text-lg">
           ₦{total.toLocaleString()}
         </span>
@@ -137,7 +135,7 @@ export function PaymentStep({
           disabled={processing}
           className="flex-1 border border-[#374151] rounded-xl py-3 text-sm text-gray-400 hover:bg-white/5 transition-all"
         >
-          ← Back
+          ← {t("common.back")}
         </button>
         <button
           onClick={onNext}
@@ -173,10 +171,10 @@ export function PaymentStep({
                   d="M4 12a8 8 0 018-8v8z"
                 />
               </svg>
-              PROCESSING…
+              {t("common.loading").toUpperCase()}…
             </>
           ) : (
-            `I'VE SENT ₦${total.toLocaleString()} →`
+            t("stadium.checkout.payment.sentConfirmation", { amount: total.toLocaleString() })
           )}
         </button>
       </div>

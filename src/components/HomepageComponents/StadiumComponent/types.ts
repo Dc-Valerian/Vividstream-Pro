@@ -8,7 +8,7 @@ export type CheckoutStep =
 
 export interface Category {
   id: CategoryId;
-  label: string;
+  labelKey: string;
   color: string;
   minPrice: number;
 }
@@ -45,8 +45,28 @@ export interface PaymentDetails {
 }
 
 export const CATEGORIES: Category[] = [
-  { id: 1, label: "Pitch Side", color: "#FFD700", minPrice: 1480 },
-  { id: 2, label: "Lower Bowl", color: "#FF6B35", minPrice: 620 },
-  { id: 3, label: "Mid Tier", color: "#4FC3F7", minPrice: 303 },
-  { id: 4, label: "Upper Deck", color: "#9E9E9E", minPrice: 363 },
+  {
+    id: 1,
+    labelKey: "stadium.categories.labels.cat1",
+    color: "#FFD700",
+    minPrice: 1480,
+  },
+  {
+    id: 2,
+    labelKey: "stadium.categories.labels.cat2",
+    color: "#FF6B35",
+    minPrice: 620,
+  },
+  {
+    id: 3,
+    labelKey: "stadium.categories.labels.cat3",
+    color: "#4FC3F7",
+    minPrice: 303,
+  },
+  {
+    id: 4,
+    labelKey: "stadium.categories.labels.cat4",
+    color: "#9E9E9E",
+    minPrice: 363,
+  },
 ];

@@ -13,11 +13,13 @@
     "logout": "退出"
   },
   "hero": {
-    "title": "通往2026年世界杯的大门",
+    "title": "2026年世界杯",
+    "fullTitle": "通往2026年世界杯的大门",
     "subtitle": "在统一的平台上兑换中奖门票、申请签证和预订酒店。通过Vividstream Pro体验最大的体育赛事。",
     "getStarted": "开始",
     "redeemTicket": "兑换门票",
-    "exploreWorldCup": "探索世界杯"
+    "exploreWorldCup": "探索世界杯",
+    "fifaWorldCup": "2026年FIFA世界杯"
   },
   "home": {
     "stadium": "体育场门票",
@@ -26,6 +28,51 @@
     "stats": "统计数据",
     "cta": "加入成千上万的球迷",
     "trust": "受到全球球迷的信任"
+  },
+  "stats": {
+    "ticketsRedeemed": "已兑换门票",
+    "countriesServed": "服务国家",
+    "uptime": "正常运行时间",
+    "support": "支持"
+  },
+  "features": {
+    "title": "您需要的一切",
+    "subtitle": "从门票兑换到旅行安排，我们为您提供全面的服务。",
+    "ticketRedemption": {
+      "title": "门票兑换",
+      "description": "通过我们安全的验证系统即时兑换您的中奖门票。"
+    },
+    "visaServices": {
+      "title": "签证服务",
+      "description": "简化的签证申请流程，提供专家指导。"
+    },
+    "hotelBooking": {
+      "title": "酒店预订",
+      "description": "以独家合作伙伴价格预订优质住宿。"
+    },
+    "worldCupBetting": {
+      "title": "世界杯竞猜",
+      "description": "预测比赛结果，赢得Vividstream奖励。"
+    }
+  },
+  "trust": {
+    "secureEncrypted": "安全加密",
+    "secureEncryptedDesc": "您的数据受企业级安全和SSL加密保护。",
+    "multiplePayment": "多种支付方式",
+    "multiplePaymentDesc": "使用加密货币（BTC、ETH、USDT）或传统卡支付。",
+    "globalCoverage": "全球覆盖",
+    "globalCoverageDesc": "为120多个国家的客户提供本地化支持。"
+  },
+  "worldCupCTA": {
+    "title": "2026年世界杯预测",
+    "subtitle": "有史以来最大的FIFA世界杯，48支球队！预测比赛结果，赚取Vividstream奖励并兑换独家奖品。加入成千上万为荣誉而战的球迷。",
+    "button": "开始预测"
+  },
+  "worldCupShowcase": {
+    "participatingNations": "参赛国家",
+    "topContenders": "夺冠热门",
+    "topContendersDesc": "世界上最好的球队争夺最高荣誉",
+    "group": "组"
   },
   "about": {
     "title": "关于Vividstream Pro",
@@ -148,8 +195,21 @@
     "termsOfService": "服务条款",
     "cookiePolicy": "Cookie政策",
     "adminPortal": "管理门户",
-    "careers": " careers",
-    "allRightsReserved": "版权所有。"
+    "careers": "careers",
+    "allRightsReserved": "版权所有。",
+    "worldCup": "世界杯",
+    "visaServices": "签证服务",
+    "hotels": "酒店",
+    "redeemTicket": "兑换门票",
+    "aboutUs": "关于我们",
+    "contactUs": "联系方式",
+    "followUs": "关注我们",
+    "tagline": "您值得信赖的门票兑换、签证服务和旅行预订平台。",
+    "address": "119 W 33rd St, New York, NY 10001, USA",
+    "phone": "+1 (929) 459-5216",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "instagram": "Instagram"
   },
   "language": {
     "select": "选择语言",

@@ -10,7 +10,8 @@
     "signIn": "Sign In",
     "signUp": "Sign Up",
     "getStarted": "Get Started",
-    "logout": "Logout"
+    "logout": "Logout",
+    "logoutConfirm": "Are you sure you want to log out?"
   },
   "hero": {
     "title": "World Cup 2026",
@@ -67,6 +68,12 @@
     "title": "World Cup 2026 Predictions",
     "subtitle": "The biggest FIFA World Cup ever with 48 teams! Predict match outcomes, earn Vividstream rewards, and redeem them for exclusive prizes. Join thousands of fans competing for glory.",
     "button": "Start Predicting"
+  },
+  "worldCupShowcase": {
+    "participatingNations": "Participating Nations",
+    "topContenders": "Top Contenders for Glory",
+    "topContendersDesc": "The world's best teams competing for the ultimate prize",
+    "group": "Group"
   },
   "about": {
     "title": "About Vividstream Pro",
@@ -149,6 +156,10 @@
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "name": "Full Name",
+    "namePlaceholder": "Enter your full name",
+    "emailPlaceholder": "example@email.com",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPasswordPlaceholder": "Confirm your password",
     "forgotPassword": "Forgot Password?",
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?",
@@ -180,7 +191,10 @@
     "or": "or",
     "learnMore": "Learn More",
     "fillRequired": "Please fill in all required fields",
-    "checkFields": "Check the highlighted fields"
+    "checkFields": "Check the highlighted fields",
+    "backToHome": "Back to Home",
+    "backToDashboard": "Back to Dashboard",
+    "guaranteedAuthentic": "Guaranteed authentic"
   },
   "footer": {
     "services": "Services",
@@ -205,7 +219,8 @@
     "phone": "+1 (929) 459-5216",
     "facebook": "Facebook",
     "twitter": "Twitter",
-    "instagram": "Instagram"
+    "instagram": "Instagram",
+    "findCode": "How to find your code:"
   },
   "language": {
     "select": "Select Language",
@@ -219,11 +234,14 @@
     "title": "Welcome back",
     "subtitle": "Sign in to access your dashboard and manage your tickets.",
     "backToHome": "Back to Home",
+    "emailLabel": "Email",
     "emailPlaceholder": "Enter your email",
+    "passwordLabel": "Password",
     "passwordPlaceholder": "Enter your password",
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot password?",
     "loginButton": "Sign In",
+    "signingIn": "Signing in...",
     "noAccount": "Don't have an account?",
     "signUp": "Sign up",
     "errors": {
@@ -233,7 +251,7 @@
       "noAccountFound": "No account found with this email"
     },
     "toast": {
-      "welcomeBack": "Welcome back! Redirecting to dashboard...",
+      "welcomeBack": "Welcome back!",
       "loginSuccess": "Login successful",
       "invalidCredentials": "Invalid credentials",
       "invalidCredentialsDesc": "The email or password you entered is incorrect",
@@ -253,11 +271,17 @@
     "title": "Create an account",
     "subtitle": "Join thousands of fans for World Cup 2026.",
     "backToHome": "Back to Home",
+    "name": "Full Name",
     "namePlaceholder": "Enter your full name",
+    "email": "Email",
     "emailPlaceholder": "Enter your email",
+    "password": "Password",
     "passwordPlaceholder": "Create a password",
+    "confirmPassword": "Confirm Password",
     "confirmPasswordPlaceholder": "Confirm your password",
     "signupButton": "Create Account",
+    "creating": "Creating...",
+    "submit": "Create Account",
     "terms": "I agree to the Terms of Service and Privacy Policy",
     "alreadyHaveAccount": "Already have an account?",
     "signIn": "Sign in",
@@ -275,103 +299,168 @@
       "termsRequired": "You must agree to the terms"
     },
     "toast": {
-      "accountCreated": "Account created successfully! Redirecting...",
-      "emailExists": "An account with this email already exists"
-    }
-  },
-  "forgotPassword": {
-    "title": "Forgot password?",
-    "subtitle": "Enter your email and we'll send you a reset link.",
-    "backToLogin": "Back to Login",
-    "emailPlaceholder": "Enter your email",
-    "resetButton": "Send Reset Link",
-    "rememberPassword": "Remember your password?",
-    "signIn": "Sign in",
-    "toast": {
-      "success": "Password reset link sent to your email!",
-      "error": "Failed to send reset link. Please try again."
-    }
-  },
-  "setPassword": {
-    "title": "Set new password",
-    "subtitle": "Create a new password for your account.",
-    "passwordPlaceholder": "Enter new password",
-    "confirmPasswordPlaceholder": "Confirm new password",
-    "setButton": "Set New Password",
-    "toast": {
-      "passwordSet": "Password set successfully! Redirecting...",
+      "accountCreated": "Account created successfully!",
+      "accountCreatedDesc": "Welcome to Vividstream Pro! Redirecting to dashboard...",
+      "emailExists": "An account with this email already exists",
+      "emailExistsDesc": "Please try logging in instead.",
+      "missingInfo": "Missing information",
+      "fillRequired": "Please fill in all required fields",
+      "registrationFailed": "Registration failed",
       "passwordMismatch": "Passwords do not match"
     }
-  },
-  "hotels": {
-    "title": "Find Your Perfect Stay",
-    "subtitle": "Book hotels near stadiums and fan zones for World Cup 2026",
-    "searchPlaceholder": "Search by city or hotel name...",
-    "filters": {
-      "priceRange": "Price Range",
-      "starRating": "Star Rating",
-      "amenities": "Amenities"
-    },
-    "sort": {
-      "recommended": "Recommended",
-      "priceLow": "Price: Low to High",
-      "priceHigh": "Price: High to Low",
-      "rating": "Highest Rated"
-    },
-    "book": "Book Now",
-    "perNight": "per night",
-    "available": "Available",
-    "noResults": "No hotels found matching your criteria",
-    "viewDetails": "View Details"
-  },
-  "visa": {
-    "title": "Visa Application",
-    "subtitle": "Apply for your World Cup 2026 visa with expert guidance",
-    "steps": {
-      "personal": "Personal Info",
-      "passport": "Passport Details",
-      "travel": "Travel Info",
-      "review": "Review & Submit"
-    },
-    "form": {
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "passportNumber": "Passport Number",
-      "passportExpiry": "Passport Expiry Date",
-      "nationality": "Nationality",
-      "dob": "Date of Birth",
-      "arrivalDate": "Arrival Date",
-      "departureDate": "Departure Date",
-      "purpose": "Purpose of Visit"
-    },
-    "submit": "Submit Application",
-    "toast": {
-      "submitted": "Application submitted successfully!",
-      "pending": "Your application is being processed."
-    }
-  },
-  "worldCup": {
-    "title": "World Cup 2026",
-    "subtitle": "Experience the biggest sporting event in the world",
-    "hostCities": "Host Cities",
-    "matches": "Matches",
-    "teams": "Teams",
-    "tickets": "Get Tickets",
-    "viewSchedule": "View Schedule"
   },
   "redeem": {
     "title": "Redeem Your Ticket",
     "subtitle": "Enter your ticket code to redeem and manage your World Cup experience",
-    "ticketCodePlaceholder": "Enter ticket code",
+    "instructions": "Enter your winning ticket code below to claim your prize.",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "your@email.com",
+    "emailHint": "Enter the email address where you received your ticket code",
+    "ticketCodeLabel": "Ticket Code",
+    "ticketCodePlaceholder": "e.g. VS-XXXX or WIN-2024-XXXX",
     "redeemButton": "Redeem Ticket",
+    "validating": "Validating...",
     "noCode": "Don't have a code?",
     "purchaseHere": "Purchase tickets here",
+    "howToFind": "How to find your code:",
+    "steps": [
+      "Check your email for the ticket notification",
+      "Look for the unique code (starts with \"VS-\" or \"WIN-\")",
+      "Enter it above and click redeem"
+    ],
+    "success": {
+      "title": "Congratulations!",
+      "message": "Your ticket has been successfully redeemed. You've won:",
+      "package": "World Cup 2026 Package",
+      "packageDesc": "Includes match tickets + 5,000 Vividstream bonus",
+      "nextSteps": "Next steps: Complete your visa application to unlock hotel booking.",
+      "applyVisa": "Apply for Visa",
+      "goToDashboard": "Go to Dashboard"
+    },
+    "errors": {
+      "enterCode": "Please enter a ticket code",
+      "enterEmail": "Please enter your email address",
+      "failed": "Failed to redeem ticket"
+    },
+    "authModal": {
+      "title": "Sign in to Redeem Your Ticket",
+      "description": "You need an account to redeem your ticket. Choose an option below:",
+      "signIn": "Sign In",
+      "signUp": "Sign Up"
+    },
     "toast": {
-      "success": "Ticket redeemed successfully!",
+      "success": "Congratulations! Your ticket has been redeemed!",
       "invalidCode": "Invalid ticket code",
       "alreadyRedeemed": "This ticket has already been redeemed"
     }
   },
+  "stadium": {
+    "title": "FIFA World Cup 2026",
+    "subtitle": "Official Ticket Platform",
+    "game": "Brazil vs Argentina",
+    "gameDetails": "Group Stage · Jul 14, 2026 · 20:00",
+    "listingsCount": "{{count}} Listings",
+    "ticket": "ticket",
+    "tickets": "tickets",
+    "inCart": "In Cart",
+    "addToCart": "Add to Cart",
+    "clear": "Clear",
+    "loading": "Loading tickets...",
+    "noTickets": "No tickets available",
+    "buyerGuarantee": "100% buyer guarantee",
+    "authentic": "Guaranteed authentic",
+    "summary": {
+      "listings": "Listings",
+      "venue": "Venue",
+      "capacity": "Capacity",
+      "stadiumName": "MetLife Stadium"
+    },
+    "categories": {
+      "labels": {
+        "cat1": "Category 1",
+        "cat2": "Category 2",
+        "cat3": "Category 3",
+        "cat4": "Category 4",
+        "field": "Field"
+      },
+      "details": "From ₦{{price}} · {{count}} listings"
+    },
+    "checkout": {
+      "titles": {
+        "cart": "Your Cart",
+        "details": "Your Details",
+        "payment": "Payment",
+        "confirmation": "Booking Confirmed"
+      },
+      "details": {
+        "personalInfo": "Personal Information",
+        "firstNamePlaceholder": "John",
+        "lastNamePlaceholder": "Doe",
+        "emailPlaceholder": "john@example.com",
+        "phonePlaceholder": "+1 234 567 8900",
+        "ticketInfo": "🎫 E-tickets will be sent to your email address as PDF. Show at the gate from your phone or print."
+      },
+      "payment": {
+        "manualTransfer": "Manual Bank Transfer",
+        "transferInstruction": "Please transfer the exact total amount to the account below to secure your tickets.",
+        "bankName": "Bank Name",
+        "accountName": "Account Name",
+        "accountNumber": "Account Number",
+        "notConfigured": "Not configured",
+        "loadError": "Failed to load bank details.",
+        "totalToCharge": "Total to charge",
+        "sentConfirmation": "I'VE SENT ₦{{amount}} →",
+        "copied": "Copied to clipboard!"
+      },
+      "confirmation": {
+        "title": "YOU'RE IN!",
+        "subtitle": "Booking confirmed for {{email}}",
+        "newUserMsg": "Check your email! We've sent you a link to set your password so you can access your dashboard and other platform features.",
+        "existingUserMsg": "Tickets confirmed! We've emailed your tickets to {{email}}. You can also view them in your dashboard.",
+        "reference": "Booking Reference",
+        "totalPaid": "Total Paid",
+        "passwordLabel": "Enter password to log in & proceed",
+        "loginToContinue": "LOGIN TO CONTINUE",
+        "applyVisa": "APPLY FOR VISA",
+        "goToDashboard": "GO TO DASHBOARD",
+        "ticket_one": "{{count}} ticket",
+        "ticket_other": "{{count}} tickets"
+      },
+      "badge": "FIFA World Cup 2026",
+      "platform": "Official Ticket Platform",
+      "matchInfo": "Brazil vs Argentina",
+      "matchDetails": "Group Stage · Jul 14, 2026 · 20:00",
+      "listingsCount": "{{count}} Listings",
+      "available": "{{count}} available",
+      "viewLabel": "👁️ {{view}}",
+      "amazing": "Amazing",
+      "inCart": "In Cart ✓",
+      "addToCart": "Add to Cart",
+      "buyerGuarantee": "🛡️ 100% buyer guarantee",
+      "checkoutButton": "CHECKOUT",
+      "checkoutCount": "CHECKOUT ({{count}})",
+      "clear": "✕ Clear",
+      "listings": "Listings",
+      "venue": "Venue",
+      "capacity": "Capacity",
+      "guaranteedAuthenticShort": "🔒 Guaranteed authentic",
+      "fromPrice": "From ₦{{price}} · {{count}} listings",
+      "bestPrice": "Best Price",
+      "bestDeal": "Best Deal",
+      "bestView": "Best View",
+      "steps": {
+        "cart": "Cart",
+        "details": "Details",
+        "payment": "Payment",
+        "confirmation": "Done"
+      },
+      "errors": {
+        "failed": "Checkout failed",
+        "unexpected": "An error occurred during checkout"
+      }
+    }
+  },
+
   "dashboard": {
     "welcome": "Welcome",
     "myTickets": "My Tickets",

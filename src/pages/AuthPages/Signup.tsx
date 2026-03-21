@@ -53,7 +53,7 @@ const Signup = () => {
 
     if (formData.password !== formData.confirmPassword) {
       toast.error("🔒 " + t("signup.toast.passwordMismatch"), {
-        description: t("signup.errors.passwordMismatch"),
+        description: t("signup.toast.passwordMismatch"),
         duration: 4000,
       });
       return;
@@ -76,29 +76,26 @@ const Signup = () => {
         formData.password,
       );
       if (result.success) {
-        toast.success("🎉 Account created successfully!", {
-          description:
-            "Welcome to Vividstream Pro! Redirecting to dashboard...",
+        toast.success("🎉 " + t("signup.toast.accountCreated"), {
+          description: t("signup.toast.accountCreatedDesc"),
           duration: 3000,
         });
         navigate(from, { replace: true });
       } else {
-        // Enhanced error messages with icons and better descriptions
-        const errorMessage = result.error || "Signup failed";
-        // let description = "Please check your information and try again";
+        const errorMessage = result.error || t("signup.toast.registrationFailed");
 
         if (errorMessage.includes("already exists")) {
-          toast.error("👤 Email already registered", {
-            description: "An account with this email already exists",
+          toast.error("👤 " + t("signup.toast.emailExists"), {
+            description: t("signup.toast.emailExistsDesc"),
             duration: 4000,
             action: {
-              label: "Login instead",
+              label: t("signup.signIn"),
               onClick: () => navigate("/login"),
             },
           });
         } else if (errorMessage.includes("required")) {
-          toast.error("📝 Missing information", {
-            description: "Please fill in all required fields",
+          toast.error("📝 " + t("signup.toast.missingInfo"), {
+            description: t("signup.toast.fillRequired"),
             duration: 4000,
           });
         } else if (errorMessage.includes("Network")) {
@@ -275,12 +272,12 @@ const Signup = () => {
           </form>
 
           <p className="mt-8 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
+            {t("signup.alreadyHaveAccount")}{" "}
             <Link
               to="/login"
               className="text-primary font-medium hover:underline"
             >
-              Sign in
+              {t("signup.signIn")}
             </Link>
           </p>
         </div>

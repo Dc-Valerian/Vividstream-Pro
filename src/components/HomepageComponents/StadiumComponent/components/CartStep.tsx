@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { CartItem, CATEGORIES } from "../types";
 
 export function CartStep({
@@ -13,6 +14,7 @@ export function CartStep({
   onBack: () => void;
   onNext: () => void;
 }) {
+  const { t } = useTranslation();
   const subtotal = cart.reduce((s, i) => s + i.listing.price * i.qty, 0);
   const fees = Math.round(subtotal * 0.12);
   const total = subtotal + fees;
@@ -21,12 +23,12 @@ export function CartStep({
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <div className="text-5xl">🎫</div>
-        <p className="text-gray-400 text-sm">Your cart is empty</p>
+        <p className="text-gray-400 text-sm">{t("stadium.noTickets")}</p>
         <button
           onClick={onBack}
           className="text-yellow-400 text-sm font-semibold hover:underline"
         >
-          ← Browse seats
+          ← {t("stadium.subtitle")}
         </button>
       </div>
     );
@@ -57,7 +59,7 @@ export function CartStep({
                       style={{ backgroundColor: cat.color }}
                     />
                     <span className="text-xs" style={{ color: cat.color }}>
-                      {cat.label}
+                      {t(cat.labelKey)}
                     </span>
                     <span className="text-xs text-gray-500 ml-1">
                       · {listing.view}
@@ -100,7 +102,7 @@ export function CartStep({
                     onClick={() => onRemove(listing._id)}
                     className="text-[11px] text-red-400/60 hover:text-red-400 mt-2 transition-colors block"
                   >
-                    Remove
+                    {t("common.delete")}
                   </button>
                 </div>
               </div>
@@ -112,15 +114,15 @@ export function CartStep({
       {/* Summary */}
       <div className="bg-white/[0.03] border border-[#1f2937] rounded-2xl p-4 space-y-2">
         <div className="flex justify-between text-sm text-gray-400">
-          <span>Subtotal</span>
+          <span>{t("stadium.summary.listings")}</span>
           <span className="text-white">₦{subtotal.toLocaleString()}</span>
         </div>
         <div className="flex justify-between text-sm text-gray-400">
-          <span>Service fee (12%)</span>
+          <span>{t("common.or")} (12%)</span>
           <span className="text-white">₦{fees.toLocaleString()}</span>
         </div>
         <div className="flex justify-between font-black text-base border-t border-[#1f2937] pt-2 mt-1">
-          <span className="text-white">Total</span>
+          <span className="text-white">{t("stadium.categories.details")}</span>
           <span className="text-yellow-400">₦{total.toLocaleString()}</span>
         </div>
       </div>
@@ -130,14 +132,14 @@ export function CartStep({
           onClick={onBack}
           className="flex-1 border border-[#374151] rounded-xl py-3 text-sm text-gray-400 hover:bg-white/5 transition-all"
         >
-          ← Back
+          ← {t("common.back")}
         </button>
         <button
           onClick={onNext}
           className="flex-[2] rounded-xl py-3 text-sm font-black tracking-widest text-black hover:scale-[1.02] active:scale-95 transition-all"
           style={{ background: "linear-gradient(135deg, #FFD700, #FF6B35)" }}
         >
-          CONTINUE →
+          {t("common.continue").toUpperCase()} →
         </button>
       </div>
     </div>
