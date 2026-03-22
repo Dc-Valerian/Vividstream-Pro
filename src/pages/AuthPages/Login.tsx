@@ -17,7 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, isAuthenticated } = useAuth();
-  
+
   // Get the redirect path from state, default to dashboard
   const from = (location.state as { from?: string })?.from || "/dashboard";
   const { theme } = useTheme();
@@ -132,6 +132,11 @@ const Login = () => {
       {/* Left Side - Form */}
       <div className="flex-1 flex flex-col justify-center px-8 py-9 lg:px-16">
         <div className="mx-auto w-full max-w-md">
+          {/* Logo at top left */}
+          <Link to="/" className="flex items-center mb-8">
+            <img src={logo} alt="Vividstream Pro" className="h-10 w-auto" />
+          </Link>
+
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               {" "}
@@ -264,9 +269,7 @@ const Login = () => {
           <h2 className="text-3xl font-bold text-foreground ">
             {t("login.subtitle")}
           </h2>
-          <p className="text-muted-foreground">
-            {t("hero.subtitle")}
-          </p>
+          <p className="text-muted-foreground">{t("hero.subtitle")}</p>
         </div>
       </div>
     </div>

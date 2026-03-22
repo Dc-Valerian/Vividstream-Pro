@@ -260,7 +260,7 @@
         "notConfigured": "未配置",
         "loadError": "无法加载银行信息。",
         "totalToCharge": "应付总额",
-        "sentConfirmation": "我已转账 ₦{{amount}} →",
+        "sentConfirmation": "我已转账 ${{amount}} →",
         "copied": "已复制到剪贴板！"
       },
       "confirmation": {
@@ -296,7 +296,7 @@
     "venue": "场馆",
     "capacity": "容纳人数",
     "guaranteedAuthenticShort": "🔒 保证正品",
-    "fromPrice": "₦{{price}} 起 · {{count}} 个列表",
+    "fromPrice": "${{price}} 起 · {{count}} 个列表",
     "bestPrice": "最佳价格",
     "bestDeal": "超值优惠",
     "bestView": "极佳视野",

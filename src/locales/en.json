@@ -363,7 +363,7 @@
     "venue": "Venue",
     "capacity": "Capacity",
     "clickToExpand": "Click to expand",
-    "fromPrice": "From ₦{{price}}",
+    "fromPrice": "From ${{price}}",
     "available": "{{count}} available",
     "viewLabel": "{{view}} View",
     "bestPrice": "Best Price",
@@ -393,7 +393,7 @@
         "cat4": "Category 4",
         "field": "Field"
       },
-      "details": "From ₦{{price}} · {{count}} listings"
+      "details": "From ${{price}} · {{count}} listings"
     },
     "checkout": {
       "titles": {
@@ -423,7 +423,7 @@
         "notConfigured": "Not configured",
         "loadError": "Failed to load bank details.",
         "totalToCharge": "Total to charge",
-        "sentConfirmation": "I'VE SENT ₦{{amount}} →",
+        "sentConfirmation": "I'VE SENT ${{amount}} →",
         "copied": "Copied to clipboard!",
         "bankTransfer": "Bank Transfer",
         "crypto": "Cryptocurrency",

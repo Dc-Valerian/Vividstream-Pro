@@ -260,7 +260,7 @@
         "notConfigured": "Nicht konfiguriert",
         "loadError": "Bankdaten konnten nicht geladen werden.",
         "totalToCharge": "Gesamtbetrag",
-        "sentConfirmation": "ICH HABE ₦{{amount}} GESENDET →",
+        "sentConfirmation": "ICH HABE ${{amount}} GESENDET →",
         "copied": "In Zwischenablage kopiert!"
       },
       "confirmation": {
@@ -296,7 +296,7 @@
     "venue": "Ort",
     "capacity": "Kapazität",
     "guaranteedAuthenticShort": "🔒 Garantiert authentisch",
-    "fromPrice": "Ab ₦{{price}} · {{count}} Angebote",
+    "fromPrice": "Ab ${{price}} · {{count}} Angebote",
     "bestPrice": "Bester Preis",
     "bestDeal": "Bestes Angebot",
     "bestView": "Beste Aussicht",

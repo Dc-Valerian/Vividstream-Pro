@@ -82,7 +82,8 @@ const Signup = () => {
         });
         navigate(from, { replace: true });
       } else {
-        const errorMessage = result.error || t("signup.toast.registrationFailed");
+        const errorMessage =
+          result.error || t("signup.toast.registrationFailed");
 
         if (errorMessage.includes("already exists")) {
           toast.error("👤 " + t("signup.toast.emailExists"), {
@@ -147,6 +148,11 @@ const Signup = () => {
         </div>
 
         <div className="mx-auto w-full max-w-lg ">
+          {/* Logo at top left */}
+          <Link to="/" className="flex items-center mb-8">
+            <img src={logo} alt="Vividstream Pro" className="h-10 w-auto" />
+          </Link>
+
           <div className="mb-8 mt-40 lg:mt-16">
             <h1 className="text-3xl font-bold mb-2">{t("signup.getTicket")}</h1>
           </div>

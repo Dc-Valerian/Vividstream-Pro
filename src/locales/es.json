@@ -182,7 +182,7 @@
         "notConfigured": "No configurado",
         "loadError": "Error al cargar los detalles bancarios.",
         "totalToCharge": "Total a pagar",
-        "sentConfirmation": "HE ENVIADO ₦{{amount}} →",
+        "sentConfirmation": "HE ENVIADO ${{amount}} →",
         "copied": "¡Copiado al portapapeles!",
         "ticket_one": "{{count}} entrada",
         "ticket_other": "{{count}} entradas"
@@ -205,7 +205,7 @@
       "venue": "Sede",
       "capacity": "Capacidad",
       "guaranteedAuthenticShort": "🔒 Autenticidad garantizada",
-      "fromPrice": "Desde ₦{{price}} · {{count}} listados",
+      "fromPrice": "Desde ${{price}} · {{count}} listados",
       "bestPrice": "Mejor Precio",
       "bestDeal": "Mejor Oferta",
       "bestView": "Mejor Vista",

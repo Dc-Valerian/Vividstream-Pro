@@ -260,7 +260,7 @@
         "notConfigured": "Non configuré",
         "loadError": "Échec du chargement des détails bancaires.",
         "totalToCharge": "Total à facturer",
-        "sentConfirmation": "J'AI ENVOYÉ ₦{{amount}} →",
+        "sentConfirmation": "J'AI ENVOYÉ ${{amount}} →",
         "copied": "Copié dans le presse-papiers !"
       },
       "confirmation": {
@@ -296,7 +296,7 @@
     "venue": "Lieu",
     "capacity": "Capacité",
     "guaranteedAuthenticShort": "🔒 Garanti authentique",
-    "fromPrice": "À partir de ₦{{price}} · {{count}} listes",
+    "fromPrice": "À partir de ${{price}} · {{count}} listes",
     "bestPrice": "Meilleur Prix",
     "bestDeal": "Meilleure Offre",
     "bestView": "Meilleure Vue",
