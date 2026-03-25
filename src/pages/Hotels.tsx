@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useCallback } from "react";
+import { shuffle } from "lodash";
 import { ChevronLeft, ChevronRight, Copy } from "lucide-react";
 import { Navbar } from "@/components/bloc/Header/Navbar";
 import { ChatWidget } from "@/components/ChatWidget";
@@ -199,9 +200,7 @@ const Hotels = () => {
 
         if (hotelsRes.ok) {
           const data = await hotelsRes.json();
-          const shuffled = [...(data.docs || [])].sort(
-            () => Math.random() - 0.5,
-          );
+          const shuffled = shuffle(data.docs || []);
           setHotels(shuffled);
           setPagination((prev) => ({
             ...prev,
@@ -425,9 +424,7 @@ const Hotels = () => {
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h2 className="text-2xl font-bold mb-2">Available Hotels</h2>
-                  <p className="text-muted-foreground">
-                    1200 properties found
-                  </p>
+                  <p className="text-muted-foreground">1200 properties found</p>
                 </div>
               </div>
 
