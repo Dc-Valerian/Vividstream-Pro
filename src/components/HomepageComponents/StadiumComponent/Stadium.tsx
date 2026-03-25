@@ -248,7 +248,7 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
 
   const [selected, setSelected] = useState<CategoryId | null>(null);
   const [hovered, setHovered] = useState<CategoryId | null>(null);
-  const [ticketCount, setTicketCount] = useState(2);
+  const [ticketCount, setTicketCount] = useState(1);
 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -803,6 +803,10 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
                       borderLeftWidth: 3,
                       animationDelay: `${i * 0.06}s`,
                     }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggle(listing.category);
+                    }}
                     onMouseEnter={() => setHovered(listing.category)}
                     onMouseLeave={() => setHovered(null)}
                   >
@@ -952,7 +956,10 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
     <>
       <div className={isMaximized ? "hidden" : ""}>{renderStadium(false)}</div>
 
-      <Dialog open={isMaximized} onOpenChange={setIsMaximized}>
+      <Dialog open={isMaximized} onOpenChange={(open) => {
+        if (!open && drawerOpen) return;
+        if (!open) setIsMaximized(false);
+      }}>
         <DialogContent className="max-w-none w-screen h-screen p-0 border-none bg-[#0a0c10] z-[9999] overflow-hidden">
           {renderStadium(true)}
         </DialogContent>
@@ -986,3 +993,4 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
 };
 
 export default Stadium;
+

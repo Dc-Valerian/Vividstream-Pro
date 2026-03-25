@@ -376,6 +376,7 @@
     "listingsCount": "{{count}} Listings",
     "amazing": "Amazing",
     "addToCart": "Add to Cart",
+    "inCart": "In Cart",
     "checkoutCount": "CHECKOUT ({{count}})",
     "checkoutButton": "CHECKOUT",
     "loadError": "Failed to load tickets",
