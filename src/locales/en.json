@@ -100,7 +100,11 @@
       },
       "visaApplication": {
         "title": "Visa Application",
-        "description": "Simplified visa application process with expert guidance. We help navigate the documentation requirements for a hassle-free experience."
+        "description": "Simplified visa application process with expert guidance. We help navigate the documentation requirements for a hassle-free experience.",
+        "form": {
+          "firstName": "First Name",
+          "lastName": "Last Name"
+        }
       },
       "hotelBooking": {
         "title": "Hotel Booking",

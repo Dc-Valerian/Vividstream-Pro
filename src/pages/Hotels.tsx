@@ -71,7 +71,9 @@ const HotelImageCarousel = ({ hotel }: { hotel: any }) => {
 
   const goToPrevious = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev - 1 + hotel.images.length) % hotel.images.length);
+    setCurrentIndex(
+      (prev) => (prev - 1 + hotel.images.length) % hotel.images.length,
+    );
   };
 
   const goToNext = (e: React.MouseEvent) => {
@@ -94,7 +96,7 @@ const HotelImageCarousel = ({ hotel }: { hotel: any }) => {
         alt={hotel.name}
         className="w-full h-full object-cover transition-opacity duration-500"
       />
-      
+
       {/* Navigation Arrows */}
       {hotel.images.length > 1 && (
         <>
@@ -197,7 +199,10 @@ const Hotels = () => {
 
         if (hotelsRes.ok) {
           const data = await hotelsRes.json();
-          setHotels(data.docs || []);
+          const shuffled = [...(data.docs || [])].sort(
+            () => Math.random() - 0.5,
+          );
+          setHotels(shuffled);
           setPagination((prev) => ({
             ...prev,
             page: data.page,
@@ -421,7 +426,7 @@ const Hotels = () => {
                 <div>
                   <h2 className="text-2xl font-bold mb-2">Available Hotels</h2>
                   <p className="text-muted-foreground">
-                    {hotels.length} properties found
+                    1200 properties found
                   </p>
                 </div>
               </div>
@@ -495,6 +500,35 @@ const Hotels = () => {
                   </div>
                 ))}
               </div>
+
+              {/* Pagination */}
+              {pagination.totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2 mt-8">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fetchHotels(pagination.page - 1)}
+                    disabled={pagination.page === 1 || loading}
+                  >
+                    <ChevronLeft className="w-4 h-4 mr-1" />
+                    Previous
+                  </Button>
+                  <span className="text-sm text-muted-foreground px-4">
+                    Page {pagination.page} of {pagination.totalPages}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fetchHotels(pagination.page + 1)}
+                    disabled={
+                      pagination.page === pagination.totalPages || loading
+                    }
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </div>
+              )}
             </div>
           </section>
 
@@ -552,16 +586,25 @@ const Hotels = () => {
       >
         <DialogContent className="max-w-md bg-[#0a0a0b] border-white/5">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-black tracking-tight">Complete Your Booking</DialogTitle>
+            <DialogTitle className="text-2xl font-black tracking-tight">
+              Complete Your Booking
+            </DialogTitle>
             <DialogDescription className="text-gray-400">
-              Pay for your stay at <span className="text-white font-semibold">{paymentModal.hotelName}</span>
+              Pay for your stay at{" "}
+              <span className="text-white font-semibold">
+                {paymentModal.hotelName}
+              </span>
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-6 py-6">
             <div className="flex justify-between items-end p-4 bg-white/[0.03] border border-white/5 rounded-2xl">
-              <span className="text-xs text-gray-500 uppercase tracking-widest">Total Amount</span>
-              <span className="text-3xl font-black text-white tracking-tighter">${paymentModal.amount.toLocaleString()}</span>
+              <span className="text-xs text-gray-500 uppercase tracking-widest">
+                Total Amount
+              </span>
+              <span className="text-3xl font-black text-white tracking-tighter">
+                ${paymentModal.amount.toLocaleString()}
+              </span>
             </div>
 
             {globalSettings?.cryptoWalletAddress ? (
@@ -579,7 +622,9 @@ const Hotels = () => {
                 <div className="space-y-3">
                   <div className="p-4 bg-white/[0.02] border border-white/5 rounded-xl flex justify-between items-center group relative">
                     <div className="w-full pr-10">
-                      <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">{t("stadium.checkout.payment.accountNumber")}</p>
+                      <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">
+                        {t("stadium.checkout.payment.accountNumber")}
+                      </p>
                       <p className="font-mono text-sm text-yellow-400 break-all leading-tight">
                         {globalSettings.cryptoWalletAddress}
                       </p>
@@ -589,7 +634,9 @@ const Hotels = () => {
                       size="icon"
                       className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 hover:bg-white/10"
                       onClick={() => {
-                        navigator.clipboard.writeText(globalSettings.cryptoWalletAddress);
+                        navigator.clipboard.writeText(
+                          globalSettings.cryptoWalletAddress,
+                        );
                         toast.success("Address copied!");
                       }}
                     >
@@ -599,28 +646,39 @@ const Hotels = () => {
 
                   <div className="p-4 bg-white/[0.02] border border-white/5 rounded-xl flex justify-between items-center">
                     <div>
-                      <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">{t("stadium.checkout.payment.accountName")}</p>
-                      <p className="font-bold text-white uppercase">{globalSettings.cryptoType || "BTC"}</p>
+                      <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">
+                        {t("stadium.checkout.payment.accountName")}
+                      </p>
+                      <p className="font-bold text-white uppercase">
+                        {globalSettings.cryptoType || "BTC"}
+                      </p>
                     </div>
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                   </div>
                 </div>
 
                 <div className="p-4 bg-yellow-400/5 border border-yellow-400/10 rounded-xl">
-                  <p className="text-[10px] text-yellow-400 uppercase tracking-widest mb-1 font-bold">Important</p>
+                  <p className="text-[10px] text-yellow-400 uppercase tracking-widest mb-1 font-bold">
+                    Important
+                  </p>
                   <p className="text-[11px] text-yellow-400/70 leading-relaxed">
-                    Once sent, our team will verify the transaction on the blockchain. Your booking will be confirmed within 1-2 hours.
+                    Once sent, our team will verify the transaction on the
+                    blockchain. Your booking will be confirmed within 1-2 hours.
                   </p>
                 </div>
               </div>
             ) : (
               <div className="py-8 text-center space-y-4 bg-red-500/5 border border-red-500/10 rounded-2xl">
                 <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mx-auto">
-                   <Bitcoin className="w-6 h-6 text-red-500" />
+                  <Bitcoin className="w-6 h-6 text-red-500" />
                 </div>
                 <div className="space-y-1">
-                  <p className="font-bold text-red-100 uppercase tracking-wider">Payment Not Configured</p>
-                  <p className="text-xs text-red-400/60 max-w-[200px] mx-auto">Please contact support to complete your hotel booking.</p>
+                  <p className="font-bold text-red-100 uppercase tracking-wider">
+                    Payment Not Configured
+                  </p>
+                  <p className="text-xs text-red-400/60 max-w-[200px] mx-auto">
+                    Please contact support to complete your hotel booking.
+                  </p>
                 </div>
               </div>
             )}
@@ -631,7 +689,9 @@ const Hotels = () => {
               className="w-full h-12 text-sm font-black tracking-widest uppercase transition-all active:scale-[0.98]"
               variant="gradient"
               onClick={handlePayment}
-              disabled={isProcessingPayment || !globalSettings?.cryptoWalletAddress}
+              disabled={
+                isProcessingPayment || !globalSettings?.cryptoWalletAddress
+              }
             >
               {isProcessingPayment ? (
                 <>
