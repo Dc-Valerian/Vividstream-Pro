@@ -276,7 +276,9 @@ const Hotels = () => {
 
     // For crypto payments, require payment slip upload
     if (paymentMethod === "crypto" && !paymentSlip) {
-      toast.error("Please upload payment proof (screenshot of your transaction)");
+      toast.error(
+        "Please upload payment proof (screenshot of your transaction)",
+      );
       return;
     }
 
@@ -630,7 +632,7 @@ const Hotels = () => {
         open={paymentModal.open}
         onOpenChange={(open) => setPaymentModal((prev) => ({ ...prev, open }))}
       >
-        <DialogContent className="max-w-md bg-[#0a0a0b] border-white/5">
+        <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto bg-[#0a0a0b] border-white/5">
           <DialogHeader>
             <DialogTitle className="text-2xl font-black tracking-tight">
               Complete Your Booking
@@ -788,7 +790,9 @@ const Hotels = () => {
               className="w-full h-12 text-sm font-black tracking-widest uppercase transition-all active:scale-[0.98]"
               variant="gradient"
               onClick={handlePayment}
-              disabled={isProcessingPayment || wallets.length === 0 || !paymentSlip}
+              disabled={
+                isProcessingPayment || wallets.length === 0 || !paymentSlip
+              }
             >
               {isProcessingPayment ? (
                 <>
