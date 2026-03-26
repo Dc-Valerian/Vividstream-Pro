@@ -23,6 +23,7 @@ export interface StadiumTicketListing {
   rating: number;
   tag: "Best Price" | "Best Deal" | "Best View" | null;
   view: string;
+  address: string;
 }
 
 export interface CartItem {
@@ -43,6 +44,11 @@ export interface PaymentDetails {
   cvv: string;
   nameOnCard: string;
   slip?: File | null;
+  // Crypto payment details
+  selectedWalletId?: string;
+  walletAddress?: string;
+  cryptocurrency?: string;
+  network?: string;
 }
 
 export const CATEGORIES: Category[] = [

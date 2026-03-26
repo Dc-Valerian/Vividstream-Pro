@@ -80,9 +80,16 @@ export const ViewModal = ({
                   </span>
                   <div className="flex justify-center mt-2">
                     <img
-                      src={value as string}
+                      src={
+                        value.startsWith("http")
+                          ? value
+                          : `${import.meta.env.VITE_API_URL || ""}${value}`
+                      }
                       alt="Payment Slip"
-                      className="max-w-full rounded-md border"
+                      className="max-w-full rounded-md border max-h-64 object-contain"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
                     />
                   </div>
                 </div>
@@ -94,6 +101,9 @@ export const ViewModal = ({
               value instanceof Date ||
               (typeof value === "string" &&
                 (value.includes("T") || !isNaN(Date.parse(value))));
+
+            // Handle nested objects (like user, relatedEntityId)
+            const isObject = typeof value === "object" && value !== null;
 
             return (
               <div
@@ -110,11 +120,21 @@ export const ViewModal = ({
                   >
                     {value as string}
                   </Badge>
+                ) : isObject ? (
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {key === "user" && value?.fullName
+                      ? value.fullName
+                      : key === "user" && value?.email
+                        ? value.email
+                        : key === "relatedEntityId" && value?._id
+                          ? value._id.substring(0, 8) + "..."
+                          : JSON.stringify(value).substring(0, 50) + "..."}
+                  </span>
                 ) : (
                   <span className="text-sm font-medium">
                     {isDate && typeof value === "string"
                       ? new Date(value).toLocaleDateString()
-                      : (value as string)}
+                      : String(value)}
                   </span>
                 )}
               </div>

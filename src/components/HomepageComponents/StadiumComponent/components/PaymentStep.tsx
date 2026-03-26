@@ -115,6 +115,15 @@ export function PaymentStep({
           onChange={(e) => {
             const wallet = wallets.find((w) => w._id === e.target.value);
             setSelectedWallet(wallet || null);
+            if (wallet) {
+              onChange({
+                ...payment,
+                selectedWalletId: wallet._id,
+                walletAddress: wallet.address,
+                cryptocurrency: wallet.cryptocurrency,
+                network: wallet.network,
+              });
+            }
           }}
           className="w-full bg-[#1a1a2e] border border-[#374151] rounded-xl px-4 py-3 text-white"
         >

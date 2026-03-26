@@ -14,6 +14,7 @@ import {
   Trophy,
   Users,
   Ticket,
+  MapPin,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
@@ -713,7 +714,10 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
                   label: t("stadium.listings"),
                   value: listings.length.toString(),
                 },
-                { label: t("stadium.venue"), value: "MetLife Stadium" },
+                {
+                  label: t("stadium.venue"),
+                  value: listings[0]?.address || "MetLife Stadium",
+                },
                 { label: t("stadium.capacity"), value: "82,500" },
               ].map((s) => (
                 <div key={s.label}>
@@ -745,8 +749,8 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
                   style={{ color: activeCatInfo.color }}
                 >
                   <span className="flex items-center gap-1">
-                    {getCategoryIcon(activeCatInfo.id)}
-                    · {t(activeCatInfo.labelKey)}
+                    {getCategoryIcon(activeCatInfo.id)}·{" "}
+                    {t(activeCatInfo.labelKey)}
                   </span>
                 </span>
               )}
@@ -843,6 +847,12 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
                           <span>
                             {t("stadium.viewLabel", { view: listing.view })}
                           </span>
+                          {listing.address && (
+                            <span className="flex items-center gap-1 text-gray-500">
+                              <MapPin className="w-3 h-3" />
+                              {listing.address}
+                            </span>
+                          )}
                         </div>
                         <div className="flex items-center gap-1.5">
                           <span
@@ -956,10 +966,13 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
     <>
       <div className={isMaximized ? "hidden" : ""}>{renderStadium(false)}</div>
 
-      <Dialog open={isMaximized} onOpenChange={(open) => {
-        if (!open && drawerOpen) return;
-        if (!open) setIsMaximized(false);
-      }}>
+      <Dialog
+        open={isMaximized}
+        onOpenChange={(open) => {
+          if (!open && drawerOpen) return;
+          if (!open) setIsMaximized(false);
+        }}
+      >
         <DialogContent className="max-w-none w-screen h-screen p-0 border-none bg-[#0a0c10] z-[9999] overflow-hidden">
           {renderStadium(true)}
         </DialogContent>
@@ -993,4 +1006,3 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
 };
 
 export default Stadium;
-

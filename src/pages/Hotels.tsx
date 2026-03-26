@@ -33,6 +33,7 @@ import {
   Dices,
   Flag,
   Trophy,
+  Upload,
 } from "lucide-react";
 import {
   Dialog,
@@ -157,13 +158,20 @@ const Hotels = () => {
   });
   const [paymentMethod, setPaymentMethod] = useState<
     "card" | "crypto" | "manual"
-  >("manual");
+  >("crypto");
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [globalSettings, setGlobalSettings] = useState<any>(null);
   const [wallets, setWallets] = useState<any[]>([]);
   const [selectedWallet, setSelectedWallet] = useState<any>(null);
+  const [paymentSlip, setPaymentSlip] = useState<File | null>(null);
 
-  // Booking Form State
+  // Auto-select default wallet when payment modal opens
+  useEffect(() => {
+    if (paymentModal.open && wallets.length > 0 && !selectedWallet) {
+      const defaultWallet = wallets.find((w) => w.isDefault) || wallets[0];
+      setSelectedWallet(defaultWallet);
+    }
+  }, [paymentModal.open, wallets, selectedWallet]);
   const [bookingFormOpen, setBookingFormOpen] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState<any>(null);
 
@@ -210,7 +218,9 @@ const Hotels = () => {
         }
 
         if (settingsRes.ok) {
-          setGlobalSettings(await settingsRes.json());
+          const settingsData = await settingsRes.json();
+          setGlobalSettings(settingsData);
+          setWallets(settingsData); // Set wallets from the active wallets endpoint
         }
       } catch (error) {
         console.error("Error fetching hotels:", error);
@@ -264,8 +274,50 @@ const Hotels = () => {
   const handlePayment = async () => {
     if (!user || !paymentModal.bookingId) return;
 
+    // For crypto payments, require payment slip upload
+    if (paymentMethod === "crypto" && !paymentSlip) {
+      toast.error("Please upload payment proof (screenshot of your transaction)");
+      return;
+    }
+
     setIsProcessingPayment(true);
     try {
+      // Use FormData for crypto payments with slip upload
+      if (paymentMethod === "crypto") {
+        const formData = new FormData();
+        formData.append("userId", user.id);
+        formData.append("amount", String(paymentModal.amount));
+        formData.append("currency", "USD");
+        formData.append("paymentMethod", "crypto");
+        formData.append("type", "hotel_booking");
+        formData.append("relatedEntityId", paymentModal.bookingId);
+        formData.append("email", user.email);
+        formData.append("walletAddress", selectedWallet?.address || "");
+        formData.append("cryptocurrency", selectedWallet?.cryptocurrency || "");
+        formData.append("network", selectedWallet?.network || "");
+        if (paymentSlip) {
+          formData.append("paymentSlip", paymentSlip);
+        }
+
+        const response = await apiFetch(endpoints.hotels.pay, {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (!response.ok)
+          throw new Error(data.message || "Payment submission failed");
+
+        toast.success(
+          "Payment submitted! Our team will verify the transaction and confirm your booking.",
+        );
+        setPaymentModal((prev) => ({ ...prev, open: false }));
+        setPaymentSlip(null);
+        return;
+      }
+
+      // For card payments, use existing flow
       const response = await apiFetch(endpoints.hotels.pay, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -288,9 +340,6 @@ const Hotels = () => {
       if (paymentMethod === "card" && data.authorization_url) {
         // Redirect to Paystack
         window.location.href = data.authorization_url;
-      } else if (paymentMethod === "crypto" && data.invoiceUrl) {
-        // Redirect to BitPay
-        window.location.href = data.invoiceUrl;
       } else {
         toast.success(
           "Payment initiated! Please complete the transfer to verify your booking.",
@@ -618,7 +667,9 @@ const Hotels = () => {
                 <select
                   value={selectedWallet?._id || ""}
                   onChange={(e) => {
-                    const wallet = wallets.find((w) => w._id === e.target.value);
+                    const wallet = wallets.find(
+                      (w) => w._id === e.target.value,
+                    );
                     setSelectedWallet(wallet || null);
                   }}
                   className="w-full bg-[#1a1a2e] border border-[#374151] rounded-xl px-4 py-3 text-white"
@@ -673,8 +724,46 @@ const Hotels = () => {
                     Important
                   </p>
                   <p className="text-[11px] text-yellow-400/70 leading-relaxed">
-                    Once sent, our team will verify the transaction on the blockchain. Your booking will be confirmed within 1-2 hours.
+                    Once sent, our team will verify the transaction on the
+                    blockchain. Your booking will be confirmed within 1-2 hours.
                   </p>
+                </div>
+
+                {/* Payment Slip Upload */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-bold text-gray-200">
+                    Upload Payment Proof
+                  </Label>
+                  <div
+                    className={`p-4 rounded-xl border-2 border-dashed flex items-center justify-center gap-3 ${
+                      paymentSlip
+                        ? "border-green-500/30 bg-green-500/5"
+                        : "border-[#374151]"
+                    }`}
+                  >
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files?.[0]) {
+                          setPaymentSlip(e.target.files[0]);
+                        }
+                      }}
+                      className="hidden"
+                      id="payment-slip-upload"
+                    />
+                    <label
+                      htmlFor="payment-slip-upload"
+                      className="cursor-pointer flex items-center gap-2 text-gray-400 hover:text-white"
+                    >
+                      <Upload className="w-5 h-5" />
+                      <span>
+                        {paymentSlip
+                          ? paymentSlip.name
+                          : "Upload payment screenshot"}
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -699,9 +788,7 @@ const Hotels = () => {
               className="w-full h-12 text-sm font-black tracking-widest uppercase transition-all active:scale-[0.98]"
               variant="gradient"
               onClick={handlePayment}
-              disabled={
-                isProcessingPayment || wallets.length === 0
-              }
+              disabled={isProcessingPayment || wallets.length === 0 || !paymentSlip}
             >
               {isProcessingPayment ? (
                 <>
