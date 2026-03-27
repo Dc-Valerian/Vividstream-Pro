@@ -426,7 +426,7 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
       className={`text-white overflow-y-auto overflow-x-hidden font-sans relative flex-1 bg-[#0a0c10] transition-all duration-500 ease-in-out ${
         isMax
           ? "h-screen w-screen flex flex-col"
-          : "relative h-[680px] md:h-[580px] rounded-3xl border border-[#1f2937] overflow-hidden md:overflow-y-auto"
+          : "relative h-[1080px] md:h-[580px] rounded-3xl border border-[#1f2937] overflow-hidden md:overflow-y-auto"
       }`}
     >
       {/* ── Banner ───────────────────────── */}

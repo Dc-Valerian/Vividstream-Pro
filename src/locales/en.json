@@ -358,6 +358,12 @@
       "alreadyRedeemed": "This ticket has already been redeemed"
     }
   },
+  "visa": {
+    "form": {
+      "firstName": "First Name",
+      "lastName": "Last Name"
+    }
+  },
   "stadium": {
     "badge": "FIFA World Cup 2026",
     "platform": "Official Ticket Platform",
@@ -440,8 +446,8 @@
       "confirmation": {
         "title": "YOU'RE IN!",
         "subtitle": "Booking confirmed for {{email}}",
-        "newUserMsg": "Check your email! We've sent you a link to set your password so you can access your dashboard and other platform features.",
-        "existingUserMsg": "Tickets confirmed! We've emailed your tickets to {{email}}. You can also view them in your dashboard.",
+        "newUserMsg": "Check your email! We've sent you a link to set your password so you can access your dashboard. Your tickets will be emailed once payment is verified.",
+        "existingUserMsg": "Payment submitted! We've sent a confirmation to {{email}}. Your tickets will be emailed once payment is verified by our team.",
         "reference": "Booking Reference",
         "totalPaid": "Total Paid",
         "passwordLabel": "Enter password to log in & proceed",

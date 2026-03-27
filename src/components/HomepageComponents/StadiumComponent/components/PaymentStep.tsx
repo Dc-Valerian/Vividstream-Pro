@@ -36,12 +36,6 @@ export function PaymentStep({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    onChange({
-      cardNumber: "manual",
-      expiry: "12/99",
-      cvv: "000",
-      nameOnCard: "MANUAL",
-    });
     fetchWallets();
   }, []);
 

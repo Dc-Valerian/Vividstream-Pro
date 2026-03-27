@@ -326,7 +326,7 @@ const Hotels = () => {
         body: JSON.stringify({
           userId: user.id,
           amount: paymentModal.amount,
-          currency: "NGN", // Or dynamic
+          currency: "USD", // Or dynamic
           paymentMethod,
           type: "hotel_booking",
           relatedEntityId: paymentModal.bookingId,
@@ -632,7 +632,7 @@ const Hotels = () => {
         open={paymentModal.open}
         onOpenChange={(open) => setPaymentModal((prev) => ({ ...prev, open }))}
       >
-        <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto bg-[#0a0a0b] border-white/5">
+        <DialogContent className="max-w-md h-[90vh] sm:h-auto sm:max-h-[85vh] overflow-y-auto bg-[#0a0a0b] border-white/5">
           <DialogHeader>
             <DialogTitle className="text-2xl font-black tracking-tight">
               Complete Your Booking
@@ -822,3 +822,4 @@ const Hotels = () => {
 };
 
 export default Hotels;
+
