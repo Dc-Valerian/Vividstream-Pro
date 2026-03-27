@@ -9,6 +9,7 @@ import { endpoints, apiFetch } from "@/config/api";
 import { toast } from "sonner";
 import { Eye, Edit, Trash2, Upload } from "lucide-react";
 import { StadiumTicketModal } from "../modals/StadiumTicketModal";
+import { format } from "date-fns";
 
 export const StadiumTicketsTab = () => {
   const navigate = useNavigate();
@@ -173,6 +174,9 @@ export const StadiumTicketsTab = () => {
                 Address
               </th>
               <th className="text-left p-4 text-sm font-medium text-muted-foreground">
+                Date & Time
+              </th>
+              <th className="text-left p-4 text-sm font-medium text-muted-foreground">
                 Tag
               </th>
               <th className="text-left p-4 text-sm font-medium text-muted-foreground">
@@ -183,7 +187,7 @@ export const StadiumTicketsTab = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={7} className="p-4 text-center">
+                <td colSpan={8} className="p-4 text-center">
                   Loading...
                 </td>
               </tr>
@@ -203,6 +207,11 @@ export const StadiumTicketsTab = () => {
                   </td>
                   <td className="p-4 font-mono text-sm">
                     {ticket.address || "-"}
+                  </td>
+                  <td className="p-4 font-mono text-sm">
+                    {ticket.date && ticket.time
+                      ? `${format(new Date(ticket.date), "MMM dd, yyyy")} ${ticket.time}`
+                      : "-"}
                   </td>
                   <td className="p-4 text-muted-foreground">
                     {ticket.tag || "-"}

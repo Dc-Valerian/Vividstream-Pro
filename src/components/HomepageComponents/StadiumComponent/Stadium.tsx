@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { format } from "date-fns";
 import { apiFetch, endpoints } from "@/config/api";
 import {
   X,
@@ -851,6 +852,11 @@ const Stadium = ({ auth: { user }, loginPath = "/login" }: StadiumProps) => {
                             <span className="flex items-center gap-1 text-gray-500">
                               <MapPin className="w-3 h-3" />
                               {listing.address}
+                            </span>
+                          )}
+                          {(listing.date || listing.time) && (
+                            <span className="flex items-center gap-1 text-gray-500">
+                              🗓 {listing.date ? format(new Date(listing.date), "MMM dd, yyyy") : ""} {listing.time || ""}
                             </span>
                           )}
                         </div>

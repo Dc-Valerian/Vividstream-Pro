@@ -55,6 +55,8 @@ export const StadiumTicketModal = ({
         rating: ticket.rating,
         view: ticket.view,
         address: ticket.address || "",
+        date: ticket.date || "",
+        time: ticket.time || "",
         tag: ticket.tag || "none",
       });
       setValue("category", String(ticket.category));
@@ -69,6 +71,8 @@ export const StadiumTicketModal = ({
         rating: 9.5,
         view: "Great view of the pitch",
         address: "",
+        date: "",
+        time: "",
         tag: "none",
       });
       setValue("category", "2");
@@ -213,6 +217,25 @@ export const StadiumTicketModal = ({
               placeholder="e.g. 1 MetLife Stadium Dr, East Rutherford, NJ 07073"
               {...register("address", { required: false })}
             />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="date">Date</Label>
+              <Input
+                id="date"
+                type="date"
+                {...register("date", { required: false })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="time">Time</Label>
+              <Input
+                id="time"
+                type="time"
+                {...register("time", { required: false })}
+              />
+            </div>
           </div>
 
           <div className="flex justify-end pt-4">

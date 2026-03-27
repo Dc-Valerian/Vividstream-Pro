@@ -24,6 +24,8 @@ export interface StadiumTicketListing {
   tag: "Best Price" | "Best Deal" | "Best View" | null;
   view: string;
   address: string;
+  date: string;
+  time: string;
 }
 
 export interface CartItem {
