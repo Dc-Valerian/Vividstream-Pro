@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +39,15 @@ const RedeemTicket = () => {
   const [isRedeemed, setIsRedeemed] = useState(false);
   const [error, setError] = useState("");
   const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  // Pre-fill email from URL query params
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const emailParam = params.get("email");
+    if (emailParam) {
+      setEmail(emailParam);
+    }
+  }, []);
 
   const handleRedeem = async () => {
     if (!ticketCode.trim()) {
