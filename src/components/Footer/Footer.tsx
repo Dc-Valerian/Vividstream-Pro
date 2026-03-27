@@ -132,6 +132,8 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">{t("footer.followUs")}</h4>
             <div className="flex gap-4">
               <a
+                target="_blank"
+                rel="noopener noreferrer"
                 href="https://www.facebook.com/profile.php?id=61578472863638&mibextid=ZbWKwL"
                 className="text-muted-foreground hover:text-primary transition-colors"
               >
